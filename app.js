@@ -685,7 +685,12 @@ async function copiarTexto(texto) {
 // ---------------- Textos do responsável técnico ----------------
 function preencherSlogan() {
   const el = $('#slogan');
-  if (typeof config.slogan === 'string') { el.textContent = config.slogan; el.hidden = !config.slogan; }
+  if (typeof config.slogan !== 'string') return;
+  // Cada linha do slogan (separada por \n no config.json) fica numa linha da tela.
+  el.replaceChildren(...config.slogan.split('\n').filter(Boolean).map((t) => {
+    const sp = document.createElement('span'); sp.textContent = t.trim(); return sp;
+  }));
+  el.hidden = !config.slogan.trim();
 }
 function preencherRT() {
   const rt = config.responsavel_tecnico || {};

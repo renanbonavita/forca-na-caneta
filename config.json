@@ -2,7 +2,7 @@
   "_leia_me": "Arquivo de configuração. Campos vazios (\"\") ficam ocultos no app. Veja o README.",
 
   "responsavel_tecnico": { "nome": "[NOME DO RESPONSÁVEL TÉCNICO]", "cref": "[NÚMERO]-G/[UF]" },
-  "slogan": "A caneta já fez a parte dela. Agora é hora de fortalecer.",
+  "slogan": "A caneta já fez a parte dela.\nAgora é hora de fortalecer.",
   "contato_email": "[seu-email-de-contato@exemplo.com]",
 
   "mostrar_marcadores_de_lugar": true,

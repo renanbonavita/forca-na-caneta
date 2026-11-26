@@ -53,7 +53,8 @@ a{color:var(--acento)}
 .selo-clinica img{border-radius:50%;object-fit:contain}
 
 .centro-inicio{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;text-align:center;padding:24px 0}
-.slogan{font-size:.95rem;color:var(--suave);font-style:italic;max-width:30ch;margin:0 auto -4px;opacity:.95}
+.slogan{font-size:1rem;color:var(--suave);font-style:italic;line-height:1.4;margin:0 0 12px}
+.slogan span{display:block}
 .info-treino{font-size:1.05rem;color:var(--suave)}
 .info-treino strong{color:var(--texto)}
 /* A ação principal: grande, ocupa a largura e divide a altura da tela. */
@@ -214,7 +215,7 @@ html.reduzir-animacoes *,html.reduzir-animacoes *::before,html.reduzir-animacoes
 @media (max-height:700px){
   .tela{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
   .centro-inicio{gap:12px;padding:12px 0}
-  .slogan{font-size:.88rem}
+  .slogan{font-size:.9rem;margin-bottom:6px}
   .bora{width:clamp(150px,30dvh,220px);box-shadow:0 0 0 8px var(--coral-suave)}
   .bora-texto{font-size:2.4rem}
   .bora-sub{font-size:.95rem}

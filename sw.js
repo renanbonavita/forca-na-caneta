@@ -1,6 +1,6 @@
 // Service worker do Dose de Força: funciona offline.
 // Ao publicar mudanças, aumente a VERSAO para os celulares baixarem a versão nova.
-const VERSAO = 'fnc-v9';
+const VERSAO = 'fnc-v10';
 
 const ESSENCIAIS = [
   './', 'index.html', 'styles.css', 'app.js', 'js/logica.js',
