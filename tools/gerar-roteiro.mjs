@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const raiz = new URL('..', import.meta.url).pathname;
 const { exercicios } = JSON.parse(readFileSync(raiz + 'exercicios.json', 'utf8'));
 const cfg = JSON.parse(readFileSync(raiz + 'config.json', 'utf8'));
-const G = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
+const G = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra', ...((cfg.produto || {}).nomes_grupos || {}) };
 const N = Object.fromEntries(((cfg.produto || {}).niveis || [{ nivel: 1, nome: 'Esquentando' }, { nivel: 2, nome: 'Pegando no tranco' }, { nivel: 3, nome: 'Força Total' }]).map((n) => [n.nivel, n.nome]));
 const NOME = (cfg.produto || {}).nome || 'Força na Caneta';
 

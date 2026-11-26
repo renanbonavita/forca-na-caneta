@@ -4,7 +4,20 @@
 // prévia da conclusão, offline, navegador interno e ausência de erros/violação de CSP.
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { iniciarServidor } from '../tools/servidor.mjs';
+
+// Genérico: os textos esperados vêm do config.json do próprio produto.
+const raiz = new URL('..', import.meta.url);
+const CFG = JSON.parse(readFileSync(new URL('config.json', raiz), 'utf8'));
+const P = CFG.produto || {};
+const TX = CFG.textos || {};
+const R = TX.rotulo_sessao || 'Treino';
+const PREFIXO = (P.prefixo_codigo || 'FNC').toUpperCase();
+const D = { aquecimento: 30, exercicio: 40, descanso: 20, desaquecimento: 30, ...(P.duracao || {}) };
+const TOTAL = D.total_segundos || 300;
+const MARCADORES = !!CFG.mostrar_marcadores_de_lugar;
+const nTxt = (n) => `${R} nº ${n}`;
 
 const { chromium, devices } = createRequire(import.meta.url)('playwright');
 const PORTA = 8199;
@@ -32,10 +45,10 @@ try {
   ok('aviso aparece no primeiro acesso, sem cláusula de isenção');
 
   await page.getByRole('button', { name: 'Entendi, bora!' }).click();
-  await page.locator('#num-treino', { hasText: 'Treino nº 1' }).waitFor();
-  assert.match(await page.locator('#btn-bora').innerText(), /5 min/);
+  await page.locator('#num-treino', { hasText: nTxt(1) }).waitFor();
+  assert.ok((await page.locator('#btn-bora').innerText()).includes(TX.bora_sub || '5 min'));
   assert.ok(await page.locator('#botao-instalar').isVisible());
-  ok('início: BORA com "5 min", Treino nº 1 e "Usar sem internet" no navegador');
+  ok(`início: BORA com "${TX.bora_sub || '5 min'}", ${nTxt(1)} e "Usar sem internet" no navegador`);
 
   const eventos = [];
   await page.exposeFunction('registrarEvento', (n) => eventos.push(n));
@@ -45,13 +58,13 @@ try {
   await visivel(page, '#treino');
   assert.equal(page.url(), BASE + '#treino');
   assert.equal(await page.locator('#etapa-rotulo').innerText(), 'Aquecimento');
-  assert.equal(await page.evaluate(() => window.__fnc.T.total), 300);
-  ok('treino abre em #treino, com aquecimento e 300 s no total');
+  assert.equal(await page.evaluate(() => window.__fnc.T.total), TOTAL);
+  ok(`treino abre em #treino, com aquecimento e ${TOTAL} s no total`);
 
-  await page.clock.runFor(31_000);
+  await page.clock.runFor((D.aquecimento + 1) * 1000);
   assert.equal(await page.locator('#etapa-rotulo').innerText(), 'Movimento 1 de 4');
   assert.notEqual(await page.locator('#legenda').innerText(), '');
-  ok('após 30 s entra no movimento 1, com legenda');
+  ok(`após ${D.aquecimento} s entra no movimento 1, com legenda`);
 
   await page.locator('#btn-facil').click();
   assert.match(await page.locator('#descricao-mov').innerText(), /Versão mais fácil/);
@@ -67,19 +80,19 @@ try {
   await page.locator('#btn-pausar').click();
   ok('pausar congela o cronômetro');
 
-  await page.clock.runFor(270_000);
+  await page.clock.runFor((TOTAL - D.aquecimento) * 1000);
   await visivel(page, '#fim');
   assert.equal(page.url(), BASE + '#fim');
-  assert.match(await page.locator('#titulo-fim').innerText(), /Treino nº 1/);
+  assert.ok((await page.locator('#titulo-fim').innerText()).includes(nTxt(1)));
   assert.equal(await page.evaluate(() => window.__fnc.store.get('treinos')), 1);
   assert.ok(eventos.includes('treino_iniciado') && eventos.includes('treino_concluido'));
-  assert.match(await page.locator('#patrocinio').innerText(), /ESPAÇO DO PATROCINADOR/);
-  ok('conclusão em 300 s (#fim), contador = 1, eventos enviados, marcador do patrocinador');
+  if (MARCADORES && !(CFG.patrocinio || {}).marca) assert.match(await page.locator('#patrocinio').innerText(), /ESPAÇO DO PATROCINADOR/);
+  ok(`conclusão em ${TOTAL} s (#fim), contador = 1, eventos enviados`);
 
   await page.getByRole('button', { name: 'Por hoje tá ótimo' }).click();
-  await page.getByText('Que tal o 2º treino do dia?').waitFor();
-  await page.locator('#num-treino', { hasText: 'Treino nº 2' }).waitFor();
-  ok('início mostra Treino nº 2 e sugere o 2º treino do dia');
+  await page.getByText(TX.segundo_do_dia || 'Que tal o 2º treino do dia?').waitFor();
+  await page.locator('#num-treino', { hasText: nTxt(2) }).waitFor();
+  ok(`início mostra ${nTxt(2)} e sugere mais um no dia`);
 
   // Voltar do celular no meio do treino: pergunta e não conta
   await page.locator('#btn-bora').click();
@@ -94,28 +107,30 @@ try {
   // Código de recuperação (seção da página Sobre)
   await page.getByRole('link', { name: 'Meu código' }).click();
   await visivel(page, '#sobre');
-  assert.equal(await page.locator('#codigo-texto').innerText(), 'FNC-1');
+  assert.equal(await page.locator('#codigo-texto').innerText(), `${PREFIXO}-1`);
   assert.match(await page.locator('#codigo-link').inputValue(), /#t=1$/);
-  await page.locator('#codigo-entrada').fill('FNC-15');
+  await page.locator('#codigo-entrada').fill(`${PREFIXO}-15`);
   await page.getByRole('button', { name: 'Restaurar', exact: true }).click();
-  assert.match(await page.locator('#restaurar-texto').innerText(), /Restaurar para o treino 15\?/);
+  assert.match(await page.locator('#restaurar-texto').innerText(), /\b15\b/);
   await page.getByRole('button', { name: 'Sim, restaurar' }).click();
   await page.getByRole('button', { name: '← Voltar' }).click();
-  await page.locator('#num-treino', { hasText: 'Treino nº 16' }).waitFor();
-  ok('código FNC-15 restaura (próximo: nº 16) e "← Voltar" leva ao início');
+  await page.locator('#num-treino', { hasText: nTxt(16) }).waitFor();
+  ok(`código ${PREFIXO}-15 restaura (próximo: nº 16) e "← Voltar" leva ao início`);
 
   // Link #t=
   await page.goto(BASE + '#t=6');
-  await page.locator('#restaurar-texto', { hasText: 'Restaurar para o treino 6?' }).waitFor();
+  await page.locator('#restaurar-texto', { hasText: /\b6\b/ }).waitFor();
   await page.getByRole('button', { name: 'Sim, restaurar' }).click();
   await page.goto(BASE);
-  await page.locator('#num-treino', { hasText: 'Treino nº 7' }).waitFor();
+  await page.locator('#num-treino', { hasText: nTxt(7) }).waitFor();
   ok('link #t=6 pergunta e restaura');
 
   // Lembretes
   await page.getByRole('link', { name: 'Lembretes' }).click();
   assert.ok(await page.locator('#sobre-lembretes').evaluate((d) => d.open));
-  assert.match(decodeURIComponent(await page.locator('#link-ics').getAttribute('href')), /RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR/);
+  const icsTexto = decodeURIComponent(await page.locator('#link-ics').getAttribute('href'));
+  assert.match(icsTexto, /RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR/);
+  assert.equal(icsTexto.match(/BEGIN:VEVENT/g).length, (P.lembretes_padrao || ['8:0']).length);
   ok('lembretes abrem a seção e geram .ics recorrente');
 
   // Modo clínica
@@ -135,9 +150,39 @@ try {
 
   // Prévia da conclusão com Missão Elástico
   await page.goto(BASE + '?previa=fim');
-  await visivel(page, '#card-elastico');
-  assert.match(await page.locator('#elastico-link').innerText(), /LINK DE AFILIADO/);
-  ok('prévia da conclusão mostra o marcador da Missão Elástico');
+  if (MARCADORES && !(CFG.elastico || {}).link) {
+    await visivel(page, '#card-elastico');
+    assert.match(await page.locator('#elastico-link').innerText(), /LINK DE AFILIADO/);
+  } else await visivel(page, '#fim');
+  ok('prévia da conclusão (?previa=fim) abre');
+
+  // Teste do mês (só nos produtos que ativam)
+  if ((P.teste || {}).ativo) {
+    await page.goto(BASE);
+    await visivel(page, '#link-teste');
+    await page.locator('#link-teste').click();
+    await visivel(page, '#teste');
+    await page.getByRole('button', { name: 'Começar' }).click();
+    await page.clock.runFor(((P.teste.segundos || 30) + 4) * 1000);
+    await visivel(page, '#teste-resultado');
+    const antesT = Number(await page.locator('#teste-valor').innerText());
+    await page.getByRole('button', { name: 'Aumentar' }).click();
+    await page.getByRole('button', { name: 'Aumentar' }).click();
+    await page.getByRole('button', { name: 'Salvar resultado' }).click();
+    await visivel(page, '#teste-mensagem');
+    assert.equal(await page.evaluate(() => window.__fnc.store.get('testes').at(-1).n), antesT + 2);
+    await page.getByRole('button', { name: 'Voltar ao início' }).click();
+    await visivel(page, '#inicio');
+    assert.ok(!(await page.locator('#link-teste').isVisible()), 'convite do teste continua aparecendo depois de feito');
+    await page.goto(BASE + '#sobre/progresso');
+    assert.match(await page.locator('#progresso-lista').innerText(), new RegExp(`${antesT + 2} vezes`));
+    ok('Teste do mês: 30 s, resultado salvo, convite some e aparece em Meu progresso');
+  }
+  if (P.compartilhar) {
+    await page.goto(BASE);
+    assert.ok(await page.locator('#link-compartilhar').isVisible());
+    ok('"Mandar para alguém" aparece no rodapé');
+  }
 
   // Termos
   await page.goto(BASE + 'termos.html');

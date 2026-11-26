@@ -6,8 +6,8 @@ Este repositório é o **Força na Caneta**, mas o código serve para qualquer a
 
 | Tipo | Arquivos | Ao criar um produto novo |
 |---|---|---|
-| **Motor** (igual em todos) | `app.js`, `js/logica.js`, `sw.js`, `styles.css`, `termos.js`, `tools/`, `tests/logica.test.mjs`, `tests/contraste.mjs` | Copiar sem mudar. Melhorias no motor são feitas aqui e copiadas para os outros |
-| **Produto** (muda em cada um) | `config.json`, `exercicios.json`, `clinicas.json`, `index.html` (textos), `termos.html`, `manifest.json`, `icons/`, `img/`, `og-image.png`, `README.md`, `TESTES.md`, `tests/e2e.mjs` | Reescrever para o produto |
+| **Motor** (igual em todos) | `app.js`, `js/logica.js`, `sw.js`, `styles.css`, `termos.js`, `tools/`, `tests/` | Copiar sem mudar. Melhorias no motor são feitas aqui e copiadas para os outros |
+| **Produto** (muda em cada um) | `config.json`, `exercicios.json`, `clinicas.json`, `index.html` (textos), `termos.html`, `manifest.json`, `icons/`, `img/`, `og-image.png`, `README.md`, `TESTES.md` | Reescrever para o produto |
 
 ## O bloco `produto` do `config.json`
 
@@ -37,6 +37,7 @@ Este repositório é o **Força na Caneta**, mas o código serve para qualquer a
 
 | Opção | Exemplo | O que faz |
 |---|---|---|
+| `nomes_grupos` | `{ "extra": "Equilíbrio" }` | Troca o nome exibido de um grupo (Sobre, ilustrações, roteiro) |
 | `escala_fonte` | `1.12` | Aumenta todo o texto em 12% (público 60+) |
 | `voz_velocidade` | `0.9` | Voz do celular um pouco mais lenta (1 = normal) |
 | `compartilhar` | `true` | Link "Mandar para alguém" no rodapé (compartilhamento do celular ou WhatsApp). Texto em `textos.compartilhar_texto` |
@@ -56,5 +57,5 @@ O formato é o mesmo de sempre. Para objetos, use **`usa_objeto: true`** e a lis
 2. Copie **todo** este repositório para lá.
 3. Troque os arquivos de produto (tabela acima). No `index.html`, revise todos os textos (aviso, Sobre, perguntas frequentes), as meta tags, o JSON-LD e o `canonical`.
 4. Gere ícones, ilustrações, prévia e roteiro: `node tools/gerar-icones.mjs`, `node tools/gerar-placeholders.mjs`, `node tools/gerar-og.mjs`, `node tools/gerar-roteiro.mjs`.
-5. Rode `npm test` e adapte o `tests/e2e.mjs` aos textos do produto antes de rodar `npm run e2e`.
+5. Rode `npm test` e `npm run e2e`. Os dois são genéricos e leem os textos e a duração do `config.json` do produto. Se o produto tiver Teste do mês ou "Mandar para alguém", o e2e testa isso também.
 6. Publique no GitHub Pages.

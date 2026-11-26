@@ -7,7 +7,8 @@ const { exercicios } = JSON.parse(readFileSync(raiz + 'exercicios.json', 'utf8')
 mkdirSync(raiz + 'img/mov', { recursive: true });
 
 const CORES = { pernas: '#FFEDE6', empurrar: '#FFEDE6', costas: '#FFEDE6', extra: '#FFEDE6' };
-const ROTULO = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
+const cfgP = JSON.parse(readFileSync(raiz + 'config.json', 'utf8')).produto || {};
+const ROTULO = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra', ...(cfgP.nomes_grupos || {}) };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
 function quebrar(texto, max = 19) {

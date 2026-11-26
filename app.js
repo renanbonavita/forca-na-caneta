@@ -638,7 +638,7 @@ function prepararSobre() {
   // Os movimentos, por nível
   if (!listaPronta && exercicios.length) {
     const box = $('#lista-movimentos');
-    const GR = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
+    const GR = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra', ...(produto.nomes_grupos || {}) };
     niveis().map((x) => x.nivel).forEach((nv) => {
       const h = document.createElement('h3');
       h.className = 'nivel-titulo';
@@ -673,7 +673,9 @@ function prepararSobre() {
   const caixa = $('#restaurar-caixa');
   if (restaurarPendente != null) {
     const n = restaurarPendente;
-    $('#restaurar-texto').textContent = `Restaurar para o treino ${n}? Sua contagem fica com ${n} treino${n === 1 ? '' : 's'} feito${n === 1 ? '' : 's'}, e o próximo será o nº ${n + 1}.`;
+    $('#restaurar-texto').textContent = (config.textos || {}).restaurar_pergunta
+      ? txt('restaurar_pergunta', { n, m: n + 1 })
+      : `Restaurar para o treino ${n}? Sua contagem fica com ${n} treino${n === 1 ? '' : 's'} feito${n === 1 ? '' : 's'}, e o próximo será o nº ${n + 1}.`;
     caixa.hidden = false;
   } else caixa.hidden = true;
 
