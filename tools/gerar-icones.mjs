@@ -4,10 +4,10 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 import { readFileSync } from 'node:fs';
 const raiz = new URL('..', import.meta.url).pathname;
 const alvos = [
-  ['icons/logo.svg', 'icons/icon-192.png', 192, 'transparent'],
-  ['icons/logo.svg', 'icons/icon-512.png', 512, 'transparent'],
+  ['icons/quadrado.svg', 'icons/icon-192.png', 192, '#FF6B4A'],
+  ['icons/quadrado.svg', 'icons/icon-512.png', 512, '#FF6B4A'],
   ['icons/maskable.svg', 'icons/icon-maskable-512.png', 512, '#FF6B4A'],
-  ['icons/maskable.svg', 'icons/apple-touch-icon.png', 180, '#FF6B4A'],
+  ['icons/quadrado.svg', 'icons/apple-touch-icon.png', 180, '#FF6B4A'],
 ];
 const browser = await chromium.launch();
 const page = await browser.newPage();

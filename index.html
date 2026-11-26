@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Força na Caneta</title>
   <meta name="description" content="Treino de força de 5 minutos em casa, com cadeira e toalha. Grátis, sem cadastro.">
-  <meta name="theme-color" content="#FFF8F4">
+  <meta name="theme-color" content="#FFFBF8">
   <meta name="color-scheme" content="light">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
@@ -64,38 +64,36 @@
     </section>
 
     <!-- 2. INÍCIO -->
-    <section id="tela-inicio" class="tela" hidden aria-labelledby="titulo-app">
+    <section id="tela-inicio" class="tela tela-inicio" hidden aria-labelledby="titulo-app">
       <header class="topo">
-        <img src="icons/logo.svg" alt="" class="logo" width="56" height="56">
+        <img src="icons/logo.svg" alt="" class="logo" width="40" height="40">
         <h1 id="titulo-app" class="marca">Força na Caneta</h1>
       </header>
-      <div id="selo-clinica" class="selo-clinica" hidden>
-        <img id="logo-clinica" alt="" width="32" height="32">
+      <p id="selo-clinica" class="selo-clinica" hidden>
+        <img id="logo-clinica" alt="" width="24" height="24">
         <span>Indicado por <strong id="nome-clinica"></strong></span>
-      </div>
+      </p>
 
-      <div class="cartao heroi">
-        <div class="chips">
-          <span class="chip chip-forte" id="num-treino">Treino nº 1</span>
-          <span class="chip">Nível <span id="nome-nivel">Esquentando</span></span>
-        </div>
+      <div class="centro-inicio">
+        <p class="info-treino"><span id="num-treino">Treino nº 1</span> · <span id="nome-nivel">Esquentando</span></p>
         <button type="button" id="btn-bora" class="btn-bora">
-          <span class="bora-texto">BORA <span aria-hidden="true">💪</span></span>
-          <span class="bora-sub">treino de 5 min</span>
+          <span class="bora-texto">BORA</span>
+          <span class="bora-sub"><span aria-hidden="true">💪</span> treino de 5 min</span>
         </button>
         <p id="msg-hoje" class="msg-hoje" hidden></p>
-        <p class="nota centro">Só precisa de uma cadeira encostada na parede e uma toalha.</p>
+        <p class="nota">Cadeira encostada na parede e uma toalha.</p>
       </div>
 
-      <nav class="grade-atalhos" aria-label="Opções">
-        <button type="button" class="atalho" id="btn-instalar"><svg class="ic"><use href="#i-instalar"/></svg><span>Adicionar à tela de início</span></button>
+      <nav class="atalhos" aria-label="Opções">
+        <button type="button" class="atalho" id="btn-instalar"><svg class="ic"><use href="#i-instalar"/></svg><span>Instalar</span></button>
         <button type="button" class="atalho" id="btn-lembretes"><svg class="ic"><use href="#i-lembrete"/></svg><span>Lembretes</span></button>
         <button type="button" class="atalho" id="btn-codigo"><svg class="ic"><use href="#i-chave"/></svg><span>Meu código</span></button>
-        <button type="button" class="atalho" id="btn-animacoes" aria-pressed="false"><svg class="ic"><use href="#i-movimento"/></svg><span>Reduzir animações</span></button>
       </nav>
 
       <footer class="rodape">
-        <a href="termos.html">Termos de uso</a>
+        <button type="button" class="link-mini" id="btn-animacoes" aria-pressed="false">Reduzir animações</button>
+        <span aria-hidden="true">·</span>
+        <a class="link-mini" href="termos.html">Termos de uso</a>
         <p>Responsável técnico: <span data-rt-nome></span> · CREF <span data-rt-cref></span></p>
       </footer>
     </section>
@@ -103,7 +101,7 @@
     <!-- 3. TREINO -->
     <section id="tela-treino" class="tela tela-treino" hidden aria-label="Treino">
       <div class="treino-topo">
-        <span id="etapa-rotulo" class="chip chip-forte">Aquecimento</span>
+        <span id="etapa-rotulo" class="etapa-rotulo">Aquecimento</span>
         <span id="tempo-total" class="nota">5:00 restantes</span>
       </div>
       <div class="barra" role="progressbar" aria-label="Progresso do treino" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0" id="barra">
@@ -125,8 +123,8 @@
       <div class="legenda-caixa"><svg class="ic"><use href="#i-voz"/></svg><p id="legenda" class="legenda" aria-live="polite"></p></div>
 
       <div class="controles">
-        <button type="button" class="btn btn-secundario" id="btn-pausar"><svg class="ic"><use href="#i-pausa"/></svg><span>Pausar</span></button>
-        <button type="button" class="btn btn-secundario" id="btn-pular"><svg class="ic"><use href="#i-pular"/></svg><span>Pular</span></button>
+        <button type="button" class="btn btn-fantasma" id="btn-pausar"><svg class="ic"><use href="#i-pausa"/></svg><span>Pausar</span></button>
+        <button type="button" class="btn btn-fantasma" id="btn-pular"><svg class="ic"><use href="#i-pular"/></svg><span>Pular</span></button>
         <button type="button" class="btn btn-alternar" id="btn-facil" aria-pressed="false"><svg class="ic"><use href="#i-folha"/></svg><span>Versão mais fácil</span></button>
       </div>
       <p id="aviso-tela" class="nota centro" hidden>Mantenha a tela ligada durante o treino.</p>
@@ -145,7 +143,7 @@
 
       <div class="acoes">
         <button type="button" class="btn btn-primario" id="btn-mais-uma">Mais uma rodada?</button>
-        <button type="button" class="btn btn-secundario" id="btn-por-hoje">Por hoje tá ótimo</button>
+        <button type="button" class="btn btn-texto" id="btn-por-hoje">Por hoje tá ótimo</button>
       </div>
 
       <div id="card-elastico" class="cartao card-elastico" hidden>
@@ -166,7 +164,7 @@
   <dialog id="dlg-instalar" aria-labelledby="dlg-instalar-titulo">
     <h2 id="dlg-instalar-titulo">Adicionar à tela de início</h2>
     <div id="instalar-conteudo" class="conteudo-dialogo"></div>
-    <button type="button" class="btn btn-secundario" data-fechar>Fechar</button>
+    <button type="button" class="btn btn-texto" data-fechar>Fechar</button>
   </dialog>
 
   <dialog id="dlg-lembretes" aria-labelledby="dlg-lembretes-titulo">
