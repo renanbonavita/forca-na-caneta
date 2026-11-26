@@ -36,7 +36,7 @@ function svg(mov) {
     usaParede ? parede : '',
     mov.usa_cadeira ? cadeira : '',
     mov.posicao === 'sentada' ? pessoaSentada : pessoaEmPe,
-    mov.usa_toalha ? toalha : '',
+    (mov.usa_objeto ?? mov.usa_toalha) ? toalha : '',
   ].join('\n') + '</g>';
   const _texto = linhas.map((l, i) => `<text x="24" y="${46 + i * 31}" font-size="26" font-weight="800">${esc(l)}</text>`).join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">

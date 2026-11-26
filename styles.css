@@ -10,6 +10,9 @@
   --acento:#B23A1C;
   --coral:#FF6B4A;
   --coral-suave:#FFF0EA;
+  --coral-hover:#F45D3B;
+  /* Texto sobre o botão principal (troque para #FFFFFF se a cor principal for escura). */
+  --texto-botao:#2A1A14;
   --sucesso:#1F6B4F;
   --sucesso-suave:#EAF5F0;
   --atencao:#FFF6DE;
@@ -64,11 +67,11 @@ a{color:var(--acento)}
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex:0 0 auto;
   align-self:center;
   width:clamp(200px,38vh,280px);width:clamp(200px,38dvh,280px);aspect-ratio:1;max-width:80vw;
-  background:var(--coral);color:var(--texto);border:3px solid var(--acento);border-radius:50%;
+  background:var(--coral);color:var(--texto-botao);border:3px solid var(--acento);border-radius:50%;
   box-shadow:0 0 0 12px var(--coral-suave);
   padding:16px;
 }
-.bora:active{background:#F45D3B}
+.bora:active{background:var(--coral-hover)}
 .bora-texto{font-size:3.2rem;font-weight:800;letter-spacing:.04em;line-height:1.05;white-space:nowrap}
 .bora-sub{font-size:1.05rem;font-weight:700;white-space:nowrap}
 .msg-hoje{font-weight:700;color:var(--sucesso)}
@@ -84,10 +87,10 @@ a{color:var(--acento)}
 
 /* ---------- Botões ---------- */
 .principal{
-  width:100%;background:var(--coral);color:var(--texto);border:2px solid var(--acento);border-radius:18px;
+  width:100%;background:var(--coral);color:var(--texto-botao);border:2px solid var(--acento);border-radius:18px;
   padding:18px 20px;font-size:1.25rem;font-weight:700;min-height:68px
 }
-.principal:active{background:#F45D3B}
+.principal:active{background:var(--coral-hover)}
 .secundario,.alternar{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
   background:var(--botao);border:2px solid var(--contorno);border-radius:16px;
@@ -182,6 +185,8 @@ a{color:var(--acento)}
 .opcao{display:flex;gap:12px;align-items:flex-start;margin-top:12px;font-size:1.05rem}
 .opcao input{width:24px;height:24px;margin-top:2px;accent-color:var(--acento);flex:0 0 auto}
 .rotulo-campo{display:block;margin-top:10px;font-size:.95rem;font-weight:600}
+.horarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.horarios .campo{margin-top:0}
 .campo{display:block;width:100%;margin-top:6px;padding:12px 14px;min-height:52px;font:inherit;color:var(--texto);
   background:var(--botao);border:2px solid var(--contorno);border-radius:12px}
 .codigo{font-size:2rem;font-weight:800;letter-spacing:.08em;text-align:center;padding:10px;margin-top:10px;border-radius:12px;background:var(--coral-suave)}

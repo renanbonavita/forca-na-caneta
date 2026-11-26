@@ -1,7 +1,9 @@
-// Força na Caneta — app principal (vanilla JS, sem backend).
+// Framework de micro-treinos (Força na Caneta e família) — app principal, vanilla JS, sem backend.
+// O que muda de um produto para outro vem de config.json ("produto", "textos", "falas"...)
+// e de exercicios.json; o conteúdo fixo das páginas fica em index.html e termos.html.
 import {
-  DURACAO, montarLinhaDoTempo, duracaoTotal, sortearTreino, nivelDoTreino, nomeDoNivel,
-  codigoDe, lerCodigo, lerHashTreino, hojeISO, gerarICS, linkGoogleAgenda,
+  montarLinhaDoTempo, duracaoTotal, sortearTreino, nivelDoTreino, nomeDoNivel, normalizarProduto,
+  momentosDasFalas, codigoDe, lerCodigo, lerHashTreino, hojeISO, gerarICS, linkGoogleAgenda, lerHorario,
   detectarPlataforma, idClinicaValido, mostrarElastico,
 } from './js/logica.js';
 
@@ -9,11 +11,13 @@ const $ = (sel) => document.querySelector(sel);
 const sortearDe = (lista) => (lista && lista.length ? lista[Math.floor(Math.random() * lista.length)] : '');
 
 // ---------------- Armazenamento (sempre em try/catch) ----------------
+// Prefixo por produto: apps no mesmo domínio (ex.: github.io) não misturam as contagens.
+let prefixoStore = 'fnc:';
 const store = {
   get(chave, padrao = null) {
-    try { const v = localStorage.getItem('fnc:' + chave); return v === null ? padrao : JSON.parse(v); } catch { return padrao; }
+    try { const v = localStorage.getItem(prefixoStore + chave); return v === null ? padrao : JSON.parse(v); } catch { return padrao; }
   },
-  set(chave, valor) { try { localStorage.setItem('fnc:' + chave, JSON.stringify(valor)); } catch { /* sem armazenamento */ } },
+  set(chave, valor) { try { localStorage.setItem(prefixoStore + chave, JSON.stringify(valor)); } catch { /* sem armazenamento */ } },
 };
 const treinosFeitos = () => Number(store.get('treinos', 0)) || 0;
 function treinosHoje() {
@@ -23,7 +27,23 @@ function treinosHoje() {
 
 // ---------------- Dados ----------------
 let config = {};
+let produto = normalizarProduto();
 let exercicios = [];
+
+// Textos de tela que mudam por produto (gênero, "treino" × "pausa"...). Padrões = Força na Caneta.
+const TEXTOS_PADRAO = {
+  rotulo_sessao: 'Treino',
+  segundo_do_dia: 'Que tal o 2º treino do dia?',
+  varios_no_dia: 'Hoje já foram {n} treinos. Que orgulho!',
+  titulo_fim: 'Acabou! {rotulo} nº {n} 🎉',
+  confirmar_encerrar: 'Encerrar o treino agora? Ele não vai entrar na contagem.',
+  aquecimento_descricao: 'Sentada, costas retas. Siga a voz: marcha leve, ombros e mãos.',
+  ultimo_descanso_descricao: 'Respire fundo. Já já vem o desaquecimento.',
+  desaquecimento_descricao: 'Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando.',
+};
+const txt = (chave, vars = {}) => String({ ...TEXTOS_PADRAO, ...(config.textos || {}) }[chave] || '')
+  .replace(/\{(\w+)\}/g, (_, k) => (vars[k] ?? ''));
+const niveis = () => produto.niveis;
 let clinica = null;
 
 async function carregarJSON(url, padrao) {
@@ -43,12 +63,12 @@ function mostrar(nome) {
 
 function atualizarInicio() {
   const proximo = treinosFeitos() + 1;
-  $('#num-treino').textContent = `Treino nº ${proximo}`;
-  $('#nome-nivel').textContent = nomeDoNivel(nivelDoTreino(proximo));
+  $('#num-treino').textContent = `${txt('rotulo_sessao')} nº ${proximo}`;
+  $('#nome-nivel').textContent = nomeDoNivel(nivelDoTreino(proximo, niveis()), niveis());
   const hoje = treinosHoje();
   const msg = $('#msg-hoje');
-  if (hoje === 1) { msg.textContent = 'Que tal o 2º treino do dia?'; msg.hidden = false; }
-  else if (hoje > 1) { msg.textContent = `Hoje já foram ${hoje} treinos. Que orgulho!`; msg.hidden = false; }
+  if (hoje === 1) { msg.textContent = txt('segundo_do_dia'); msg.hidden = false; }
+  else if (hoje > 1) { msg.textContent = txt('varios_no_dia', { n: hoje }); msg.hidden = false; }
   else msg.hidden = true;
 }
 
@@ -238,10 +258,10 @@ const T = {
 function comecarTreino(nivelForcado = null) {
   desbloquearAudio();
   T.numero = treinosFeitos() + 1;
-  T.nivel = nivelForcado || nivelDoTreino(T.numero);
+  T.nivel = nivelForcado || nivelDoTreino(T.numero, niveis());
   const movs = sortearTreino(exercicios, T.nivel, store.get('ultimaCombo', []));
   store.set('ultimaCombo', movs.map((m) => m.id));
-  T.etapas = montarLinhaDoTempo(movs, DURACAO);
+  T.etapas = montarLinhaDoTempo(movs, produto.duracao);
   T.total = duracaoTotal(T.etapas); // sempre 300 s
   T.ativo = true; T.pausadoEm = null; T.posicao = 'sentada';
   rotuloPausa(false);
@@ -295,7 +315,7 @@ function entrarEtapa(i) {
   if (e.tipo === 'aquecimento') {
     $('#etapa-rotulo').textContent = 'Aquecimento';
     $('#nome-mov').textContent = 'Aquecimento';
-    $('#descricao-mov').textContent = 'Sentada, costas retas. Siga a voz: marcha leve, ombros e mãos.';
+    $('#descricao-mov').textContent = txt('aquecimento_descricao');
     mostrarMidia(null, 'img/aquecimento.svg');
     falar(fala('aquecimento-1'), { interromper: true });
   } else if (e.tipo === 'exercicio') {
@@ -320,14 +340,14 @@ function entrarEtapa(i) {
       falar(falaDeLista('frases_descanso', 'descanso'), { interromper: true });
     } else {
       $('#nome-mov').textContent = 'Último descanso';
-      $('#descricao-mov').textContent = 'Respire fundo. Já já vem o desaquecimento.';
+      $('#descricao-mov').textContent = txt('ultimo_descanso_descricao');
       mostrarMidia(null, 'img/descanso.svg');
       falar(fala('ultimo-descanso'), { interromper: true });
     }
   } else if (e.tipo === 'desaquecimento') {
     $('#etapa-rotulo').textContent = 'Desaquecimento';
     $('#nome-mov').textContent = 'Desaquecimento';
-    $('#descricao-mov').textContent = 'Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando.';
+    $('#descricao-mov').textContent = txt('desaquecimento_descricao');
     mostrarMidia(null, 'img/desaquecimento.svg');
     falar(fala('desaquecimento-1'), { interromper: true });
   }
@@ -347,27 +367,29 @@ function tique() {
   const d = decorridoNaEtapa();
   const restante = Math.ceil(e.dur - d);
 
-  // Falas programadas por etapa
+  // Falas programadas por etapa, em momentos proporcionais à duração (js/logica.js)
+  const mo = momentosDasFalas(e);
   if (e.tipo === 'aquecimento') {
-    if (d >= 10) uma('aq2', () => falar(fala('aquecimento-2')));
-    if (d >= 18) uma('aq3', () => falar(fala('aquecimento-3')));
-    if (d >= 23) uma('prox', () => anunciarProximo(e.proximo));
+    if (d >= mo.aq2) uma('aq2', () => falar(fala('aquecimento-2')));
+    if (d >= mo.aq3) uma('aq3', () => falar(fala('aquecimento-3')));
+    if (d >= mo.prox) uma('prox', () => anunciarProximo(e.proximo));
   } else if (e.tipo === 'exercicio') {
     const m = e.mov;
-    if (d >= e.dur / 2) {
+    if (d >= mo.meio) {
       uma('meio', () => {
         if (m.unilateral) falar(fala('troca-lado'), { interromper: true });
         else if (m.envolve_levantar) falar(falaDeLista('frases_levantar', 'levantar'));
-        else if (m.usa_toalha) falar(falaDeLista('frases_toalha', 'toalha'));
+        // usa_objeto (garrafa, elástico...) é o nome novo; usa_toalha continua aceito.
+        else if (m.usa_objeto ?? m.usa_toalha) falar(config.frases_objeto ? falaDeLista('frases_objeto', 'objeto') : falaDeLista('frases_toalha', 'toalha'));
         else falar(falaDeLista('frases_durante', 'durante'));
       });
     }
-    if (restante <= 10) uma('10s', () => falar(falaDeLista('frases_10s', 'dez')));
+    if (mo.dez != null && d >= mo.dez) uma('10s', () => falar(falaDeLista('frases_10s', 'dez')));
   } else if (e.tipo === 'descanso') {
-    if (d >= 7 && e.proximo) uma('prox', () => anunciarProximo(e.proximo));
+    if (d >= mo.prox && e.proximo) uma('prox', () => anunciarProximo(e.proximo));
   } else if (e.tipo === 'desaquecimento') {
-    if (d >= 10) uma('dq2', () => falar(fala('desaquecimento-2')));
-    if (d >= 20) uma('dq3', () => falar(fala('desaquecimento-3')));
+    if (d >= mo.dq2) uma('dq2', () => falar(fala('desaquecimento-2')));
+    if (d >= mo.dq3) uma('dq3', () => falar(fala('desaquecimento-3')));
   }
   if (restante <= 3 && restante >= 1 && e.tipo !== 'desaquecimento') uma('bipe' + restante, () => bipe(restante === 1 ? 1175 : 880));
 
@@ -428,8 +450,8 @@ function concluir() {
   store.set('ultimoTreino', hojeISO());
   store.set('hoje', { dia: hojeISO(), n: treinosHoje() + 1 });
   track('treino_concluido', { nivel: T.nivel });
-  const novoNivel = nivelDoTreino(n + 1);
-  const subiu = novoNivel > nivelDoTreino(n);
+  const novoNivel = nivelDoTreino(n + 1, niveis());
+  const subiu = novoNivel > nivelDoTreino(n, niveis());
   if (subiu) track('nivel_alcancado', { nivel: novoNivel });
   mostrarFim(n, subiu ? novoNivel : null);
 }
@@ -443,11 +465,11 @@ function marcador(texto) {
 }
 
 function mostrarFim(n, novoNivel, { previa = false } = {}) {
-  $('#titulo-fim').textContent = `Acabou! Treino nº ${n} 🎉`;
+  $('#titulo-fim').textContent = txt('titulo_fim', { rotulo: txt('rotulo_sessao'), n });
   const frase = falaDeLista('frases_conclusao', 'conclusao');
   $('#frase-fim').textContent = frase ? frase.texto : '';
   const msgNivel = $('#msg-nivel');
-  if (novoNivel) { msgNivel.textContent = `Novo nível desbloqueado: ${nomeDoNivel(novoNivel)}!`; msgNivel.hidden = false; }
+  if (novoNivel) { msgNivel.textContent = `Novo nível desbloqueado: ${nomeDoNivel(novoNivel, niveis())}!`; msgNivel.hidden = false; }
   else msgNivel.hidden = true;
 
   const marcadores = !!config.mostrar_marcadores_de_lugar;
@@ -580,7 +602,7 @@ function rota() {
   // Saiu do treino pelo "voltar" do celular: confirma antes de encerrar.
   if (T.ativo && tipo !== 'treino') {
     pausar();
-    if (window.confirm('Encerrar o treino agora? Ele não vai entrar na contagem.')) pararTreino();
+    if (window.confirm(txt('confirmar_encerrar'))) pararTreino();
     else { history.pushState(null, '', '#treino'); pilha.push('#treino'); mostrar('treino'); continuar(); return; }
   }
 
@@ -604,10 +626,10 @@ function prepararSobre() {
   if (!listaPronta && exercicios.length) {
     const box = $('#lista-movimentos');
     const GR = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
-    [1, 2, 3].forEach((nv) => {
+    niveis().map((x) => x.nivel).forEach((nv) => {
       const h = document.createElement('h3');
       h.className = 'nivel-titulo';
-      h.textContent = `Nível ${nv} · ${nomeDoNivel(nv)}`;
+      h.textContent = `Nível ${nv} · ${nomeDoNivel(nv, niveis())}`;
       const ul = document.createElement('ul');
       exercicios.filter((e) => e.nivel === nv).forEach((e) => {
         const li = document.createElement('li');
@@ -633,7 +655,7 @@ function prepararSobre() {
   prepararLembretes();
 
   // Código
-  $('#codigo-texto').textContent = codigoDe(treinosFeitos());
+  $('#codigo-texto').textContent = codigoDe(treinosFeitos(), produto.prefixo_codigo);
   $('#codigo-link').value = linkRecuperacao();
   const caixa = $('#restaurar-caixa');
   if (restaurarPendente != null) {
@@ -648,25 +670,44 @@ function prepararSobre() {
 }
 
 // ---------------- Lembretes (.ics) ----------------
+// Um seletor de horário por lembrete diário (produto.lembretes_padrao define quantos e os horários iniciais).
 function prepararLembretes() {
-  const sel = $('#hora-lembrete');
-  if (!sel.options.length) {
-    for (let h = 6; h <= 21; h++) for (const m of [0, 30]) {
-      const o = document.createElement('option');
-      o.value = `${h}:${m}`; o.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-      sel.append(o);
-    }
-    sel.value = store.get('horaLembrete', '8:0');
-    sel.addEventListener('change', atualizarLinksLembrete);
+  const box = $('#horarios-lembrete');
+  if (!box.children.length) {
+    const padrao = produto.lembretes_padrao;
+    const salvos = store.get('horariosLembrete', null) || [store.get('horaLembrete', null)].filter(Boolean);
+    padrao.forEach((p, i) => {
+      const sel = document.createElement('select');
+      sel.className = 'campo';
+      sel.id = i === 0 ? 'hora-lembrete' : `hora-lembrete-${i + 1}`;
+      sel.setAttribute('aria-label', padrao.length > 1 ? `Horário ${i + 1}` : 'Horário');
+      for (let h = 6; h <= 21; h++) for (const m of [0, 30]) {
+        const o = document.createElement('option');
+        o.value = `${h}:${m}`; o.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        sel.append(o);
+      }
+      sel.value = salvos[i] && lerHorario(salvos[i]) ? salvos[i] : p;
+      sel.addEventListener('change', atualizarLinksLembrete);
+      box.append(sel);
+    });
   }
   atualizarLinksLembrete();
 }
 function atualizarLinksLembrete() {
-  const [hora, minuto] = $('#hora-lembrete').value.split(':').map(Number);
-  store.set('horaLembrete', `${hora}:${minuto}`);
+  const horarios = [...$('#horarios-lembrete').querySelectorAll('select')].map((s) => s.value);
+  store.set('horariosLembrete', horarios);
   const url = location.origin + location.pathname;
-  $('#link-ics').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(gerarICS({ hora, minuto, url }));
-  $('#link-google').href = linkGoogleAgenda({ hora, minuto, url });
+  const base = { url, titulo: produto.titulo_lembrete, descricao: produto.descricao_lembrete, id: produto.id, minutos: Math.max(1, Math.round(duracaoTotal(montarLinhaDoTempo([1, 2, 3, 4], produto.duracao)) / 60)) };
+  $('#link-ics').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(gerarICS({ ...base, horarios }));
+  const google = $('#links-google');
+  google.replaceChildren(...horarios.map((h) => {
+    const { hora, minuto } = lerHorario(h);
+    const a = document.createElement('a');
+    a.className = 'botao-link'; a.target = '_blank'; a.rel = 'noopener';
+    a.href = linkGoogleAgenda({ ...base, hora, minuto });
+    a.textContent = horarios.length > 1 ? `Google Agenda · ${String(hora).padStart(2, '0')}:${String(minuto).padStart(2, '0')}` : 'Usar o Google Agenda';
+    return a;
+  }));
 }
 
 // ---------------- Código de recuperação ----------------
@@ -744,7 +785,7 @@ function ligarEventos() {
   });
   $('#btn-encerrar').addEventListener('click', () => {
     pausar();
-    if (window.confirm('Encerrar o treino agora? Ele não vai entrar na contagem.')) { pararTreino(); voltar(); }
+    if (window.confirm(txt('confirmar_encerrar'))) { pararTreino(); voltar(); }
     else continuar();
   });
 
@@ -761,8 +802,8 @@ function ligarEventos() {
   document.querySelectorAll('[data-voltar]').forEach((b) => b.addEventListener('click', voltar));
   $('#btn-copiar').addEventListener('click', () => copiarTexto($('#codigo-link').value));
   $('#btn-usar-codigo').addEventListener('click', () => {
-    const n = lerCodigo($('#codigo-entrada').value);
-    if (n == null) { $('#codigo-erro').textContent = 'Código inválido. Ele tem o formato FNC-15.'; return; }
+    const n = lerCodigo($('#codigo-entrada').value, produto.prefixos_aceitos);
+    if (n == null) { $('#codigo-erro').textContent = `Código inválido. Ele tem o formato ${produto.prefixo_codigo}-15.`; return; }
     $('#codigo-erro').textContent = '';
     restaurarPendente = n;
     prepararSobre();
@@ -787,11 +828,23 @@ function ligarEventos() {
 }
 
 // ---------------- Início ----------------
+// Cores do produto (config.json → produto.cores), aplicadas como variáveis CSS.
+const CORES_CSS = { principal: '--coral', principal_hover: '--coral-hover', principal_suave: '--coral-suave', acento: '--acento', texto_botao: '--texto-botao' };
+function aplicarCores() {
+  const c = produto.cores || {};
+  Object.entries(CORES_CSS).forEach(([k, v]) => {
+    if (typeof c[k] === 'string' && /^#[0-9a-f]{3,8}$/i.test(c[k])) document.documentElement.style.setProperty(v, c[k]);
+  });
+}
+
 async function iniciar() {
   [config, exercicios] = await Promise.all([
     carregarJSON('config.json', {}),
     carregarJSON('exercicios.json', { exercicios: [] }).then((j) => j.exercicios || []),
   ]);
+  try { produto = normalizarProduto(config.produto || {}); } catch (e) { console.error(e); }
+  prefixoStore = `${produto.id}:`;
+  aplicarCores();
   preencherRT();
   preencherSlogan();
   aplicarReduzir();

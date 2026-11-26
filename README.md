@@ -22,7 +22,8 @@ Um web app (PWA) gratuito de treinos de força de **5 minutos**, feitos em casa 
 
 | Arquivo | Para que serve | Você vai editar? |
 |---|---|---|
-| `config.json` | Responsável técnico, patrocinador, link do elástico, contador de acessos, frases e falas | **Sim** |
+| `config.json` | Produto (nome, duração, níveis, cores), textos de tela, slogan, responsável técnico, patrocinador, elástico, contador de acessos, frases e falas | **Sim** |
+| `FRAMEWORK.md` | Como este código serve outros apps da família (Força no Batente, 60+) | Para criar produtos |
 | `clinicas.json` | Clínicas parceiras (nome, logo, cor) | **Sim** |
 | `exercicios.json` | Os 24 movimentos (8 por nível) | Às vezes |
 | `termos.html` | Termos de uso e privacidade | **Sim** (marcadores `[ ]`) |

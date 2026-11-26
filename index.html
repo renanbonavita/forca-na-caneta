@@ -96,7 +96,7 @@
     <img class="logo-marca" src="icons/logo.svg" alt="" width="28" height="28"><span>Força na Caneta</span>
     <button class="botao-instalar" id="botao-instalar" type="button" hidden><svg class="ic ic-18"><use href="#i-baixar"/></svg>Usar sem internet</button>
   </div>
-  <p id="slogan" class="slogan"><span>A caneta já fez a parte dela.</span><span>Agora é hora de fortalecer.</span></p>
+  <p id="slogan" class="slogan"><span>Enquanto a caneta faz a parte dela,</span><span>você cuida da sua força.</span></p>
   <p id="selo-clinica" class="selo-clinica" hidden><img id="logo-clinica" alt="" width="24" height="24"><span>Indicado por <strong id="nome-clinica"></strong></span></p>
 
   <div class="centro-inicio">
@@ -223,12 +223,12 @@
     <details class="secao" id="sobre-lembretes">
       <summary><h2>Lembretes</h2></summary>
       <p>Um lembrete de segunda a sexta na agenda do celular: <strong>“Treino Força na Caneta – 5 min”</strong>.</p>
-      <label class="rotulo-campo" for="hora-lembrete">Que horas?</label>
-      <select class="campo" id="hora-lembrete"></select>
+      <p class="rotulo-campo">Que horas?</p>
+      <div id="horarios-lembrete" class="horarios"></div>
       <div class="botoes-linha">
         <a class="botao-link" id="link-ics" download="lembrete-forca-na-caneta.ics" href="#">Adicionar à agenda</a>
-        <a class="botao-link" id="link-google" target="_blank" rel="noopener" href="#">Usar o Google Agenda</a>
       </div>
+      <div class="botoes-linha" id="links-google"></div>
       <p class="u-mt8 fraco u-texto-menor">No iPhone, o arquivo abre no app Calendário: toque em “Adicionar”.</p>
     </details>
 

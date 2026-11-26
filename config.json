@@ -1,18 +1,75 @@
 {
-  "_leia_me": "Arquivo de configuração. Campos vazios (\"\") ficam ocultos no app. Veja o README.",
-
-  "responsavel_tecnico": { "nome": "[NOME DO RESPONSÁVEL TÉCNICO]", "cref": "[NÚMERO]-G/[UF]" },
-  "slogan": "A caneta já fez a parte dela.\nAgora é hora de fortalecer.",
+  "_leia_me": "Configuração do produto. Campos vazios (\"\") ficam ocultos no app. O bloco \"produto\" define o que muda de um app da família para outro (nome, duração, níveis, código, lembretes, cores). Veja o README.",
+  "produto": {
+    "id": "fnc",
+    "nome": "Força na Caneta",
+    "prefixo_codigo": "FNC",
+    "prefixos_aceitos": [
+      "DOSE"
+    ],
+    "titulo_lembrete": "Treino Força na Caneta – 5 min",
+    "descricao_lembrete": "Hora do treino de 5 minutos! Cadeira encostada na parede, toalha na mão e bora.",
+    "lembretes_padrao": [
+      "8:0"
+    ],
+    "duracao": {
+      "aquecimento": 30,
+      "exercicio": 40,
+      "descanso": 20,
+      "desaquecimento": 30,
+      "descanso_final": true,
+      "total_segundos": 300
+    },
+    "niveis": [
+      {
+        "nivel": 1,
+        "nome": "Esquentando",
+        "de": 1,
+        "ate": 6
+      },
+      {
+        "nivel": 2,
+        "nome": "Pegando no tranco",
+        "de": 7,
+        "ate": 15
+      },
+      {
+        "nivel": 3,
+        "nome": "Força Total",
+        "de": 16,
+        "ate": null
+      }
+    ],
+    "cores": {
+      "principal": "#FF6B4A",
+      "principal_hover": "#F45D3B",
+      "principal_suave": "#FFF0EA",
+      "acento": "#B23A1C",
+      "texto_botao": "#2A1A14"
+    }
+  },
+  "textos": {
+    "rotulo_sessao": "Treino",
+    "segundo_do_dia": "Que tal o 2º treino do dia?",
+    "varios_no_dia": "Hoje já foram {n} treinos. Que orgulho!",
+    "titulo_fim": "Acabou! {rotulo} nº {n} 🎉",
+    "confirmar_encerrar": "Encerrar o treino agora? Ele não vai entrar na contagem.",
+    "aquecimento_descricao": "Sentada, costas retas. Siga a voz: marcha leve, ombros e mãos.",
+    "ultimo_descanso_descricao": "Respire fundo. Já já vem o desaquecimento.",
+    "desaquecimento_descricao": "Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando."
+  },
+  "responsavel_tecnico": {
+    "nome": "[NOME DO RESPONSÁVEL TÉCNICO]",
+    "cref": "[NÚMERO]-G/[UF]"
+  },
+  "slogan": "Enquanto a caneta faz a parte dela,\nvocê cuida da sua força.",
   "contato_email": "[seu-email-de-contato@exemplo.com]",
-
   "mostrar_marcadores_de_lugar": true,
-
   "patrocinio": {
     "marca": "",
     "link": "",
     "texto": "Hidrate-se e garanta sua proteína — apoio"
   },
-
   "elastico": {
     "link": "",
     "a_partir_do_treino": 7,
@@ -21,12 +78,17 @@
     "texto": "Pronta para um desafio extra? Um elástico simples deixa os movimentos mais fortes.",
     "botao": "Quero meu elástico"
   },
-
-  "analytics": { "goatcounter": "renanbonavita", "plausible_dominio": "", "debug": true },
-
-  "audio": { "usar_mp3": false },
-  "midia": { "usar_videos": false },
-
+  "analytics": {
+    "goatcounter": "renanbonavita",
+    "plausible_dominio": "",
+    "debug": true
+  },
+  "audio": {
+    "usar_mp3": false
+  },
+  "midia": {
+    "usar_videos": false
+  },
   "falas": {
     "aquecimento-1": "Bora aquecer! Sentada, costas retinhas. Marcha leve, levantando os joelhos alternados.",
     "aquecimento-2": "Agora gira os ombros pra trás, bem devagar.",
@@ -40,7 +102,6 @@
     "desaquecimento-3": "Agora levanta devagar. Antes de sair andando, fica um instante em pé, parada.",
     "a-seguir": "A seguir:"
   },
-
   "frases_durante": [
     "Costas retinhas, ombro longe da orelha.",
     "Respira! Músculo também gosta de oxigênio.",

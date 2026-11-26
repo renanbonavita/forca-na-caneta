@@ -1,6 +1,11 @@
-// Service worker do Força na Caneta: funciona offline.
+// Service worker do framework (Força na Caneta e família): funciona offline.
 // Ao publicar mudanças, aumente a VERSAO para os celulares baixarem a versão nova.
-const VERSAO = 'fnc-v11';
+const VERSAO = 'v12';
+// O nome do cache inclui o endereço do app: vários apps no mesmo domínio
+// (ex.: usuario.github.io/app-1 e /app-2) não apagam os arquivos uns dos outros.
+const ESCOPO = new URL(self.registration.scope).pathname;
+const CACHE = `fw:${ESCOPO}:${VERSAO}`;
+const doApp = async (req, opcoes) => (await caches.open(CACHE)).match(req, opcoes);
 
 const ESSENCIAIS = [
   './', 'index.html', 'styles.css', 'app.js', 'js/logica.js',
@@ -12,7 +17,7 @@ const ESSENCIAIS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
-    const cache = await caches.open(VERSAO);
+    const cache = await caches.open(CACHE);
     // cache: 'reload' ignora o cache HTTP do navegador e garante os arquivos novos.
     await cache.addAll(ESSENCIAIS.map((u) => new Request(u, { cache: 'reload' })));
     // Placeholders, vídeos e áudios: guarda o que existir (arquivos ainda não gravados são ignorados).
@@ -26,7 +31,7 @@ self.addEventListener('install', (event) => {
       });
       if (cfg.audio && cfg.audio.usar_mp3) {
         Object.keys(cfg.falas || {}).forEach((id) => extras.add(`audio/${id}.mp3`));
-        const listas = { frases_durante: 'durante', frases_levantar: 'levantar', frases_toalha: 'toalha', frases_10s: 'dez', frases_descanso: 'descanso', frases_conclusao: 'conclusao' };
+        const listas = { frases_durante: 'durante', frases_levantar: 'levantar', frases_toalha: 'toalha', frases_objeto: 'objeto', frases_10s: 'dez', frases_descanso: 'descanso', frases_conclusao: 'conclusao' };
         Object.entries(listas).forEach(([k, p]) => (cfg[k] || []).forEach((_, i) => extras.add(`audio/${p}-${String(i + 1).padStart(2, '0')}.mp3`)));
       }
       (cli.clinicas || []).forEach((c) => c.logo && extras.add(c.logo));
@@ -39,7 +44,8 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const nomes = await caches.keys();
-    await Promise.all(nomes.filter((n) => n !== VERSAO).map((n) => caches.delete(n)));
+    // Apaga só versões antigas DESTE app (e o formato antigo de nome, fnc-vN).
+    await Promise.all(nomes.filter((n) => n !== CACHE && (n.startsWith(`fw:${ESCOPO}:`) || /^fnc-v\d+$/.test(n))).map((n) => caches.delete(n)));
     await self.clients.claim();
   })());
 });
@@ -73,7 +79,7 @@ self.addEventListener('fetch', (event) => {
   // Fontes do Google: usa o cache e atualiza por trás.
   if (/fonts\.(googleapis|gstatic)\.com/.test(url.hostname)) {
     event.respondWith((async () => {
-      const cache = await caches.open(VERSAO);
+      const cache = await caches.open(CACHE);
       const salvo = await cache.match(req);
       const rede = fetch(req).then((r) => { cache.put(req, r.clone()); return r; }).catch(() => salvo);
       return salvo || rede;
@@ -87,11 +93,11 @@ self.addEventListener('fetch', (event) => {
     event.respondWith((async () => {
       try {
         const r = await fetch(req, { cache: 'no-cache' });
-        const cache = await caches.open(VERSAO);
+        const cache = await caches.open(CACHE);
         cache.put(url.pathname.endsWith('termos.html') ? 'termos.html' : 'index.html', r.clone());
         return r;
       } catch {
-        return (await caches.match(req, { ignoreSearch: true })) || (await caches.match('index.html'));
+        return (await doApp(req, { ignoreSearch: true })) || (await doApp('index.html'));
       }
     })());
     return;
@@ -103,19 +109,19 @@ self.addEventListener('fetch', (event) => {
     event.respondWith((async () => {
       try {
         const r = await fetch(req, { cache: 'no-cache' });
-        if (r.ok) (await caches.open(VERSAO)).put(req, r.clone());
+        if (r.ok) (await caches.open(CACHE)).put(req, r.clone());
         return r;
-      } catch { return caches.match(req, { ignoreSearch: true }); }
+      } catch { return doApp(req, { ignoreSearch: true }); }
     })());
     return;
   }
 
   // Mídia (imagens, vídeos, áudios): cache primeiro.
   event.respondWith((async () => {
-    const salvo = await caches.match(req, { ignoreSearch: true });
+    const salvo = await doApp(req, { ignoreSearch: true });
     if (salvo) return req.headers.has('range') ? respostaParcial(req, salvo) : salvo;
     const r = await fetch(req);
-    if (r.ok && r.status === 200 && !req.headers.has('range')) (await caches.open(VERSAO)).put(req, r.clone());
+    if (r.ok && r.status === 200 && !req.headers.has('range')) (await caches.open(CACHE)).put(req, r.clone());
     return r;
   })());
 });

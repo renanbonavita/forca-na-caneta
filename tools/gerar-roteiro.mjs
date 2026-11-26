@@ -5,9 +5,10 @@ const raiz = new URL('..', import.meta.url).pathname;
 const { exercicios } = JSON.parse(readFileSync(raiz + 'exercicios.json', 'utf8'));
 const cfg = JSON.parse(readFileSync(raiz + 'config.json', 'utf8'));
 const G = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
-const N = { 1: 'Esquentando', 2: 'Pegando no tranco', 3: 'Força Total' };
+const N = Object.fromEntries(((cfg.produto || {}).niveis || [{ nivel: 1, nome: 'Esquentando' }, { nivel: 2, nome: 'Pegando no tranco' }, { nivel: 3, nome: 'Força Total' }]).map((n) => [n.nivel, n.nome]));
+const NOME = (cfg.produto || {}).nome || 'Força na Caneta';
 
-let md = `# Roteiro de gravação — Força na Caneta
+let md = `# Roteiro de gravação — ${NOME}
 
 > Arquivo gerado por \`node tools/gerar-roteiro.mjs\`. Se mudar exercícios ou frases, gere de novo.
 
@@ -47,15 +48,16 @@ const listas = [
   ['frases_durante', 'durante', 'Metade dos movimentos (geral)'],
   ['frases_levantar', 'levantar', 'Metade dos movimentos de levantar'],
   ['frases_toalha', 'toalha', 'Metade dos movimentos com toalha'],
+  ['frases_objeto', 'objeto', 'Metade dos movimentos com objeto (garrafa, elástico...)'],
   ['frases_10s', 'dez', 'Faltando 10 s'],
   ['frases_descanso', 'descanso', 'Início do descanso'],
   ['frases_conclusao', 'conclusao', 'Tela final'],
 ];
 let total = 0;
 md += `\n## 4. Frases sorteadas\n\nO número do arquivo segue a ordem da lista no \`config.json\` (01 = primeira frase).\n`;
-for (const [k, p, q] of listas) {
+for (const [k, p, q] of listas.filter(([k]) => (cfg[k] || []).length)) {
   md += `\n### ${q}\n\n| Arquivo | Texto |\n|---|---|\n`;
-  cfg[k].forEach((t, i) => { total++; md += `| \`audio/${p}-${String(i + 1).padStart(2, '0')}.mp3\` | ${t.replace(/ ?💪/, '')} |\n`; });
+  (cfg[k] || []).forEach((t, i) => { total++; md += `| \`audio/${p}-${String(i + 1).padStart(2, '0')}.mp3\` | ${t.replace(/ ?💪/, '')} |\n`; });
 }
 const fixas = Object.keys(cfg.falas).length - 1;
 md += `\n---\n\n**Total:** ${exercicios.length} vídeos e ${exercicios.length * 2 + fixas + total} áudios (${exercicios.length * 2} de movimentos, ${fixas} falas fixas e ${total} frases).\n`;

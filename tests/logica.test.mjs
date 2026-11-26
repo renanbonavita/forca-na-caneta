@@ -4,20 +4,48 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   DURACAO, GRUPOS, montarLinhaDoTempo, duracaoTotal, sortearTreino, temLevantarSeguido, nivelDoTreino,
-  gerarICS, lerCodigo, lerHashTreino, codigoDe, detectarPlataforma, mostrarElastico, proximoDiaUtil, idClinicaValido,
+  gerarICS, lerCodigo, normalizarProduto, momentosDasFalas, lerHorario, lerHashTreino, codigoDe, detectarPlataforma, mostrarElastico, proximoDiaUtil, idClinicaValido,
 } from '../js/logica.js';
 
 const raiz = new URL('..', import.meta.url);
 const { exercicios } = JSON.parse(readFileSync(new URL('exercicios.json', raiz), 'utf8'));
 const config = JSON.parse(readFileSync(new URL('config.json', raiz), 'utf8'));
+const produto = normalizarProduto(config.produto || {});
 
-test('treino soma exatamente 300 s (5 min)', () => {
-  for (const nivel of [1, 2, 3]) {
-    const etapas = montarLinhaDoTempo(sortearTreino(exercicios, nivel), DURACAO);
-    assert.equal(duracaoTotal(etapas), 300);
-    assert.equal(etapas.length, 10);
-    assert.equal(etapas.at(-1).inicio + etapas.at(-1).dur, 300);
+test('treino soma exatamente a duração do produto (Força na Caneta: 300 s)', () => {
+  const total = produto.duracao.total_segundos;
+  assert.ok(total, 'config.produto.duracao.total_segundos ausente');
+  for (const nv of produto.niveis) {
+    const etapas = montarLinhaDoTempo(sortearTreino(exercicios, nv.nivel), produto.duracao);
+    assert.equal(duracaoTotal(etapas), total);
+    assert.equal(etapas.at(-1).inicio + etapas.at(-1).dur, total);
   }
+  if (produto.id === 'fnc') assert.equal(total, 300);
+});
+
+test('framework: sem descanso final e falas sempre dentro da etapa', () => {
+  const d = { aquecimento: 15, exercicio: 30, descanso: 10, desaquecimento: 15, descanso_final: false };
+  const etapas = montarLinhaDoTempo([1, 2, 3, 4].map((i) => ({ id: i })), d);
+  assert.equal(duracaoTotal(etapas), 180);
+  assert.equal(etapas.filter((e) => e.tipo === 'descanso').length, 3);
+  for (const dd of [d, produto.duracao, { aquecimento: 20, exercicio: 30, descanso: 5, desaquecimento: 20 }]) {
+    for (const e of montarLinhaDoTempo([1, 2].map((i) => ({ id: i })), dd)) {
+      Object.values(momentosDasFalas(e)).filter((v) => v != null).forEach((t) => assert.ok(t >= 0 && t < e.dur, `${e.tipo}: ${t}s fora de ${e.dur}s`));
+    }
+  }
+});
+
+test('framework: produto padrão, prefixos e horários', () => {
+  const p = normalizarProduto({ id: 'batente', prefixo_codigo: 'fnb', niveis: [{ nivel: 1, nome: 'A', de: 1, ate: null }] });
+  assert.equal(p.prefixo_codigo, 'FNB');
+  assert.equal(lerCodigo('FNB-9', p.prefixos_aceitos), 9);
+  assert.equal(lerCodigo('FNC-9', p.prefixos_aceitos), null);
+  assert.equal(nivelDoTreino(500, p.niveis), 1);
+  assert.throws(() => normalizarProduto({ id: 'Com Espaço' }));
+  assert.deepEqual(lerHorario('14:30'), { hora: 14, minuto: 30 });
+  const ics = gerarICS({ horarios: ['10:0', '14:0', '16:0'], titulo: 'Pausa – 3 min', id: 'batente', minutos: 3 });
+  assert.equal(ics.match(/BEGIN:VEVENT/g).length, 3);
+  assert.match(ics, /DURATION:PT3M/);
 });
 
 test('biblioteca: 8 movimentos por nível, 2 por grupo, campos completos', () => {
@@ -59,7 +87,7 @@ test('evita levantar seguido mesmo com dois movimentos de levantar', () => {
 });
 
 test('níveis: 1–6, 7–15, 16+', () => {
-  assert.deepEqual([1, 6, 7, 15, 16, 100].map(nivelDoTreino), [1, 1, 2, 2, 3, 3]);
+  assert.deepEqual([1, 6, 7, 15, 16, 100].map((n) => nivelDoTreino(n, produto.niveis)), [1, 1, 2, 2, 3, 3]);
 });
 
 test('frases: pelo menos 30 e nenhuma cita remédio ou emagrecimento', () => {

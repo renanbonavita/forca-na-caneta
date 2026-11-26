@@ -1,7 +1,9 @@
-// Lógica pura do Força na Caneta (sem DOM). Usada pelo app e pelos testes.
+// Lógica pura do framework (sem DOM). Usada pelo app e pelos testes.
+// Tudo o que muda de um produto para outro vem do bloco "produto" do config.json
+// (veja normalizarProduto). Os valores padrão abaixo são os do Força na Caneta.
 
-// Duração fixa: 30 s + 4 × (40 s + 20 s) + 30 s = 300 s = 5 min.
-export const DURACAO = Object.freeze({ aquecimento: 30, exercicio: 40, descanso: 20, desaquecimento: 30 });
+// Padrão: 30 s + 4 × (40 s + 20 s) + 30 s = 300 s = 5 min.
+export const DURACAO = Object.freeze({ aquecimento: 30, exercicio: 40, descanso: 20, desaquecimento: 30, descanso_final: true });
 export const GRUPOS = Object.freeze(['pernas', 'empurrar', 'costas', 'extra']);
 
 export const NIVEIS = Object.freeze([
@@ -10,19 +12,47 @@ export const NIVEIS = Object.freeze([
   { nivel: 3, nome: 'Força Total', de: 16, ate: Infinity },
 ]);
 
+export const PRODUTO_PADRAO = Object.freeze({
+  id: 'fnc',
+  nome: 'Força na Caneta',
+  prefixo_codigo: 'FNC',
+  prefixos_aceitos: ['FNC', 'DOSE'],
+  titulo_lembrete: 'Treino Força na Caneta – 5 min',
+  descricao_lembrete: 'Hora do treino de 5 minutos! Cadeira encostada na parede, toalha na mão e bora.',
+  lembretes_padrao: ['8:0'],
+  duracao: DURACAO,
+  niveis: NIVEIS,
+});
+
+/** Junta o bloco "produto" do config.json com os padrões e valida o essencial. */
+export function normalizarProduto(p = {}) {
+  const produto = { ...PRODUTO_PADRAO, ...p };
+  produto.duracao = { ...DURACAO, ...(p.duracao || {}) };
+  produto.niveis = (p.niveis && p.niveis.length ? p.niveis : NIVEIS)
+    .map((nv) => ({ ...nv, ate: nv.ate == null ? Infinity : nv.ate }));
+  produto.prefixo_codigo = String(produto.prefixo_codigo || 'FNC').toUpperCase();
+  produto.prefixos_aceitos = [...new Set([produto.prefixo_codigo, ...(p.prefixos_aceitos || [])].map((x) => String(x).toUpperCase()))];
+  if (!/^[a-z0-9-]{1,20}$/.test(produto.id)) throw new Error('produto.id inválido: use letras minúsculas, números e hífen');
+  return produto;
+}
+
 /** Nível do treino de número `n` (1, 2, 3...). */
-export function nivelDoTreino(n) {
-  const achado = NIVEIS.find((nv) => n >= nv.de && n <= nv.ate);
+export function nivelDoTreino(n, niveis = NIVEIS) {
+  const achado = niveis.find((nv) => n >= nv.de && n <= (nv.ate == null ? Infinity : nv.ate));
   return achado ? achado.nivel : 1;
 }
-export const nomeDoNivel = (nivel) => (NIVEIS.find((nv) => nv.nivel === nivel) || NIVEIS[0]).nome;
+export const nomeDoNivel = (nivel, niveis = NIVEIS) => (niveis.find((nv) => nv.nivel === nivel) || niveis[0]).nome;
 
-/** Monta a sequência de etapas do treino com o segundo de início de cada uma. */
+/**
+ * Monta a sequência de etapas do treino com o segundo de início de cada uma.
+ * Com d.descanso_final = false, não há descanso depois do último movimento.
+ */
 export function montarLinhaDoTempo(movimentos, d = DURACAO) {
   const etapas = [{ tipo: 'aquecimento', dur: d.aquecimento, proximo: movimentos[0] || null }];
   movimentos.forEach((mov, i) => {
     etapas.push({ tipo: 'exercicio', dur: d.exercicio, mov, indice: i });
-    etapas.push({ tipo: 'descanso', dur: d.descanso, proximo: movimentos[i + 1] || null, indice: i });
+    const ultimo = i === movimentos.length - 1;
+    if (!ultimo || d.descanso_final !== false) etapas.push({ tipo: 'descanso', dur: d.descanso, proximo: movimentos[i + 1] || null, indice: i });
   });
   etapas.push({ tipo: 'desaquecimento', dur: d.desaquecimento });
   let t = 0;
@@ -30,6 +60,19 @@ export function montarLinhaDoTempo(movimentos, d = DURACAO) {
   return etapas;
 }
 export const duracaoTotal = (etapas) => etapas.reduce((soma, e) => soma + e.dur, 0);
+
+/**
+ * Momentos (em segundos dentro da etapa) em que cada fala programada toca.
+ * Proporcionais à duração, para funcionar com etapas curtas ou longas.
+ */
+export function momentosDasFalas(e) {
+  const d = e.dur;
+  if (e.tipo === 'aquecimento') return { aq2: d / 3, aq3: d * 0.6, prox: Math.max(d * 0.6 + 2, d - 7) };
+  if (e.tipo === 'exercicio') return { meio: d / 2, dez: d >= 25 ? d - 10 : null };
+  if (e.tipo === 'descanso') return { prox: Math.min(7, d * 0.35) };
+  if (e.tipo === 'desaquecimento') return { dq2: d / 3, dq3: (d * 2) / 3 };
+  return {};
+}
 
 function sortearUm(lista, rnd) { return lista[Math.floor(rnd() * lista.length)]; }
 function embaralhar(lista, rnd) {
@@ -75,9 +118,10 @@ export function sortearTreino(exercicios, nivel, idsAnteriores = [], rnd = Math.
 }
 
 // ---------- Código de recuperação ----------
-export const codigoDe = (treinos) => `FNC-${treinos}`;
-export function lerCodigo(texto) {
-  const m = String(texto || '').trim().match(/^(?:DOSE|FNC)[\s-]?(\d{1,4})$/i);
+export const codigoDe = (treinos, prefixo = 'FNC') => `${prefixo}-${treinos}`;
+export function lerCodigo(texto, prefixos = ['FNC', 'DOSE']) {
+  const alt = prefixos.map((x) => String(x).replace(/[^A-Za-z0-9]/g, '')).filter(Boolean).join('|');
+  const m = String(texto || '').trim().match(new RegExp(`^(?:${alt})[\\s-]?(\\d{1,4})$`, 'i'));
   return m ? Number(m[1]) : null;
 }
 export function lerHashTreino(hash) {
@@ -102,41 +146,52 @@ const fmtLocal = (d) => `${d.getFullYear()}${doisDig(d.getMonth() + 1)}${doisDig
 const fmtUTC = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 const escaparICS = (s) => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 
-export const TITULO_LEMBRETE = 'Treino Força na Caneta – 5 min';
+export const TITULO_LEMBRETE = PRODUTO_PADRAO.titulo_lembrete;
 
-/** Gera um .ics com evento recorrente de segunda a sexta (horário local "flutuante"). */
-export function gerarICS({ hora, minuto, url = '', agora = new Date() }) {
-  const inicio = proximoDiaUtil(hora, minuto, agora);
-  const linhas = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Forca na Caneta//Lembrete//PT-BR',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:fnc-${fmtUTC(agora)}-${doisDig(hora)}${doisDig(minuto)}@forcanacaneta`,
-    `DTSTAMP:${fmtUTC(agora)}`,
-    `DTSTART:${fmtLocal(inicio)}`,
-    'DURATION:PT5M',
-    'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',
-    `SUMMARY:${escaparICS(TITULO_LEMBRETE)}`,
-    `DESCRIPTION:${escaparICS(`Hora do treino de 5 minutos! Cadeira encostada na parede, toalha na mão e bora. ${url}`.trim())}`,
-  ];
-  if (url) linhas.push(`URL:${url}`);
-  linhas.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0S', `DESCRIPTION:${escaparICS(TITULO_LEMBRETE)}`, 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR');
+/** "8:30" → { hora: 8, minuto: 30 } */
+export function lerHorario(txt) {
+  const m = String(txt).match(/^(\d{1,2}):(\d{1,2})$/);
+  if (!m) return null;
+  const hora = Number(m[1]), minuto = Number(m[2]);
+  return hora < 24 && minuto < 60 ? { hora, minuto } : null;
+}
+
+/**
+ * Gera um .ics com um evento recorrente de segunda a sexta para cada horário
+ * (horário local "flutuante"). Aceita { hora, minuto } ou { horarios: ['10:0', '14:0'] }.
+ */
+export function gerarICS({ hora, minuto, horarios, url = '', agora = new Date(), titulo = TITULO_LEMBRETE, descricao = PRODUTO_PADRAO.descricao_lembrete, id = 'fnc', minutos = 5 }) {
+  const lista = (horarios || [`${hora}:${minuto}`]).map(lerHorario).filter(Boolean);
+  const linhas = ['BEGIN:VCALENDAR', 'VERSION:2.0', `PRODID:-//${id}//Lembrete//PT-BR`, 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  lista.forEach(({ hora: h, minuto: m }) => {
+    const inicio = proximoDiaUtil(h, m, agora);
+    linhas.push(
+      'BEGIN:VEVENT',
+      `UID:${id}-${fmtUTC(agora)}-${doisDig(h)}${doisDig(m)}@${id}.lembrete`,
+      `DTSTAMP:${fmtUTC(agora)}`,
+      `DTSTART:${fmtLocal(inicio)}`,
+      `DURATION:PT${minutos}M`,
+      'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',
+      `SUMMARY:${escaparICS(titulo)}`,
+      `DESCRIPTION:${escaparICS(`${descricao} ${url}`.trim())}`,
+    );
+    if (url) linhas.push(`URL:${url}`);
+    linhas.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0S', `DESCRIPTION:${escaparICS(titulo)}`, 'END:VALARM', 'END:VEVENT');
+  });
+  linhas.push('END:VCALENDAR');
   return linhas.join('\r\n') + '\r\n';
 }
 
-/** Link para criar o mesmo lembrete no Google Agenda (útil no Android). */
-export function linkGoogleAgenda({ hora, minuto, url = '', agora = new Date() }) {
+/** Link para criar o lembrete de UM horário no Google Agenda (útil no Android). */
+export function linkGoogleAgenda({ hora, minuto, url = '', agora = new Date(), titulo = TITULO_LEMBRETE, descricao = PRODUTO_PADRAO.descricao_lembrete, minutos = 5 }) {
   const inicio = proximoDiaUtil(hora, minuto, agora);
-  const fim = new Date(inicio.getTime() + 5 * 60 * 1000);
+  const fim = new Date(inicio.getTime() + minutos * 60 * 1000);
   const p = new URLSearchParams({
     action: 'TEMPLATE',
-    text: TITULO_LEMBRETE,
+    text: titulo,
     dates: `${fmtLocal(inicio)}/${fmtLocal(fim)}`,
     recur: 'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',
-    details: `Hora do treino de 5 minutos! ${url}`.trim(),
+    details: `${descricao} ${url}`.trim(),
     ctz: 'America/Sao_Paulo',
   });
   return `https://calendar.google.com/calendar/render?${p.toString()}`;
