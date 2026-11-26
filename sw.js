@@ -1,6 +1,6 @@
 // Service worker do Força na Caneta: funciona offline.
 // Ao publicar mudanças, aumente a VERSAO para os celulares baixarem a versão nova.
-const VERSAO = 'fnc-v2';
+const VERSAO = 'fnc-v3';
 
 const ESSENCIAIS = [
   './', 'index.html', 'styles.css', 'app.js', 'js/logica.js',

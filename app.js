@@ -50,7 +50,7 @@ function atualizarInicio() {
   const hoje = treinosHoje();
   const msg = $('#msg-hoje');
   if (hoje === 1) { msg.textContent = 'Que tal o 2º treino do dia?'; msg.hidden = false; }
-  else if (hoje > 1) { msg.textContent = `Hoje já foram ${hoje} treinos. Que orgulho! 🧡`; msg.hidden = false; }
+  else if (hoje > 1) { msg.textContent = `Hoje já foram ${hoje} treinos. Que orgulho!`; msg.hidden = false; }
   else msg.hidden = true;
 }
 
@@ -245,7 +245,7 @@ function comecarTreino(nivelForcado = null) {
   T.etapas = montarLinhaDoTempo(movs, DURACAO);
   T.total = duracaoTotal(T.etapas); // sempre 300 s
   T.ativo = true; T.pausadoEm = null; T.posicao = 'sentada';
-  $('#btn-pausar').textContent = '⏸ Pausar';
+  rotuloPausa(false);
   mostrar('treino');
   pedirWakeLock();
   track('treino_iniciado', { nivel: T.nivel });
@@ -271,7 +271,7 @@ function mostrarMidia(mov, imagemPadrao) {
 
 function alertaCadeira(proximo) {
   const el = $('#alerta');
-  if (proximo && proximo.usa_cadeira) { el.textContent = '🪑 ' + fala('cadeira-alerta').texto; el.hidden = false; return true; }
+  if (proximo && proximo.usa_cadeira) { $('#alerta-texto').textContent = fala('cadeira-alerta').texto; el.hidden = false; return true; }
   el.hidden = true; return false;
 }
 function anunciarProximo(proximo) {
@@ -389,12 +389,18 @@ function renderizarTempo() {
   $('#barra').setAttribute('aria-valuenow', String(Math.round(feito)));
 }
 
+function rotuloPausa(pausado) {
+  const b = $('#btn-pausar');
+  b.querySelector('use').setAttribute('href', pausado ? '#i-play' : '#i-pausa');
+  b.querySelector('span').textContent = pausado ? 'Continuar' : 'Pausar';
+}
+
 function pausar(motivo) {
   if (!T.ativo || T.pausadoEm) return;
   T.pausadoEm = Date.now();
   calar();
   legenda(motivo || 'Pausado. Toque em Continuar quando quiser.');
-  $('#btn-pausar').textContent = '▶ Continuar';
+  rotuloPausa(true);
   $('#cronometro').classList.add('pausado');
   try { $('#video').pause(); } catch { /* */ }
 }
@@ -403,7 +409,7 @@ function continuar() {
   T.inicioEtapa += Date.now() - T.pausadoEm;
   T.pausadoEm = null;
   legenda('');
-  $('#btn-pausar').textContent = '⏸ Pausar';
+  rotuloPausa(false);
   $('#cronometro').classList.remove('pausado');
   if (!$('#video').hidden) $('#video').play().catch(() => {});
 }
@@ -442,7 +448,7 @@ function mostrarFim(n, novoNivel, { previa = false } = {}) {
   const frase = falaDeLista('frases_conclusao', 'conclusao');
   $('#frase-fim').textContent = frase ? frase.texto : '';
   const msgNivel = $('#msg-nivel');
-  if (novoNivel) { msgNivel.textContent = `Novo nível desbloqueado: ${nomeDoNivel(novoNivel)}! 🚀`; msgNivel.hidden = false; }
+  if (novoNivel) { msgNivel.textContent = `Novo nível desbloqueado: ${nomeDoNivel(novoNivel)}!`; msgNivel.hidden = false; }
   else msgNivel.hidden = true;
 
   const marcadores = !!config.mostrar_marcadores_de_lugar;
@@ -543,7 +549,7 @@ async function abrirInstalar() {
   } else if (p.ios) {
     const ol = document.createElement('ol');
     ol.append(li('Abra este site no <strong>Safari</strong>.'),
-      li('Toque em <strong>⋯ (Mais)</strong> e depois em <strong>Compartilhar</strong> <span aria-hidden="true">⬆️</span>.'),
+      li('Toque em <strong>⋯ (Mais)</strong> e depois em <strong>Compartilhar</strong>.'),
       li('Role e toque em <strong>“Adicionar à Tela de Início”</strong>.'),
       li('Toque em <strong>“Adicionar”</strong>. Pronto! 🎉'));
     box.append(ol);

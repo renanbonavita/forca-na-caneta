@@ -6,7 +6,7 @@ const raiz = new URL('..', import.meta.url).pathname;
 const { exercicios } = JSON.parse(readFileSync(raiz + 'exercicios.json', 'utf8'));
 mkdirSync(raiz + 'img/mov', { recursive: true });
 
-const CORES = { pernas: '#FFE1D6', empurrar: '#FFF0C7', costas: '#DDF3E8', extra: '#E8E2FF' };
+const CORES = { pernas: '#FFEDE6', empurrar: '#FFEDE6', costas: '#FFEDE6', extra: '#FFEDE6' };
 const ROTULO = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -32,32 +32,32 @@ function svg(mov) {
   const fundo = CORES[mov.grupo] || '#FFF';
   const linhas = quebrar(mov.nome);
   const usaParede = /parede/i.test(mov.nome + mov.descricao);
-  const figura = '<g transform="translate(70 10)">' + [
+  const figura = '<g transform="translate(-60 -48)">' + [
     usaParede ? parede : '',
     mov.usa_cadeira ? cadeira : '',
     mov.posicao === 'sentada' ? pessoaSentada : pessoaEmPe,
     mov.usa_toalha ? toalha : '',
   ].join('\n') + '</g>';
-  const texto = linhas.map((l, i) => `<text x="24" y="${46 + i * 31}" font-size="26" font-weight="800">${esc(l)}</text>`).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
-<rect width="480" height="360" fill="${fundo}"/>
-<rect x="0" y="270" width="480" height="90" fill="#000" opacity=".05"/>
+  const _texto = linhas.map((l, i) => `<text x="24" y="${46 + i * 31}" font-size="26" font-weight="800">${esc(l)}</text>`).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
+<rect width="480" height="300" fill="${fundo}"/>
+<rect x="0" y="222" width="480" height="78" fill="#F7D9CC"/>
 ${figura}
-${texto}
-<text x="24" y="310" font-size="20" font-weight="700">${ROTULO[mov.grupo]} · nível ${mov.nivel}</text>
-<text x="24" y="338" font-size="18" fill="#5E4B43">Ilustração provisória · vídeo em gravação</text>
+<text x="24" y="40" font-size="18" font-weight="800" fill="#B23A1C">${ROTULO[mov.grupo].toUpperCase()}</text>
+<text x="24" y="282" font-size="16" fill="#6B5850">Ilustração provisória · vídeo em gravação</text>
 </svg>\n`;
 }
 
 for (const mov of exercicios) writeFileSync(raiz + mov.placeholder, svg(mov));
 
-const simples = (titulo, sub, cor) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
-<rect width="480" height="360" fill="${cor}"/>
-${pessoaSentada.replace(/285/g, '240').replace(/325/g, '280').replace(/320/g, '275')}
-<text x="240" y="300" font-size="34" font-weight="900" text-anchor="middle">${titulo}</text>
-<text x="240" y="335" font-size="20" text-anchor="middle" fill="#5E4B43">${sub}</text>
+const simples = (titulo, sub, cor) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
+<rect width="480" height="300" fill="${cor}"/>
+<g transform="translate(0 -48)">${pessoaSentada.replace(/285/g, '240').replace(/325/g, '280').replace(/320/g, '275')}</g>
+<rect x="0" y="222" width="480" height="78" fill="#F7D9CC"/>
+<text x="24" y="40" font-size="18" font-weight="800" fill="#B23A1C">${titulo.toUpperCase()}</text>
+<text x="24" y="282" font-size="16" fill="#6B5850">${sub}</text>
 </svg>\n`;
-writeFileSync(raiz + 'img/aquecimento.svg', simples('Aquecimento', 'Sentada, no seu ritmo', '#FFE1D6'));
-writeFileSync(raiz + 'img/descanso.svg', simples('Descanso', 'Respira fundo', '#DDF3E8'));
-writeFileSync(raiz + 'img/desaquecimento.svg', simples('Desaquecimento', 'Levante devagar no final', '#E8E2FF'));
+writeFileSync(raiz + 'img/aquecimento.svg', simples('Aquecimento', 'Sentada, no seu ritmo', '#FFEDE6'));
+writeFileSync(raiz + 'img/descanso.svg', simples('Descanso', 'Respira fundo', '#FFEDE6'));
+writeFileSync(raiz + 'img/desaquecimento.svg', simples('Desaquecimento', 'Levante devagar no final', '#FFEDE6'));
 console.log(`${exercicios.length} ilustrações + 3 telas geradas em img/`);

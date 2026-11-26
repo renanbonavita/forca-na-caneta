@@ -5,18 +5,24 @@ const lum = (hex) => {
 };
 const razao = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 const pares = [
-  ['texto sobre fundo', '#2A1A14', '#FFF7F2', 4.5],
-  ['texto suave sobre fundo', '#5E4B43', '#FFF7F2', 4.5],
-  ['texto suave sobre branco', '#5E4B43', '#FFFFFF', 4.5],
+  ['texto sobre fundo', '#2A1A14', '#FFF8F4', 4.5],
+  ['texto secundário sobre fundo', '#6B5850', '#FFF8F4', 4.5],
+  ['texto secundário sobre branco', '#6B5850', '#FFFFFF', 4.5],
+  ['texto secundário sobre coral suave', '#6B5850', '#FFEDE6', 4.5],
+  ['texto sobre chip coral suave', '#2A1A14', '#FFEDE6', 4.5],
+  ['coral escuro sobre coral suave (rótulos)', '#B23A1C', '#FFEDE6', 4.5],
+  ['verde sobre verde claro', '#1F6B4F', '#E6F4EE', 4.5],
+  ['texto sobre alerta', '#2A1A14', '#FFF4D6', 4.5],
+  ['ícone coral escuro sobre branco (gráfico)', '#B23A1C', '#FFFFFF', 3],
   ['texto escuro sobre botão coral', '#2A1A14', '#FF6B4A', 4.5],
-  ['link coral escuro sobre fundo', '#B23A1C', '#FFF7F2', 4.5],
+  ['link coral escuro sobre fundo', '#B23A1C', '#FFF8F4', 4.5],
   ['marcador coral escuro sobre branco', '#B23A1C', '#FFFFFF', 4.5],
   ['legenda branca sobre escuro', '#FFFFFF', '#2A1A14', 4.5],
-  ['verde sobre fundo', '#1F6B4F', '#FFF7F2', 4.5],
+  ['verde sobre fundo', '#1F6B4F', '#FFF8F4', 4.5],
   ['texto sobre alerta amarelo', '#2A1A14', '#FFF1C9', 4.5],
   ['texto sobre verde claro', '#2A1A14', '#DDF3E8', 4.5],
   ['erro sobre branco', '#A3241B', '#FFFFFF', 4.5],
-  ['barra de progresso (gráfico) sobre trilho', '#B23A1C', '#FFE1D6', 3],
+  ['barra de progresso (gráfico) sobre trilho', '#B23A1C', '#FFEDE6', 3],
 ];
 let falhou = false;
 for (const [nome, a, b, min] of pares) {
