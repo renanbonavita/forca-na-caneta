@@ -56,15 +56,19 @@ a{color:var(--acento)}
 .info-treino{font-size:1.05rem;color:var(--suave)}
 .info-treino strong{color:var(--texto)}
 /* A ação principal: grande, ocupa a largura e divide a altura da tela. */
+/* A ação principal: botão redondo de "início rápido", com anel de destaque.
+   O tamanho acompanha a altura da tela (entre 200px e 280px). */
 .bora{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;
-  min-height:clamp(160px,32vh,260px);min-height:clamp(160px,32dvh,260px);
-  background:var(--coral);color:var(--texto);border:2px solid var(--acento);border-radius:22px;
-  padding:20px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex:0 0 auto;
+  align-self:center;
+  width:clamp(200px,38vh,280px);width:clamp(200px,38dvh,280px);aspect-ratio:1;max-width:80vw;
+  background:var(--coral);color:var(--texto);border:3px solid var(--acento);border-radius:50%;
+  box-shadow:0 0 0 12px var(--coral-suave);
+  padding:16px;
 }
 .bora:active{background:#F45D3B}
-.bora-texto{font-size:3.4rem;font-weight:800;letter-spacing:.04em;line-height:1.05}
-.bora-sub{font-size:1.15rem;font-weight:700}
+.bora-texto{font-size:3.2rem;font-weight:800;letter-spacing:.04em;line-height:1.05;white-space:nowrap}
+.bora-sub{font-size:1.05rem;font-weight:700;white-space:nowrap}
 .msg-hoje{font-weight:700;color:var(--sucesso)}
 .fraco{color:var(--suave)}
 
@@ -197,14 +201,21 @@ html.reduzir-animacoes *,html.reduzir-animacoes *::before,html.reduzir-animacoes
 /* Celulares estreitos */
 @media (max-width:360px){
   .voltar,.ouvir{padding:9px 11px;font-size:.95rem;gap:6px}
-  .links-rodape{font-size:.84rem}
-  .bora-texto{font-size:2.8rem}
+  .links-rodape{font-size:.8rem}
+  .marca{font-size:.92rem;white-space:nowrap}
+  .marca > span{display:none}
+  .links-rodape .logo-rodape{display:none}
+  .botao-instalar{padding:0 10px;font-size:.82rem;white-space:nowrap}
+  .rt{font-size:.78rem}
+  .bora-texto{font-size:2.6rem}
 }
 /* Celulares baixos (ex.: iPhone SE): início e treino cabem sem rolar. */
 @media (max-height:700px){
   .tela{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
   .centro-inicio{gap:12px;padding:12px 0}
-  .bora-texto{font-size:2.8rem}
+  .bora{width:clamp(160px,32dvh,220px);box-shadow:0 0 0 8px var(--coral-suave)}
+  .bora-texto{font-size:2.4rem}
+  .bora-sub{font-size:.95rem}
   .tela-treino{gap:10px}
   .cronometro{font-size:2.4rem;min-width:76px}
   .mov h1{font-size:1.35rem}
