@@ -49,8 +49,8 @@ test('framework: produto padrão, prefixos e horários', () => {
 });
 
 test('biblioteca: 8 movimentos por nível, 2 por grupo, campos completos', () => {
-  const campos = ['id', 'nome', 'nivel', 'grupo', 'descricao', 'dica_seguranca', 'versao_facil', 'usa_cadeira', 'usa_toalha', 'envolve_levantar', 'video', 'audio_intro'];
-  for (const nivel of [1, 2, 3]) {
+  const campos = ['id', 'nome', 'nivel', 'grupo', 'descricao', 'dica_seguranca', 'versao_facil', 'usa_cadeira', 'envolve_levantar', 'video', 'audio_intro'];
+  for (const nivel of produto.niveis.map((n) => n.nivel)) {
     const doNivel = exercicios.filter((e) => e.nivel === nivel);
     assert.equal(doNivel.length, 8, `nível ${nivel}`);
     for (const g of GRUPOS) assert.equal(doNivel.filter((e) => e.grupo === g).length, 2, `nível ${nivel} grupo ${g}`);
@@ -67,7 +67,7 @@ test('nada no chão e nada de mergulho de tríceps', () => {
 });
 
 test('sorteio: 1 por grupo, não repete combinação anterior, sem levantar seguido', () => {
-  for (const nivel of [1, 2, 3]) {
+  for (const nivel of produto.niveis.map((n) => n.nivel)) {
     let anterior = [];
     for (let i = 0; i < 2000; i++) {
       const t = sortearTreino(exercicios, nivel, anterior);
@@ -86,13 +86,20 @@ test('evita levantar seguido mesmo com dois movimentos de levantar', () => {
   for (let i = 0; i < 500; i++) assert.ok(!temLevantarSeguido(sortearTreino(falsos, 9)));
 });
 
-test('níveis: 1–6, 7–15, 16+', () => {
-  assert.deepEqual([1, 6, 7, 15, 16, 100].map((n) => nivelDoTreino(n, produto.niveis)), [1, 1, 2, 2, 3, 3]);
+test('níveis do produto: contínuos, sem buracos, o último sem fim', () => {
+  const nv = produto.niveis;
+  nv.forEach((n, i) => {
+    assert.equal(nivelDoTreino(n.de, nv), n.nivel);
+    if (i > 0) assert.equal(n.de, nv[i - 1].ate + 1, `buraco antes do nível ${n.nivel}`);
+  });
+  assert.equal(nv.at(-1).ate, Infinity);
+  assert.equal(nivelDoTreino(100000, nv), nv.at(-1).nivel);
+  if (produto.id === 'fnc') assert.deepEqual([1, 6, 7, 15, 16, 100].map((n) => nivelDoTreino(n, nv)), [1, 1, 2, 2, 3, 3]);
 });
 
 test('frases: pelo menos 30 e nenhuma cita remédio ou emagrecimento', () => {
-  const listas = ['frases_durante', 'frases_levantar', 'frases_toalha', 'frases_10s', 'frases_descanso', 'frases_conclusao'];
-  const todas = listas.flatMap((l) => config[l]);
+  const listas = ['frases_durante', 'frases_levantar', 'frases_toalha', 'frases_objeto', 'frases_10s', 'frases_descanso', 'frases_conclusao'];
+  const todas = listas.flatMap((l) => config[l] || []);
   assert.ok(todas.length >= 30, `só ${todas.length} frases`);
   const tudo = JSON.stringify(config) + JSON.stringify(exercicios);
   assert.ok(!/ozempic|mounjaro|wegovy|semaglutid|tirzepatid|liraglutid|saxenda|emagre[cç]a|perca peso|perder peso|kg/i.test(tudo));

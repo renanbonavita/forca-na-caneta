@@ -56,7 +56,9 @@
     "confirmar_encerrar": "Encerrar o treino agora? Ele não vai entrar na contagem.",
     "aquecimento_descricao": "Sentada, costas retas. Siga a voz: marcha leve, ombros e mãos.",
     "ultimo_descanso_descricao": "Respire fundo. Já já vem o desaquecimento.",
-    "desaquecimento_descricao": "Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando."
+    "desaquecimento_descricao": "Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando.",
+    "bora_sub": "treino de 5 min",
+    "requisitos_inicio": "Cadeira encostada na parede e uma toalha."
   },
   "responsavel_tecnico": {
     "nome": "[NOME DO RESPONSÁVEL TÉCNICO]",

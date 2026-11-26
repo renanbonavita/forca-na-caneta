@@ -40,6 +40,8 @@ const TEXTOS_PADRAO = {
   aquecimento_descricao: 'Sentada, costas retas. Siga a voz: marcha leve, ombros e mãos.',
   ultimo_descanso_descricao: 'Respire fundo. Já já vem o desaquecimento.',
   desaquecimento_descricao: 'Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando.',
+  bora_sub: 'treino de 5 min',
+  requisitos_inicio: 'Cadeira encostada na parede e uma toalha.',
 };
 const txt = (chave, vars = {}) => String({ ...TEXTOS_PADRAO, ...(config.textos || {}) }[chave] || '')
   .replace(/\{(\w+)\}/g, (_, k) => (vars[k] ?? ''));
@@ -724,6 +726,11 @@ async function copiarTexto(texto) {
 }
 
 // ---------------- Textos do responsável técnico ----------------
+function preencherTextosProduto() {
+  document.querySelectorAll('[data-produto-nome]').forEach((e) => { e.textContent = produto.nome; });
+  $('#bora-sub').textContent = txt('bora_sub');
+  $('#requisitos-inicio').textContent = txt('requisitos_inicio');
+}
 function preencherSlogan() {
   const el = $('#slogan');
   if (typeof config.slogan !== 'string') return;
@@ -846,6 +853,7 @@ async function iniciar() {
   prefixoStore = `${produto.id}:`;
   aplicarCores();
   preencherRT();
+  preencherTextosProduto();
   preencherSlogan();
   aplicarReduzir();
   rotuloVoz();

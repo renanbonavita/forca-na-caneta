@@ -93,7 +93,7 @@
 <!-- ===== INÍCIO ===== -->
 <main id="inicio" class="tela" aria-label="Início">
   <div class="marca">
-    <img class="logo-marca" src="icons/logo.svg" alt="" width="28" height="28"><span>Força na Caneta</span>
+    <img class="logo-marca" src="icons/logo.svg" alt="" width="28" height="28"><span data-produto-nome>Força na Caneta</span>
     <button class="botao-instalar" id="botao-instalar" type="button" hidden><svg class="ic ic-18"><use href="#i-baixar"/></svg>Usar sem internet</button>
   </div>
   <p id="slogan" class="slogan"><span>Enquanto a caneta faz a parte dela,</span><span>você cuida da sua força.</span></p>
@@ -103,10 +103,10 @@
     <p class="info-treino"><strong id="num-treino">Treino nº 1</strong> · <span id="nome-nivel">Esquentando</span></p>
     <button class="bora" type="button" id="btn-bora">
       <span class="bora-texto">BORA</span>
-      <span class="bora-sub"><span aria-hidden="true">💪</span> treino de 5 min</span>
+      <span class="bora-sub"><span aria-hidden="true">💪</span> <span id="bora-sub">treino de 5 min</span></span>
     </button>
     <p id="msg-hoje" class="msg-hoje" hidden></p>
-    <p class="fraco">Cadeira encostada na parede e uma toalha.</p>
+    <p class="fraco" id="requisitos-inicio">Cadeira encostada na parede e uma toalha.</p>
   </div>
 
   <footer class="rodape">
