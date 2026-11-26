@@ -103,7 +103,7 @@ try {
   ok('modo clínica (?c=demo) aparece e fica guardado');
 
   // Instalação no iPhone
-  await page.getByRole('button', { name: /Adicionar à tela de início/ }).click();
+  await page.getByRole('button', { name: 'Instalar' }).click();
   assert.match(await page.locator('#instalar-conteudo').innerText(), /Adicionar à Tela de Início/);
   await page.locator('#dlg-instalar [data-fechar]').click();
   ok('instruções de instalação para iPhone');
@@ -129,7 +129,7 @@ try {
   const p2 = await ig.newPage();
   await p2.goto(BASE);
   await p2.getByRole('button', { name: 'Entendi, bora!' }).click();
-  await p2.getByRole('button', { name: /Adicionar à tela de início/ }).click();
+  await p2.getByRole('button', { name: 'Instalar' }).click();
   assert.match(await p2.locator('#instalar-conteudo').innerText(), /navegador interno do Instagram/);
   ok('detecta navegador interno do Instagram e orienta abrir no Safari');
 

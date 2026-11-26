@@ -16,18 +16,18 @@ Antes de testar, abra uma vez `SEU-SITE/?c=demo` para ligar o modo clínica.
 - [ ] "Lembretes" → escolher horário → abre o Calendário → evento de seg a sex, 5 min.
 
 ## iPhone — tela de início
-- [ ] "Adicionar à tela de início" mostra os passos; seguir os passos instala o ícone **FnC**.
+- [ ] "Instalar" mostra os passos; seguir os passos instala o ícone **FnC**.
 - [ ] Abrir pelo ícone: abre sem a barra do Safari.
 - [ ] A contagem começou do zero? Se sim, usar "Meu código" (anotado antes) e restaurar.
 - [ ] Modo avião + abrir pelo ícone: **funciona offline** e faz um treino completo.
 
 ## iPhone — navegadores internos
-- [ ] Enviar o link no **WhatsApp** e abrir: o app funciona; "Adicionar à tela de início" orienta abrir no Safari.
+- [ ] Enviar o link no **WhatsApp** e abrir: o app funciona; "Instalar" orienta abrir no Safari.
 - [ ] Abrir o link pela bio/direct do **Instagram**: aparece "Você está no navegador interno do Instagram".
 
 ## Android — Chrome
 - [ ] Voz em português, legendas e bipes.
-- [ ] "Adicionar à tela de início" abre o **pedido de instalação** do Chrome; o ícone aparece.
+- [ ] "Instalar" abre o **pedido de instalação** do Chrome; o ícone aparece.
 - [ ] Tela não apaga durante o treino.
 - [ ] Offline funciona depois de instalado.
 - [ ] "Lembretes" → "Usar o Google Agenda" cria o evento recorrente.
