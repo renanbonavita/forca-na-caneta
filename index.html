@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Força na Caneta</title>
+  <meta name="description" content="Treino de força de 5 minutos em casa, com cadeira e toalha. Grátis, sem cadastro.">
+  <meta name="theme-color" content="#FF6B4A">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="FnC">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- 1. AVISO (primeiro acesso) -->
+    <section id="tela-aviso" class="tela" hidden aria-labelledby="titulo-aviso">
+      <img src="icons/logo.svg" alt="Força na Caneta" class="logo logo-pequeno" width="72" height="72">
+      <h1 id="titulo-aviso">Antes de começar</h1>
+      <div class="cartao aviso-texto">
+        <p>O Força na Caneta traz exercícios genéricos de força, sem orientação individual. Ele não substitui avaliação médica, nutricional ou de profissional de educação física. Responsável técnico: <span data-rt-nome></span>, CREF <span data-rt-cref></span>.</p>
+        <ul>
+          <li>Converse com seu médico antes de começar, principalmente se você usa medicação para emagrecer ou tem alguma condição de saúde.</li>
+          <li>Levante-se sempre devagar: tontura ao ficar em pé pode acontecer, sobretudo com pouca comida ou pouca água.</li>
+          <li>Beba água antes e depois do treino.</li>
+          <li>Use uma cadeira firme, sem rodinhas, encostada na parede, em piso que não escorrega.</li>
+          <li>Pare na hora se sentir tontura, dor no peito, falta de ar, enjoo ou mal-estar.</li>
+        </ul>
+      </div>
+      <button type="button" class="btn btn-principal" id="btn-aceitar">Entendi, bora!</button>
+      <p class="centro"><a href="termos.html">Termos de uso</a></p>
+    </section>
+
+    <!-- 2. INÍCIO -->
+    <section id="tela-inicio" class="tela" hidden aria-labelledby="titulo-app">
+      <header class="topo">
+        <img src="icons/logo.svg" alt="" class="logo" width="96" height="96">
+        <h1 id="titulo-app" class="titulo-app">Força na Caneta</h1>
+        <div id="selo-clinica" class="selo-clinica" hidden>
+          <img id="logo-clinica" alt="" width="40" height="40">
+          <span>Indicado por <strong id="nome-clinica"></strong></span>
+        </div>
+      </header>
+
+      <button type="button" id="btn-bora" class="btn-bora">
+        <span class="bora-texto">BORA <span aria-hidden="true">💪</span></span>
+        <span class="bora-sub">treino de 5 min</span>
+      </button>
+
+      <p class="info-treino"><strong id="num-treino">Treino nº 1</strong> · nível <span id="nome-nivel">Esquentando</span></p>
+      <p id="msg-hoje" class="msg-hoje" hidden></p>
+      <p class="sub">Só precisa de uma cadeira encostada na parede e uma toalha.</p>
+
+      <nav class="rodape" aria-label="Opções">
+        <button type="button" class="btn-rodape" id="btn-instalar">📲 Adicionar à tela de início</button>
+        <button type="button" class="btn-rodape" id="btn-lembretes">⏰ Lembretes</button>
+        <button type="button" class="btn-rodape" id="btn-codigo">🔑 Meu código</button>
+        <button type="button" class="btn-rodape" id="btn-animacoes" aria-pressed="false">✨ Reduzir animações</button>
+        <a class="btn-rodape" href="termos.html">📄 Termos de uso</a>
+      </nav>
+      <p class="rt">Responsável técnico: <span data-rt-nome></span> · CREF <span data-rt-cref></span></p>
+    </section>
+
+    <!-- 3. TREINO -->
+    <section id="tela-treino" class="tela tela-treino" hidden aria-label="Treino">
+      <div class="treino-topo">
+        <span id="etapa-rotulo" class="etapa-rotulo">Aquecimento</span>
+        <span id="tempo-total" class="tempo-total">5:00</span>
+      </div>
+      <div class="barra" role="progressbar" aria-label="Progresso do treino" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0" id="barra">
+        <div class="barra-preenchida" id="barra-preenchida"></div>
+      </div>
+
+      <div class="midia">
+        <video id="video" muted playsinline loop autoplay preload="auto" hidden aria-hidden="true"></video>
+        <img id="placeholder" src="img/aquecimento.svg" alt="">
+      </div>
+
+      <h2 id="nome-mov" class="nome-mov">Aquecimento</h2>
+      <div id="cronometro" class="cronometro" aria-hidden="true">30</div>
+      <p id="descricao-mov" class="descricao-mov"></p>
+      <div id="alerta" class="alerta" role="status" hidden></div>
+      <p id="legenda" class="legenda" aria-live="polite"></p>
+
+      <div class="controles">
+        <button type="button" class="btn btn-controle" id="btn-pausar">⏸ Pausar</button>
+        <button type="button" class="btn btn-controle" id="btn-pular">⏭ Pular</button>
+        <button type="button" class="btn btn-controle btn-facil" id="btn-facil" aria-pressed="false">🌱 Versão mais fácil</button>
+      </div>
+      <p id="aviso-tela" class="aviso-tela" hidden>📱 Mantenha a tela ligada durante o treino.</p>
+      <button type="button" class="link-discreto" id="btn-encerrar">Encerrar treino</button>
+    </section>
+
+    <!-- 4. CONCLUSÃO -->
+    <section id="tela-fim" class="tela tela-fim" hidden aria-labelledby="titulo-fim">
+      <canvas id="confete" class="confete" aria-hidden="true"></canvas>
+      <h1 id="titulo-fim" class="titulo-fim">Acabou! Treino nº 1 🎉</h1>
+      <p id="frase-fim" class="frase-fim"></p>
+      <p id="msg-nivel" class="msg-nivel" hidden></p>
+
+      <button type="button" class="btn btn-principal" id="btn-mais-uma">Mais uma rodada?</button>
+      <button type="button" class="btn btn-secundario" id="btn-por-hoje">Por hoje tá ótimo</button>
+
+      <div id="card-elastico" class="cartao card-elastico" hidden>
+        <button type="button" class="fechar" id="btn-dispensar-elastico" aria-label="Dispensar Missão Elástico">✕</button>
+        <h2 id="elastico-titulo">Missão Elástico</h2>
+        <p id="elastico-texto"></p>
+        <a id="elastico-link" class="btn btn-secundario" target="_blank" rel="sponsored noopener"></a>
+      </div>
+
+      <p id="patrocinio" class="patrocinio" hidden></p>
+    </section>
+  </main>
+
+  <!-- Diálogos -->
+  <dialog id="dlg-instalar" aria-labelledby="dlg-instalar-titulo">
+    <h2 id="dlg-instalar-titulo">Adicionar à tela de início</h2>
+    <div id="instalar-conteudo"></div>
+    <button type="button" class="btn btn-secundario" data-fechar>Fechar</button>
+  </dialog>
+
+  <dialog id="dlg-lembretes" aria-labelledby="dlg-lembretes-titulo">
+    <h2 id="dlg-lembretes-titulo">Lembrete na agenda</h2>
+    <p>Um lembrete de segunda a sexta: <strong>“Treino Força na Caneta – 5 min”</strong>.</p>
+    <label for="hora-lembrete" class="rotulo">Que horas?</label>
+    <select id="hora-lembrete" class="campo"></select>
+    <a id="link-ics" class="btn btn-principal" download="lembrete-forca-na-caneta.ics" href="#">📅 Adicionar à agenda do celular</a>
+    <a id="link-google" class="btn btn-secundario" target="_blank" rel="noopener" href="#">Usar o Google Agenda</a>
+    <p class="nota">No iPhone, o arquivo abre direto no app Calendário: toque em “Adicionar”.</p>
+    <button type="button" class="btn btn-secundario" data-fechar>Fechar</button>
+  </dialog>
+
+  <dialog id="dlg-codigo" aria-labelledby="dlg-codigo-titulo">
+    <h2 id="dlg-codigo-titulo">Meu código</h2>
+    <p>Se o celular apagar sua contagem, use este código para recuperar:</p>
+    <p class="codigo" id="codigo-texto">FNC-0</p>
+    <input id="codigo-link" class="campo" readonly aria-label="Link de recuperação">
+    <button type="button" class="btn btn-principal" id="btn-copiar">Copiar link</button>
+    <p id="copiado" class="nota" role="status"></p>
+    <hr>
+    <label for="codigo-entrada" class="rotulo">Tem um código? Digite aqui:</label>
+    <input id="codigo-entrada" class="campo" placeholder="FNC-15" autocomplete="off" autocapitalize="characters">
+    <button type="button" class="btn btn-secundario" id="btn-usar-codigo">Restaurar</button>
+    <p id="codigo-erro" class="nota erro" role="alert"></p>
+    <button type="button" class="btn btn-secundario" data-fechar>Fechar</button>
+  </dialog>
+
+  <dialog id="dlg-restaurar" aria-labelledby="dlg-restaurar-titulo">
+    <h2 id="dlg-restaurar-titulo">Restaurar para o treino <span id="restaurar-num"></span>?</h2>
+    <p id="restaurar-texto"></p>
+    <button type="button" class="btn btn-principal" id="btn-restaurar-sim">Sim, restaurar</button>
+    <button type="button" class="btn btn-secundario" data-fechar>Agora não</button>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{
+  "_leia_me": "Arquivo de configuração. Campos vazios (\"\") ficam ocultos no app. Veja o README.",
+
+  "responsavel_tecnico": { "nome": "[NOME DO RESPONSÁVEL TÉCNICO]", "cref": "[NÚMERO]-G/[UF]" },
+  "contato_email": "[seu-email-de-contato@exemplo.com]",
+
+  "mostrar_marcadores_de_lugar": true,
+
+  "patrocinio": {
+    "marca": "",
+    "link": "",
+    "texto": "Hidrate-se e garanta sua proteína — apoio"
+  },
+
+  "elastico": {
+    "link": "",
+    "a_partir_do_treino": 7,
+    "repetir_a_cada": 5,
+    "titulo": "Missão Elástico",
+    "texto": "Pronta para um desafio extra? Um elástico simples deixa os movimentos mais fortes.",
+    "botao": "Quero meu elástico"
+  },
+
+  "analytics": { "goatcounter": "", "plausible_dominio": "", "debug": false },
+
+  "audio": { "usar_mp3": false },
+  "midia": { "usar_videos": false },
+
+  "falas": {
+    "aquecimento-1": "Bora aquecer! Sentada, costas retinhas. Marcha leve, levantando os joelhos alternados.",
+    "aquecimento-2": "Agora gira os ombros pra trás, bem devagar.",
+    "aquecimento-3": "Abre e fecha as mãos. Respira fundo.",
+    "cadeira-alerta": "Cadeira encostada na parede? Então bora.",
+    "levanta-devagar": "Levanta devagar.",
+    "troca-lado": "Troca de lado!",
+    "ultimo-descanso": "Último descanso! Já já vem o desaquecimento.",
+    "desaquecimento-1": "Desaquecimento. Sentada, respira fundo pelo nariz e solta pela boca.",
+    "desaquecimento-2": "Entrelaça as mãos e estica os braços pra frente, alongando as costas.",
+    "desaquecimento-3": "Agora levanta devagar. Antes de sair andando, fica um instante em pé, parada.",
+    "a-seguir": "A seguir:"
+  },
+
+  "frases_durante": [
+    "Costas retinhas, ombro longe da orelha.",
+    "Respira! Músculo também gosta de oxigênio.",
+    "Isso! Seu eu do futuro tá batendo palma.",
+    "Devagar é chique. Controle é tudo.",
+    "Tá indo lindamente. Sem pressa, com força.",
+    "Cada repetição é um tijolinho de força.",
+    "Força na caneta e no braço também!",
+    "Ninguém tá olhando: pode fazer careta à vontade.",
+    "Barriga firme, como quem vai fechar a calça jeans.",
+    "Músculo não tem idade, tem treino.",
+    "Se precisar, usa a versão mais fácil. Fazer é o que conta!",
+    "Pés firmes no chão, rainha no trono."
+  ],
+  "frases_levantar": [
+    "Senta, levanta... devagarinho que a força tá vindo!",
+    "Levanta devagar, que a pressa fica pra fila do banco.",
+    "Sobe com calma, desce com classe."
+  ],
+  "frases_toalha": [
+    "Puxa essa toalha como quem puxa o cobertor no inverno!",
+    "Toalha esticada, escápulas apertadinhas.",
+    "Essa toalha nunca trabalhou tanto na vida."
+  ],
+  "frases_10s": [
+    "Mais 10 segundos. Seu músculo agradece, sua cadeira nem tanto.",
+    "Só mais 10! Já dá pra sentir o cheirinho da vitória.",
+    "Reta final: 10 segundinhos.",
+    "Dez segundos. Capricha, mas sem prender a respiração.",
+    "Último gás! Dez segundos e descanso."
+  ],
+  "frases_descanso": [
+    "Descansa. Respira fundo e solta devagar.",
+    "Pausa merecida. Um golinho de água vai bem.",
+    "Respira... ombros relaxados.",
+    "Sacode as mãos, solta o corpo."
+  ],
+  "frases_conclusao": [
+    "Acabou! Cinco minutos de pura força na caneta 💪",
+    "Treino feito! Pode contar pra todo mundo (ou guardar só pra você).",
+    "Mais forte que ontem. Simples assim.",
+    "Cinco minutos que valem ouro. Parabéns!",
+    "Seu músculo mandou dizer: obrigado!",
+    "Missão cumprida. A cadeira sobreviveu e você arrasou.",
+    "Um treino de cada vez, e a força vai ficando.",
+    "Arrasou! Agora um copo d'água pra fechar com chave de ouro.",
+    "Constância vence tudo. Você tá no caminho.",
+    "Feito! Força que ninguém vê, mas você sente."
+  ]
+}

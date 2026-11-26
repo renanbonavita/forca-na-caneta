@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Termos de uso · Força na Caneta</title>
+  <meta name="theme-color" content="#FF6B4A">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .termos h2 { margin-top: 24px; }
+    .termos p, .termos li { max-width: 65ch; }
+    .marcador { display: inline; padding: 0 6px; }
+  </style>
+</head>
+<body>
+  <main id="app" class="termos">
+    <p><a href="./">← Voltar para o app</a></p>
+    <h1>Termos de uso e privacidade</h1>
+    <p class="nota">Última atualização: <span class="marcador">[DATA]</span></p>
+
+    <h2>1. O que é o Força na Caneta</h2>
+    <p>O Força na Caneta é um site gratuito com treinos de força de 5 minutos, feitos em casa com uma cadeira e uma toalha. Os exercícios são genéricos, sem orientação individual, e não substituem avaliação médica, nutricional ou de profissional de educação física.</p>
+
+    <h2>2. Responsável técnico</h2>
+    <p>Os exercícios foram selecionados e revisados por:<br>
+      <strong><span data-rt-nome>[NOME DO RESPONSÁVEL TÉCNICO]</span></strong>, profissional de educação física, CREF <span data-rt-cref>[NÚMERO]</span>.</p>
+
+    <h2>3. Cuidados antes e durante o treino</h2>
+    <ul>
+      <li>Converse com seu médico antes de começar, principalmente se você usa medicação para emagrecer ou tem alguma condição de saúde.</li>
+      <li>Levante-se sempre devagar: tontura ao ficar em pé pode acontecer, sobretudo com pouca comida ou pouca água.</li>
+      <li>Beba água antes e depois do treino.</li>
+      <li>Use uma cadeira firme, sem rodinhas, com o encosto encostado na parede, em piso que não escorrega.</li>
+      <li>Pare na hora se sentir tontura, dor no peito, falta de ar, enjoo ou mal-estar, e procure atendimento se os sintomas não passarem.</li>
+    </ul>
+
+    <h2>4. Privacidade</h2>
+    <p><strong>Não pedimos cadastro, nome, e-mail, telefone, peso ou qualquer dado de saúde.</strong></p>
+    <ul>
+      <li><strong>No seu celular:</strong> o app guarda só o número de treinos feitos, a data do último treino, se você leu o aviso e suas preferências (como “reduzir animações”). Esses dados ficam no seu aparelho, e você pode apagá-los limpando os dados do site no navegador.</li>
+      <li><strong>Estatísticas de uso:</strong> usamos um contador de acessos sem cookies e sem dados pessoais <span class="marcador">[GoatCounter ou Plausible]</span>. Ele registra, de forma agregada e anônima, quantos treinos foram iniciados e concluídos. Não identificamos você.</li>
+      <li><strong>Link de clínica:</strong> se você entrou pelo link de uma clínica, o identificador da clínica é guardado no seu aparelho e enviado junto das estatísticas anônimas. A clínica recebe apenas números agregados (por exemplo, “120 treinos concluídos no mês”), nunca dados de uma pessoa.</li>
+      <li><strong>Links de parceiros:</strong> o app pode mostrar um apoiador e um link de compra de elástico. Ao tocar nesses links, você vai para o site do parceiro, que tem a própria política de privacidade.</li>
+    </ul>
+
+    <h2>5. Contato</h2>
+    <p>Dúvidas, sugestões ou pedidos sobre seus dados: <span class="marcador" data-contato>[seu-email-de-contato]</span></p>
+
+    <p class="nota">Responsável pelo site: <span class="marcador">[RAZÃO SOCIAL / CNPJ]</span></p>
+    <p><a href="./">← Voltar para o app</a></p>
+  </main>
+  <script>
+    // Preenche os dados do responsável técnico e contato a partir do config.json
+    fetch('config.json').then((r) => r.json()).then((c) => {
+      const rt = c.responsavel_tecnico || {};
+      document.querySelectorAll('[data-rt-nome]').forEach((e) => { if (rt.nome) e.textContent = rt.nome; });
+      document.querySelectorAll('[data-rt-cref]').forEach((e) => { if (rt.cref) e.textContent = rt.cref; });
+      document.querySelectorAll('[data-contato]').forEach((e) => { if (c.contato_email) e.textContent = c.contato_email; });
+    }).catch(() => {});
+  </script>
+</body>
+</html>

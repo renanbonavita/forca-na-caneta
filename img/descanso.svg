@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
+<rect width="480" height="360" fill="#DDF3E8"/>
+<g stroke="#2A1A14" stroke-width="8" stroke-linecap="round" fill="none">
+  <path d="M240 140 v55 h40 v60"/><path d="M240 160 l35 15"/></g><circle cx="240" cy="120" r="16" fill="#2A1A14"/>
+<text x="240" y="300" font-size="34" font-weight="900" text-anchor="middle">Descanso</text>
+<text x="240" y="335" font-size="20" text-anchor="middle" fill="#5E4B43">Respira fundo</text>
+</svg>

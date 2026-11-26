@@ -1,0 +1,15 @@
+{
+  "name": "forca-na-caneta",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PWA gratuito de micro-treinos de força de 5 minutos.",
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/servidor.mjs",
+    "test": "node --test tests/logica.test.mjs && node tests/contraste.mjs",
+    "e2e": "node tests/e2e.mjs",
+    "placeholders": "node tools/gerar-placeholders.mjs",
+    "roteiro": "node tools/gerar-roteiro.mjs",
+    "icones": "node tools/gerar-icones.mjs"
+  }
+}

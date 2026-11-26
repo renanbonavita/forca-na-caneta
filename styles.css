@@ -1,0 +1,246 @@
+/* Força na Caneta — estilos. Contraste validado em tests/contraste.mjs */
+:root {
+  --fundo: #FFF7F2;
+  --superficie: #FFFFFF;
+  --texto: #2A1A14;
+  --texto-suave: #5E4B43;
+  --coral: #FF6B4A;          /* fundo de botão: texto escuro por cima */
+  --coral-claro: #FFE1D6;
+  --coral-escuro: #B23A1C;   /* links e destaques sobre o fundo claro */
+  --verde: #1F6B4F;
+  --borda: #EBD5CB;
+  --foco: #2A1A14;
+  --cor-clinica: var(--coral-escuro);
+  --raio: 20px;
+  --sombra: 0 6px 20px rgba(42, 26, 20, 0.10);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Nunito", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 19px;
+  line-height: 1.5;
+  min-height: 100dvh;
+}
+
+a { color: var(--coral-escuro); font-weight: 700; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; border-radius: 8px; }
+[tabindex="-1"]:focus { outline: none; }
+
+#app {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+}
+.tela { display: flex; flex-direction: column; gap: 16px; }
+
+h1 { font-size: 30px; line-height: 1.2; margin: 8px 0 0; font-weight: 900; }
+h2 { font-size: 24px; line-height: 1.25; margin: 0; font-weight: 800; }
+.centro { text-align: center; margin: 0; }
+
+.logo { display: block; margin: 0 auto; }
+.logo-pequeno { margin-top: 8px; }
+
+.cartao {
+  background: var(--superficie);
+  border-radius: var(--raio);
+  padding: 20px;
+  box-shadow: var(--sombra);
+}
+.aviso-texto p { margin-top: 0; }
+.aviso-texto ul { margin: 0; padding-left: 22px; }
+.aviso-texto li { margin-bottom: 10px; }
+
+/* Botões */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 20px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 21px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn-principal { background: var(--coral); color: var(--texto); box-shadow: 0 6px 0 #C9492C; }
+.btn-secundario { background: var(--superficie); color: var(--texto); border: 2px solid var(--texto); }
+.btn[aria-disabled="true"] { opacity: .75; cursor: default; }
+
+/* Início */
+.topo { text-align: center; padding-top: 8px; }
+.titulo-app { font-size: 32px; margin-top: 4px; }
+.selo-clinica {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 12px; padding: 8px 16px 8px 8px;
+  background: var(--superficie);
+  border: 2px solid var(--cor-clinica);
+  border-radius: 999px;
+  font-size: 18px;
+}
+.selo-clinica img { border-radius: 50%; object-fit: contain; background: #fff; }
+
+.btn-bora {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  margin: 16px 0 4px;
+  border: 0;
+  border-radius: 40px;
+  background: var(--coral);
+  color: var(--texto);
+  box-shadow: 0 10px 0 #C9492C, 0 18px 30px rgba(201, 73, 44, .35);
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: pulsar 2.4s ease-in-out infinite;
+}
+.btn-bora:active { transform: translateY(6px); box-shadow: 0 4px 0 #C9492C; }
+.bora-texto { font-size: 60px; font-weight: 900; letter-spacing: 2px; line-height: 1.1; }
+.bora-sub { font-size: 21px; font-weight: 800; }
+@keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+
+.info-treino { text-align: center; font-size: 21px; margin: 0; }
+.msg-hoje { text-align: center; margin: 0; font-weight: 800; color: var(--verde); }
+.sub { text-align: center; margin: 0; color: var(--texto-suave); }
+
+.rodape { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; border-top: 2px dashed var(--borda); padding-top: 16px; }
+.btn-rodape {
+  display: flex; align-items: center; min-height: 56px; width: 100%;
+  padding: 12px 16px;
+  background: transparent; border: 0; border-radius: 14px;
+  color: var(--texto); font: inherit; font-weight: 700; text-align: left; text-decoration: none;
+  cursor: pointer;
+}
+.btn-rodape:hover, .btn-rodape:focus-visible { background: var(--coral-claro); }
+.btn-rodape[aria-pressed="true"] { background: var(--coral-claro); }
+.btn-rodape[aria-pressed="true"]::after { content: " ✓"; margin-left: 6px; }
+.rt { font-size: 16px; color: var(--texto-suave); text-align: center; margin: 0; }
+
+/* Treino */
+.tela-treino { gap: 12px; }
+.treino-topo { display: flex; justify-content: space-between; align-items: baseline; font-weight: 800; }
+.etapa-rotulo { font-size: 20px; }
+.tempo-total { font-size: 18px; color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+.barra { height: 14px; background: var(--coral-claro); border-radius: 999px; overflow: hidden; }
+.barra-preenchida { height: 100%; width: 0; background: var(--coral-escuro); border-radius: 999px; transition: width .25s linear; }
+
+.midia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--superficie);
+  border-radius: var(--raio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+.midia video, .midia img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.midia img { object-fit: contain; }
+
+.nome-mov { text-align: center; font-size: 26px; }
+.cronometro {
+  text-align: center;
+  font-size: 88px; font-weight: 900; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.cronometro.pausado { opacity: .5; }
+.descricao-mov { margin: 0; }
+.alerta {
+  background: #FFF1C9; border: 2px solid #8A6100; color: var(--texto);
+  border-radius: 16px; padding: 12px 16px; font-weight: 800; font-size: 20px; text-align: center;
+}
+.legenda {
+  min-height: 3.2em; margin: 0;
+  background: var(--texto); color: #fff;
+  border-radius: 16px; padding: 12px 16px;
+  font-size: 20px; font-weight: 700; text-align: center;
+}
+.legenda:empty { visibility: hidden; }
+.controles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-controle { background: var(--superficie); color: var(--texto); border: 2px solid var(--texto); font-size: 19px; border-radius: 18px; }
+.btn-facil { grid-column: 1 / -1; }
+.btn-facil[aria-pressed="true"] { background: #DDF3E8; border-color: var(--verde); }
+.btn-controle:disabled { opacity: .45; cursor: default; }
+.aviso-tela { margin: 0; text-align: center; color: var(--texto-suave); font-size: 17px; }
+.link-discreto {
+  align-self: center; min-height: 48px; padding: 8px 16px;
+  background: none; border: 0; color: var(--texto-suave); font: inherit; font-size: 17px; text-decoration: underline; cursor: pointer;
+}
+
+/* Conclusão */
+.tela-fim { text-align: center; padding-top: 24px; }
+.titulo-fim { font-size: 34px; }
+.frase-fim { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+.msg-nivel { background: #DDF3E8; border-radius: 16px; padding: 12px; margin: 0; font-weight: 800; }
+.confete { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+.card-elastico { position: relative; text-align: left; margin-top: 8px; border: 2px solid var(--coral); }
+.card-elastico h2 { padding-right: 40px; }
+.fechar {
+  position: absolute; top: 8px; right: 8px; width: 48px; height: 48px;
+  border: 0; background: none; font-size: 22px; color: var(--texto); cursor: pointer; border-radius: 50%;
+}
+.patrocinio { font-size: 17px; color: var(--texto-suave); margin: 8px 0 0; }
+
+/* Marcadores de lugar (enquanto config.mostrar_marcadores_de_lugar = true) */
+.marcador {
+  display: block;
+  border: 2px dashed var(--coral-escuro);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #FFF;
+  color: var(--coral-escuro);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* Diálogos */
+dialog {
+  width: min(520px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  border: 0; border-radius: 24px; padding: 24px;
+  background: var(--superficie); color: var(--texto);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+}
+dialog::backdrop { background: rgba(42, 26, 20, .55); }
+dialog[open] { display: flex; flex-direction: column; gap: 12px; }
+dialog h2 { font-size: 24px; }
+dialog p { margin: 0; }
+dialog ol { margin: 0; padding-left: 24px; }
+dialog li { margin-bottom: 8px; }
+.rotulo { font-weight: 800; }
+.campo {
+  width: 100%; min-height: 56px; padding: 12px 14px;
+  border: 2px solid var(--texto-suave); border-radius: 14px;
+  font: inherit; color: var(--texto); background: #fff;
+}
+.codigo { font-size: 40px; font-weight: 900; text-align: center; letter-spacing: 2px; }
+.nota { font-size: 17px; color: var(--texto-suave); }
+.erro { color: #A3241B; font-weight: 700; }
+hr { border: 0; border-top: 2px dashed var(--borda); margin: 4px 0; width: 100%; }
+
+/* Reduzir animações */
+html.reduzir-animacoes *, html.reduzir-animacoes *::before, html.reduzir-animacoes *::after {
+  animation: none !important; transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Telas baixas: treino cabe sem rolar muito */
+@media (max-height: 700px) {
+  .cronometro { font-size: 64px; }
+  .midia { aspect-ratio: 16 / 9; }
+  .btn-bora { min-height: 160px; }
+}
