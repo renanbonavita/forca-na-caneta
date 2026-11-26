@@ -642,7 +642,15 @@ function preencherRT() {
 // ---------------- Service worker ----------------
 function registrarSW() {
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    const tinhaControle = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});
+    // Quando uma versão nova assume, recarrega uma vez (nunca no meio de um treino).
+    let recarregou = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!tinhaControle || recarregou || T.ativo) return;
+      recarregou = true;
+      location.reload();
+    });
   }
 }
 

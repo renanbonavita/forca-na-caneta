@@ -1,6 +1,6 @@
 // Service worker do Força na Caneta: funciona offline.
 // Ao publicar mudanças, aumente a VERSAO para os celulares baixarem a versão nova.
-const VERSAO = 'fnc-v3';
+const VERSAO = 'fnc-v4';
 
 const ESSENCIAIS = [
   './', 'index.html', 'styles.css', 'app.js', 'js/logica.js',
@@ -13,7 +13,8 @@ const ESSENCIAIS = [
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(VERSAO);
-    await cache.addAll(ESSENCIAIS);
+    // cache: 'reload' ignora o cache HTTP do navegador e garante os arquivos novos.
+    await cache.addAll(ESSENCIAIS.map((u) => new Request(u, { cache: 'reload' })));
     // Placeholders, vídeos e áudios: guarda o que existir (arquivos ainda não gravados são ignorados).
     try {
       const [ex, cfg, cli] = await Promise.all(['exercicios.json', 'config.json', 'clinicas.json'].map((u) => fetch(u).then((r) => r.json())));
@@ -85,7 +86,7 @@ self.addEventListener('fetch', (event) => {
   if (req.mode === 'navigate') {
     event.respondWith((async () => {
       try {
-        const r = await fetch(req);
+        const r = await fetch(req, { cache: 'no-cache' });
         const cache = await caches.open(VERSAO);
         cache.put(url.pathname.endsWith('termos.html') ? 'termos.html' : 'index.html', r.clone());
         return r;
@@ -96,11 +97,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // JSON de configuração: rede primeiro (para receber atualizações), cache se offline.
-  if (url.pathname.endsWith('.json')) {
+  // Código e configuração (html, css, js, json): rede primeiro, para página, estilo e script
+  // virem sempre da MESMA versão. O cache só entra quando está offline.
+  if (/\.(html|css|js|mjs|json)$/.test(url.pathname)) {
     event.respondWith((async () => {
       try {
-        const r = await fetch(req);
+        const r = await fetch(req, { cache: 'no-cache' });
         if (r.ok) (await caches.open(VERSAO)).put(req, r.clone());
         return r;
       } catch { return caches.match(req, { ignoreSearch: true }); }
@@ -108,7 +110,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Demais arquivos (css, js, imagens, vídeos, áudios): cache primeiro.
+  // Mídia (imagens, vídeos, áudios): cache primeiro.
   event.respondWith((async () => {
     const salvo = await caches.match(req, { ignoreSearch: true });
     if (salvo) return req.headers.has('range') ? respostaParcial(req, salvo) : salvo;
