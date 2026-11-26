@@ -1,6 +1,6 @@
 {
-  "name": "Dose de Força",
-  "short_name": "Dose de Força",
+  "name": "Força na Caneta",
+  "short_name": "Força",
   "description": "Treino de força de 5 minutos em casa, com cadeira e toalha.",
   "lang": "pt-BR",
   "start_url": "./",

@@ -1,4 +1,4 @@
-# Dose de Força 💪
+# Força na Caneta 💪
 
 Um web app (PWA) gratuito de treinos de força de **5 minutos**, feitos em casa com **cadeira e toalha**. Não tem cadastro e não tem backend: são só arquivos estáticos, então a hospedagem pode ser gratuita.
 
@@ -129,7 +129,7 @@ Para ver os eventos no console do navegador enquanto testa, use `"debug": true`.
 No `config.json`:
 ```json
 "responsavel_tecnico": { "nome": "Fulana de Tal", "cref": "012345-G/SP" },
-"contato_email": "contato@dosedeforca.com.br"
+"contato_email": "contato@forcanacaneta.com.br"
 ```
 O nome aparece no aviso inicial, no rodapé e nos termos.
 
@@ -153,7 +153,7 @@ O `index.html` tem uma política de segurança (Content-Security-Policy) que só
 
 ### Patrocinador de proteína
 ```json
-"patrocinio": { "marca": "Marca X", "link": "https://marca-x.com.br/?utm_source=dosedeforca", "texto": "Hidrate-se e garanta sua proteína — apoio" }
+"patrocinio": { "marca": "Marca X", "link": "https://marca-x.com.br/?utm_source=forcanacaneta", "texto": "Hidrate-se e garanta sua proteína — apoio" }
 ```
 Resultado na tela final (linha discreta abaixo do card): *"Hidrate-se e garanta sua proteína — apoio **Marca X**"* (com link). Se `marca` ficar vazia, a linha some.
 

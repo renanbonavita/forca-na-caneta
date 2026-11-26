@@ -1,4 +1,4 @@
-// Dose de Força — app principal (vanilla JS, sem backend).
+// Força na Caneta — app principal (vanilla JS, sem backend).
 import {
   DURACAO, montarLinhaDoTempo, duracaoTotal, sortearTreino, nivelDoTreino, nomeDoNivel,
   codigoDe, lerCodigo, lerHashTreino, hojeISO, gerarICS, linkGoogleAgenda,
@@ -762,7 +762,7 @@ function ligarEventos() {
   $('#btn-copiar').addEventListener('click', () => copiarTexto($('#codigo-link').value));
   $('#btn-usar-codigo').addEventListener('click', () => {
     const n = lerCodigo($('#codigo-entrada').value);
-    if (n == null) { $('#codigo-erro').textContent = 'Código inválido. Ele tem o formato DOSE-15.'; return; }
+    if (n == null) { $('#codigo-erro').textContent = 'Código inválido. Ele tem o formato FNC-15.'; return; }
     $('#codigo-erro').textContent = '';
     restaurarPendente = n;
     prepararSobre();

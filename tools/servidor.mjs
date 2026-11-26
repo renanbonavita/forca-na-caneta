@@ -22,5 +22,5 @@ export function iniciarServidor(p = porta) {
   return new Promise((ok) => srv.listen(p, () => ok(srv)));
 }
 if (import.meta.url === `file://${process.argv[1]}`) {
-  iniciarServidor().then(() => console.log(`Dose de Força em http://localhost:${porta}`));
+  iniciarServidor().then(() => console.log(`Força na Caneta em http://localhost:${porta}`));
 }

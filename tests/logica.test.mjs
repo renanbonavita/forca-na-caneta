@@ -75,14 +75,14 @@ test('.ics: recorrente seg–sex, 5 min, título correto', () => {
   const ics = gerarICS({ hora: 8, minuto: 30, url: 'https://exemplo.com/', agora });
   assert.match(ics, /RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR/);
   assert.match(ics, /DURATION:PT5M/);
-  assert.match(ics, /SUMMARY:Treino Dose de Força – 5 min/);
+  assert.match(ics, /SUMMARY:Treino Força na Caneta – 5 min/);
   assert.match(ics, /DTSTART:20261130T083000/); // segunda
   assert.ok(ics.includes('\r\n'));
   assert.equal(proximoDiaUtil(8, 0, new Date(2026, 10, 25, 7, 0)).getDate(), 25);
 });
 
 test('código de recuperação e link #t=', () => {
-  assert.equal(codigoDe(15), 'DOSE-15');
+  assert.equal(codigoDe(15), 'FNC-15');
   assert.equal(lerCodigo('dose-15'), 15);
   assert.equal(lerCodigo('fnc-15'), 15);
   assert.equal(lerCodigo(' FNC 7 '), 7);

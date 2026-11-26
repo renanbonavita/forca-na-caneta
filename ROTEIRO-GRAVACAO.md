@@ -1,4 +1,4 @@
-# Roteiro de gravação — Dose de Força
+# Roteiro de gravação — Força na Caneta
 
 > Arquivo gerado por `node tools/gerar-roteiro.mjs`. Se mudar exercícios ou frases, gere de novo.
 
@@ -124,7 +124,7 @@ O número do arquivo segue a ordem da lista no `config.json` (01 = primeira fras
 | `audio/durante-04.mp3` | Devagar é chique. Controle é tudo. |
 | `audio/durante-05.mp3` | Tá indo lindamente. Sem pressa, com força. |
 | `audio/durante-06.mp3` | Cada repetição é um tijolinho de força. |
-| `audio/durante-07.mp3` | Essa é a sua dose de força do dia! |
+| `audio/durante-07.mp3` | Força na caneta e no braço também! |
 | `audio/durante-08.mp3` | Ninguém tá olhando: pode fazer careta à vontade. |
 | `audio/durante-09.mp3` | Barriga firme, como quem vai fechar a calça jeans. |
 | `audio/durante-10.mp3` | Músculo não tem idade, tem treino. |
@@ -170,7 +170,7 @@ O número do arquivo segue a ordem da lista no `config.json` (01 = primeira fras
 
 | Arquivo | Texto |
 |---|---|
-| `audio/conclusao-01.mp3` | Dose de força tomada! Cinco minutos de pura energia |
+| `audio/conclusao-01.mp3` | Cinco minutos de pura força na caneta |
 | `audio/conclusao-02.mp3` | Treino feito! Pode contar pra todo mundo (ou guardar só pra você). |
 | `audio/conclusao-03.mp3` | Mais forte que ontem. Simples assim. |
 | `audio/conclusao-04.mp3` | Cinco minutos que valem ouro. Parabéns! |

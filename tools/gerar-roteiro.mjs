@@ -7,7 +7,7 @@ const cfg = JSON.parse(readFileSync(raiz + 'config.json', 'utf8'));
 const G = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
 const N = { 1: 'Esquentando', 2: 'Pegando no tranco', 3: 'Força Total' };
 
-let md = `# Roteiro de gravação — Dose de Força
+let md = `# Roteiro de gravação — Força na Caneta
 
 > Arquivo gerado por \`node tools/gerar-roteiro.mjs\`. Se mudar exercícios ou frases, gere de novo.
 
