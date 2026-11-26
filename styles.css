@@ -127,7 +127,7 @@ a{color:var(--acento)}
 .progresso-texto span{color:var(--suave);font-variant-numeric:tabular-nums}
 .trilho{height:8px;background:var(--borda);border-radius:999px;overflow:hidden}
 .trilho-cheio{height:100%;width:0;background:var(--acento);border-radius:999px}
-.midia{position:relative;aspect-ratio:16/10;background:#FFEDE6;border-radius:18px;overflow:hidden;border:1px solid var(--borda)}
+.midia{position:relative;aspect-ratio:16/10;background:var(--coral-suave);border-radius:18px;overflow:hidden;border:1px solid var(--borda)}
 .midia video,.midia img{width:100%;height:100%;display:block}
 .midia video{object-fit:cover}
 .midia img{object-fit:contain}
@@ -221,7 +221,7 @@ html.reduzir-animacoes *,html.reduzir-animacoes *::before,html.reduzir-animacoes
   .tela{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
   .centro-inicio{gap:12px;padding:12px 0}
   .slogan{font-size:.9rem;margin-bottom:6px}
-  .bora{width:clamp(150px,30dvh,220px);box-shadow:0 0 0 8px var(--coral-suave)}
+  .bora{width:clamp(150px,27dvh,220px);box-shadow:0 0 0 8px var(--coral-suave)}
   .bora-texto{font-size:2.4rem}
   .bora-sub{font-size:.95rem}
   .tela-treino{gap:10px}
@@ -232,7 +232,9 @@ html.reduzir-animacoes *,html.reduzir-animacoes *::before,html.reduzir-animacoes
   .legenda{font-size:.98rem;min-height:44px;padding:8px 10px}
   .instrucao h1{font-size:1.8rem}
   .selo-fim{width:72px;height:72px;margin-bottom:14px}
-  .rodape{margin-top:12px}
+  .rodape{margin-top:8px}
+  .rodape p+p{margin-top:4px}
+  .links-rodape a{padding:8px 2px}
 }
 
 /* ---------- Teste do mês ---------- */
@@ -242,6 +244,15 @@ html.reduzir-animacoes *,html.reduzir-animacoes *::before,html.reduzir-animacoes
 .contador .secundario{font-size:2rem;min-height:72px;padding:0}
 .contador output{font-size:3.4rem;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
 #link-teste{align-self:center}
+
+/* Telas muito baixas (ex.: iPhone SE com letra maior): o slogan sai para o BORA caber. */
+@media (max-height:620px){
+  .slogan{display:none}
+  .centro-inicio{gap:8px;padding:6px 0}
+  #link-teste{min-height:44px;padding:6px 14px}
+  .bora-texto{font-size:2.2rem}
+  .bora-sub{font-size:.8rem}
+}
 
 /* ---------- Termos ---------- */
 a.voltar{text-decoration:none;display:inline-flex;align-items:center}

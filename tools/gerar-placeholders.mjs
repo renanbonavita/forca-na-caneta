@@ -6,8 +6,9 @@ const raiz = new URL('..', import.meta.url).pathname;
 const { exercicios } = JSON.parse(readFileSync(raiz + 'exercicios.json', 'utf8'));
 mkdirSync(raiz + 'img/mov', { recursive: true });
 
-const CORES = { pernas: '#FFEDE6', empurrar: '#FFEDE6', costas: '#FFEDE6', extra: '#FFEDE6' };
 const cfgP = JSON.parse(readFileSync(raiz + 'config.json', 'utf8')).produto || {};
+const CORP = { principal_suave: '#FFEDE6', acento: '#B23A1C', ...(cfgP.cores || {}) };
+const CORES = { pernas: CORP.principal_suave, empurrar: CORP.principal_suave, costas: CORP.principal_suave, extra: CORP.principal_suave };
 const ROTULO = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra', ...(cfgP.nomes_grupos || {}) };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -42,9 +43,9 @@ function svg(mov) {
   const _texto = linhas.map((l, i) => `<text x="24" y="${46 + i * 31}" font-size="26" font-weight="800">${esc(l)}</text>`).join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
 <rect width="480" height="300" fill="${fundo}"/>
-<rect x="0" y="222" width="480" height="78" fill="#F7D9CC"/>
+<rect x="0" y="222" width="480" height="78" fill="#000" opacity=".06"/>
 ${figura}
-<text x="24" y="40" font-size="18" font-weight="800" fill="#B23A1C">${ROTULO[mov.grupo].toUpperCase()}</text>
+<text x="24" y="40" font-size="18" font-weight="800" fill="${CORP.acento}">${ROTULO[mov.grupo].toUpperCase()}</text>
 <text x="24" y="282" font-size="16" fill="#6B5850">Ilustração provisória · vídeo em gravação</text>
 </svg>\n`;
 }
@@ -54,11 +55,11 @@ for (const mov of exercicios) writeFileSync(raiz + mov.placeholder, svg(mov));
 const simples = (titulo, sub, cor) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
 <rect width="480" height="300" fill="${cor}"/>
 <g transform="translate(0 -48)">${pessoaSentada.replace(/285/g, '240').replace(/325/g, '280').replace(/320/g, '275')}</g>
-<rect x="0" y="222" width="480" height="78" fill="#F7D9CC"/>
-<text x="24" y="40" font-size="18" font-weight="800" fill="#B23A1C">${titulo.toUpperCase()}</text>
+<rect x="0" y="222" width="480" height="78" fill="#000" opacity=".06"/>
+<text x="24" y="40" font-size="18" font-weight="800" fill="${CORP.acento}">${titulo.toUpperCase()}</text>
 <text x="24" y="282" font-size="16" fill="#6B5850">${sub}</text>
 </svg>\n`;
-writeFileSync(raiz + 'img/aquecimento.svg', simples('Aquecimento', 'Sentada, no seu ritmo', '#FFEDE6'));
-writeFileSync(raiz + 'img/descanso.svg', simples('Descanso', 'Respira fundo', '#FFEDE6'));
-writeFileSync(raiz + 'img/desaquecimento.svg', simples('Desaquecimento', 'Levante devagar no final', '#FFEDE6'));
+writeFileSync(raiz + 'img/aquecimento.svg', simples('Aquecimento', 'No seu ritmo', CORP.principal_suave));
+writeFileSync(raiz + 'img/descanso.svg', simples('Descanso', 'Respira fundo', CORP.principal_suave));
+writeFileSync(raiz + 'img/desaquecimento.svg', simples('Desaquecimento', 'Levante devagar no final', CORP.principal_suave));
 console.log(`${exercicios.length} ilustrações + 3 telas geradas em img/`);

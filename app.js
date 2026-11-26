@@ -844,6 +844,8 @@ async function compartilhar(e) {
 // ---------------- Textos do responsável técnico ----------------
 function preencherTextosProduto() {
   document.querySelectorAll('[data-produto-nome]').forEach((e) => { e.textContent = produto.nome; });
+  document.querySelectorAll('[data-titulo-lembrete]').forEach((e) => { e.textContent = produto.titulo_lembrete; });
+  $('#link-ics').setAttribute('download', `lembrete-${produto.id}.ics`);
   $('#bora-sub').textContent = txt('bora_sub');
   $('#requisitos-inicio').textContent = txt('requisitos_inicio');
 }
@@ -860,6 +862,13 @@ function preencherRT() {
   const rt = config.responsavel_tecnico || {};
   document.querySelectorAll('[data-rt-nome]').forEach((e) => { e.textContent = rt.nome || '[NOME]'; });
   document.querySelectorAll('[data-rt-cref]').forEach((e) => { e.textContent = rt.cref || '[NÚMERO]'; });
+  // Segundo responsável (opcional), ex.: fisioterapeuta no produto 60+.
+  const fi = config.responsavel_fisioterapia;
+  document.querySelectorAll('[data-fisio]').forEach((e) => { e.hidden = !fi; });
+  if (fi) {
+    document.querySelectorAll('[data-fisio-nome]').forEach((e) => { e.textContent = fi.nome || '[NOME]'; });
+    document.querySelectorAll('[data-fisio-crefito]').forEach((e) => { e.textContent = fi.crefito || '[NÚMERO]'; });
+  }
 }
 
 // ---------------- Service worker ----------------

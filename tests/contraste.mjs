@@ -28,6 +28,18 @@ const pares = [
   ['texto escuro sobre botão coral (BORA)', '#2A1A14', '#FF6B4A', 4.5],
   ['barra de progresso (gráfico) sobre trilho', '#B23A1C', '#EADBD2', 3],
 ];
+// Pares das cores do produto (config.json → produto.cores).
+import { readFileSync } from 'node:fs';
+const cfgC = (JSON.parse(readFileSync(new URL('../config.json', import.meta.url), 'utf8')).produto || {}).cores;
+if (cfgC) {
+  pares.push(
+    ['PRODUTO: texto do botão sobre a cor principal', cfgC.texto_botao, cfgC.principal, 4.5],
+    ['PRODUTO: texto do botão sobre a cor ao tocar', cfgC.texto_botao, cfgC.principal_hover, 4.5],
+    ['PRODUTO: acento (links/bordas) sobre o fundo', cfgC.acento, '#FFFBF8', 4.5],
+    ['PRODUTO: acento sobre a cor suave', cfgC.acento, cfgC.principal_suave, 4.5],
+    ['PRODUTO: texto sobre a cor suave', '#2A1A14', cfgC.principal_suave, 4.5],
+  );
+}
 let falhou = false;
 for (const [nome, a, b, min] of pares) {
   const r = razao(a, b);

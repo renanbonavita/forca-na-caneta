@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" font-family="Nunito, Arial, sans-serif" fill="#2A1A14">
-<rect width="480" height="300" fill="#FFEDE6"/>
-<rect x="0" y="222" width="480" height="78" fill="#F7D9CC"/>
+<rect width="480" height="300" fill="#FFF0EA"/>
+<rect x="0" y="222" width="480" height="78" fill="#000" opacity=".06"/>
 <g transform="translate(-60 -48)"><rect x="226" y="60" width="14" height="210" fill="#C9B3A8"/>
 
 <g stroke="#2A1A14" stroke-width="8" stroke-linecap="round" fill="none">

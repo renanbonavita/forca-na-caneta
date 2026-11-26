@@ -181,7 +181,7 @@ try {
   if (P.compartilhar) {
     await page.goto(BASE);
     assert.ok(await page.locator('#link-compartilhar').isVisible());
-    ok('"Mandar para alguém" aparece no rodapé');
+    ok('"Compartilhar" aparece no rodapé');
   }
 
   // Termos
