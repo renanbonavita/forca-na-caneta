@@ -21,7 +21,7 @@
     "botao": "Quero meu elástico"
   },
 
-  "analytics": { "goatcounter": "", "plausible_dominio": "", "debug": false },
+  "analytics": { "goatcounter": "renanbonavita", "plausible_dominio": "", "debug": true },
 
   "audio": { "usar_mp3": false },
   "midia": { "usar_videos": false },
