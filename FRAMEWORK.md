@@ -33,9 +33,18 @@ Este repositório é o **Força na Caneta**, mas o código serve para qualquer a
 - **Cores:** confira o contraste. Se a cor principal for escura, use `"texto_botao": "#FFFFFF"`. Rode `node tests/contraste.mjs` com as cores novas.
 - **Duração:** as falas programadas ("a seguir", "faltam 10 s", "troca de lado") tocam em momentos **proporcionais** à duração de cada etapa (`momentosDasFalas` em `js/logica.js`). Etapas curtas funcionam. Mesmo assim, deixe pelo menos **10 s de descanso** para dar tempo de trocar de posição.
 
+## Opções extras do `produto` (desligadas por padrão)
+
+| Opção | Exemplo | O que faz |
+|---|---|---|
+| `escala_fonte` | `1.12` | Aumenta todo o texto em 12% (público 60+) |
+| `voz_velocidade` | `0.9` | Voz do celular um pouco mais lenta (1 = normal) |
+| `compartilhar` | `true` | Link "Mandar para alguém" no rodapé (compartilhamento do celular ou WhatsApp). Texto em `textos.compartilhar_texto` |
+| `teste` | `{ "ativo": true, "segundos": 30, "intervalo_dias": 30 }` | **Teste do mês**: tela `#teste` (sentar e levantar em 30 s, a pessoa informa quantas vezes), histórico em Sobre → Meu progresso (`#sobre/progresso`) e evento `teste_concluido` com a **faixa** do resultado (nunca o número exato). Textos: `teste_chamada`, `teste_instrucao`, `teste_seguranca`, `teste_pergunta` |
+
 ## O bloco `textos` (gênero e vocabulário)
 
-`rotulo_sessao` ("Treino" ou "Pausa"), `segundo_do_dia`, `varios_no_dia` (use `{n}`), `titulo_fim` (use `{rotulo}` e `{n}`), `confirmar_encerrar`, `aquecimento_descricao`, `ultimo_descanso_descricao`, `desaquecimento_descricao`. O que não vier no `config.json` usa o padrão do Força na Caneta.
+`rotulo_sessao` ("Treino" ou "Pausa"), `bora_sub`, `requisitos_inicio`, `segundo_do_dia`, `varios_no_dia` (use `{n}`), `titulo_fim` (use `{rotulo}` e `{n}`), `confirmar_encerrar`, `aquecimento_descricao`, `ultimo_descanso_descricao`, `desaquecimento_descricao`. O que não vier no `config.json` usa o padrão do Força na Caneta.
 
 ## Exercícios
 

@@ -3,7 +3,7 @@
 // e de exercicios.json; o conteúdo fixo das páginas fica em index.html e termos.html.
 import {
   montarLinhaDoTempo, duracaoTotal, sortearTreino, nivelDoTreino, nomeDoNivel, normalizarProduto,
-  momentosDasFalas, codigoDe, lerCodigo, lerHashTreino, hojeISO, gerarICS, linkGoogleAgenda, lerHorario,
+  momentosDasFalas, diasDesde, testeDevido, faixaTeste, codigoDe, lerCodigo, lerHashTreino, hojeISO, gerarICS, linkGoogleAgenda, lerHorario,
   detectarPlataforma, idClinicaValido, mostrarElastico,
 } from './js/logica.js';
 
@@ -41,6 +41,11 @@ const TEXTOS_PADRAO = {
   ultimo_descanso_descricao: 'Respire fundo. Já já vem o desaquecimento.',
   desaquecimento_descricao: 'Sente-se, respire e alongue. No final, levante devagar e fique um instante parada antes de sair andando.',
   bora_sub: 'treino de 5 min',
+  teste_chamada: 'Teste do mês: quantas vezes você senta e levanta em 30 segundos?',
+  teste_instrucao: 'Sente no meio da cadeira encostada na parede, com os braços cruzados no peito. Quando a voz disser "valendo", levante e sente o máximo de vezes que conseguir, com segurança, em 30 segundos. Conte em voz alta.',
+  teste_seguranca: 'Se precisar, use as mãos nas coxas. Pare se sentir tontura, dor ou falta de ar.',
+  teste_pergunta: 'Quantas vezes você ficou em pé?',
+  compartilhar_texto: 'Achei este treino de força de 5 minutos, grátis e sem cadastro. Abra no celular e toque em BORA:',
   requisitos_inicio: 'Cadeira encostada na parede e uma toalha.',
 };
 const txt = (chave, vars = {}) => String({ ...TEXTOS_PADRAO, ...(config.textos || {}) }[chave] || '')
@@ -57,7 +62,7 @@ async function carregarJSON(url, padrao) {
 }
 
 // ---------------- Telas ----------------
-const TELAS = ['aviso', 'inicio', 'treino', 'fim', 'sobre'];
+const TELAS = ['aviso', 'inicio', 'treino', 'fim', 'sobre', 'teste'];
 function mostrar(nome) {
   TELAS.forEach((t) => document.getElementById(t).classList.toggle('ativa', t === nome));
   window.scrollTo(0, 0);
@@ -72,6 +77,10 @@ function atualizarInicio() {
   if (hoje === 1) { msg.textContent = txt('segundo_do_dia'); msg.hidden = false; }
   else if (hoje > 1) { msg.textContent = txt('varios_no_dia', { n: hoje }); msg.hidden = false; }
   else msg.hidden = true;
+  const lt = $('#link-teste');
+  const t = produto.teste || {};
+  lt.hidden = !(t.ativo && testeDevido(store.get('testes', []), t.intervalo_dias || 30));
+  lt.textContent = txt('teste_chamada');
 }
 
 // ---------------- Reduzir animações ----------------
@@ -105,7 +114,7 @@ function enviarEvento(nome, props) {
   try {
     if (window.goatcounter && window.goatcounter.count) {
       // GoatCounter não tem "propriedades": a clínica vai no caminho do evento.
-      const caminho = `evento/${nome}` + (props.clinica ? `/${props.clinica}` : '') + (props.nivel ? `/nivel-${props.nivel}` : '');
+      const caminho = `evento/${nome}` + (props.clinica ? `/${props.clinica}` : '') + (props.nivel ? `/nivel-${props.nivel}` : '') + (props.faixa ? `/faixa-${props.faixa}` : '');
       window.goatcounter.count({ path: caminho, title: nome, event: true });
     } else if ((config.analytics || {}).goatcounter) {
       filaEventos.push([nome, props]);
@@ -184,7 +193,7 @@ function proximaFala() {
       const u = new SpeechSynthesisUtterance(semEmoji(item.texto));
       u.lang = 'pt-BR';
       if (voz.vozPt) u.voice = voz.vozPt;
-      u.rate = 1;
+      u.rate = Number(produto.voz_velocidade) || 1;
       u.onend = terminou;
       speechSynthesis.speak(u);
     } catch { /* sem voz: a legenda continua */ }
@@ -608,12 +617,14 @@ function rota() {
     else { history.pushState(null, '', '#treino'); pilha.push('#treino'); mostrar('treino'); continuar(); return; }
   }
 
+  if (tipo !== 'teste') pararTeste();
   if (tipo === 'treino') { if (T.ativo) mostrar('treino'); else ir('', { substituir: true }); return; }
+  if (tipo === 'teste') { if ((produto.teste || {}).ativo) { prepararTeste(); mostrar('teste'); } else ir('', { substituir: true }); return; }
   if (tipo === 'fim') { if (fimPronto) mostrar('fim'); else ir('', { substituir: true }); return; }
   if (tipo === 'sobre') {
     prepararSobre();
     mostrar('sobre');
-    const alvo = { instalar: 'sobre-instalar', lembretes: 'sobre-lembretes', codigo: 'sobre-codigo', voz: 'sobre-voz', movimentos: 'sobre-movimentos' }[sub];
+    const alvo = { instalar: 'sobre-instalar', lembretes: 'sobre-lembretes', codigo: 'sobre-codigo', voz: 'sobre-voz', movimentos: 'sobre-movimentos', progresso: 'sobre-progresso' }[sub];
     if (alvo) { const d = document.getElementById(alvo); d.open = true; d.scrollIntoView(); }
     return;
   }
@@ -665,6 +676,23 @@ function prepararSobre() {
     $('#restaurar-texto').textContent = `Restaurar para o treino ${n}? Sua contagem fica com ${n} treino${n === 1 ? '' : 's'} feito${n === 1 ? '' : 's'}, e o próximo será o nº ${n + 1}.`;
     caixa.hidden = false;
   } else caixa.hidden = true;
+
+  // Meu progresso (Teste do mês)
+  const sec = $('#sobre-progresso');
+  sec.hidden = !(produto.teste || {}).ativo;
+  if (!sec.hidden) {
+    const hist = store.get('testes', []);
+    const lista = $('#progresso-lista');
+    lista.replaceChildren(...hist.slice().reverse().map((r) => {
+      const li = document.createElement('li');
+      const [a, m, d] = r.data.split('-');
+      li.textContent = `${d}/${m}/${a}: ${r.n} vezes`;
+      return li;
+    }));
+    $('#progresso-resumo').textContent = hist.length
+      ? `Melhor resultado: ${Math.max(...hist.map((r) => r.n))} vezes. Último teste há ${diasDesde(hist.at(-1).data)} dia(s).`
+      : 'Você ainda não fez o Teste do mês.';
+  }
 
   // Voz e animações
   $('#opcao-voz').checked = vozLigada();
@@ -723,6 +751,92 @@ async function copiarTexto(texto) {
     try { ok = document.execCommand('copy'); } catch { /* */ }
   }
   $('#copiado').textContent = ok ? 'Link copiado! Guarde no WhatsApp ou nas notas.' : 'Selecionado. Toque e segure para copiar.';
+}
+
+// ---------------- Teste do mês (opcional) ----------------
+const TT = { estado: 'intro', timer: null, inicio: 0, valor: 0, ditos: new Set() };
+function prepararTeste() {
+  pararTeste();
+  TT.estado = 'intro';
+  const hist = store.get('testes', []);
+  TT.valor = hist.length ? hist.at(-1).n : 8;
+  $('#teste-instrucao').textContent = txt('teste_instrucao');
+  $('#teste-seguranca').textContent = txt('teste_seguranca');
+  $('#teste-pergunta').textContent = txt('teste_pergunta');
+  $('#teste-intro').hidden = false;
+  $('#teste-relogio').hidden = true;
+  $('#teste-resultado').hidden = true;
+  $('#teste-mensagem').hidden = true;
+  $('#teste-acao').textContent = 'Começar';
+  $('#teste-acao').disabled = false;
+}
+function pararTeste() {
+  clearInterval(TT.timer); TT.timer = null;
+  if (TT.estado === 'contando') { calar(); soltarWakeLock(); TT.estado = 'intro'; }
+}
+function iniciarContagemTeste() {
+  desbloquearAudio();
+  pedirWakeLock();
+  TT.estado = 'contando';
+  TT.ditos = new Set();
+  const segundos = (produto.teste || {}).segundos || 30;
+  TT.inicio = Date.now() + 3000; // 3, 2, 1
+  $('#teste-intro').hidden = true;
+  $('#teste-relogio').hidden = false;
+  $('#teste-acao').disabled = true;
+  falar({ texto: 'Três, dois, um...' }, { interromper: true });
+  const tique = () => {
+    const d = (Date.now() - TT.inicio) / 1000;
+    if (d < 0) { $('#teste-relogio').textContent = String(Math.ceil(-d)); return; }
+    if (!TT.ditos.has('valendo')) { TT.ditos.add('valendo'); bipe(1175, 200); falar({ texto: 'Valendo!' }, { interromper: true }); }
+    const resta = Math.max(0, Math.ceil(segundos - d));
+    $('#teste-relogio').textContent = String(resta);
+    if (resta <= 10 && !TT.ditos.has('10')) { TT.ditos.add('10'); falar({ texto: 'Faltam 10 segundos.' }); }
+    if (d >= segundos) {
+      clearInterval(TT.timer); TT.timer = null;
+      bipe(880, 400);
+      falar({ texto: 'Tempo! Pode sentar e respirar.' }, { interromper: true });
+      soltarWakeLock();
+      TT.estado = 'resultado';
+      $('#teste-relogio').hidden = true;
+      $('#teste-resultado').hidden = false;
+      $('#teste-valor').textContent = String(TT.valor);
+      $('#teste-acao').textContent = 'Salvar resultado';
+      $('#teste-acao').disabled = false;
+    }
+  };
+  tique();
+  TT.timer = setInterval(tique, 200);
+}
+function salvarTeste() {
+  const hist = store.get('testes', []);
+  const anterior = hist.length ? hist.at(-1).n : null;
+  const hoje = hojeISO();
+  const novo = hist.filter((r) => r.data !== hoje);
+  novo.push({ data: hoje, n: TT.valor });
+  store.set('testes', novo.slice(-36));
+  track('teste_concluido', { faixa: faixaTeste(TT.valor) });
+  const msg = $('#teste-mensagem');
+  if (anterior == null) msg.textContent = `Resultado guardado: ${TT.valor} vezes. Daqui a um mês tem mais!`;
+  else if (TT.valor > anterior) msg.textContent = `${TT.valor} vezes: ${TT.valor - anterior} a mais que no último teste. Que evolução!`;
+  else if (TT.valor === anterior) msg.textContent = `${TT.valor} vezes, igual ao último teste. Manter também é vitória!`;
+  else msg.textContent = `${TT.valor} vezes. Tem dia que rende menos, e tudo bem. Siga treinando.`;
+  msg.hidden = false;
+  $('#teste-resultado').hidden = true;
+  TT.estado = 'salvo';
+  $('#teste-acao').textContent = 'Voltar ao início';
+}
+
+// ---------------- Mandar para alguém (opcional) ----------------
+async function compartilhar(e) {
+  e.preventDefault();
+  const url = location.origin + location.pathname + (clinica ? `?c=${clinica.id}` : '');
+  const texto = txt('compartilhar_texto');
+  track('compartilhar');
+  if (navigator.share) {
+    try { await navigator.share({ title: produto.nome, text: texto, url }); return; } catch { return; }
+  }
+  window.open(`https://wa.me/?text=${encodeURIComponent(`${texto} ${url}`)}`, '_blank', 'noopener');
 }
 
 // ---------------- Textos do responsável técnico ----------------
@@ -805,6 +919,16 @@ function ligarEventos() {
     track('clique_elastico');
   });
 
+  // Teste do mês
+  $('#teste-acao').addEventListener('click', () => {
+    if (TT.estado === 'intro') iniciarContagemTeste();
+    else if (TT.estado === 'resultado') salvarTeste();
+    else if (TT.estado === 'salvo') ir('', { substituir: true });
+  });
+  $('#teste-menos').addEventListener('click', () => { TT.valor = Math.max(0, TT.valor - 1); $('#teste-valor').textContent = String(TT.valor); });
+  $('#teste-mais').addEventListener('click', () => { TT.valor = Math.min(60, TT.valor + 1); $('#teste-valor').textContent = String(TT.valor); });
+  $('#link-compartilhar').addEventListener('click', compartilhar);
+
   // Sobre
   document.querySelectorAll('[data-voltar]').forEach((b) => b.addEventListener('click', voltar));
   $('#btn-copiar').addEventListener('click', () => copiarTexto($('#codigo-link').value));
@@ -852,6 +976,9 @@ async function iniciar() {
   try { produto = normalizarProduto(config.produto || {}); } catch (e) { console.error(e); }
   prefixoStore = `${produto.id}:`;
   aplicarCores();
+  // Tamanho de letra do produto (ex.: 1.12 = 12% maior; tudo em rem acompanha).
+  if (Number(produto.escala_fonte) > 0) document.documentElement.style.fontSize = `${Number(produto.escala_fonte) * 100}%`;
+  $('#it-compartilhar').hidden = !produto.compartilhar;
   preencherRT();
   preencherTextosProduto();
   preencherSlogan();

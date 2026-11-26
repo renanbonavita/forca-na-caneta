@@ -235,6 +235,14 @@ html.reduzir-animacoes *,html.reduzir-animacoes *::before,html.reduzir-animacoes
   .rodape{margin-top:12px}
 }
 
+/* ---------- Teste do mês ---------- */
+.teste p{font-size:1.15rem}
+.relogio-teste{font-size:5.5rem;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;margin:20px 0;line-height:1}
+.contador{display:grid;grid-template-columns:72px 1fr 72px;align-items:center;gap:12px;margin-top:10px}
+.contador .secundario{font-size:2rem;min-height:72px;padding:0}
+.contador output{font-size:3.4rem;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
+#link-teste{align-self:center}
+
 /* ---------- Termos ---------- */
 a.voltar{text-decoration:none;display:inline-flex;align-items:center}
 .termos h2{font-size:1.2rem;margin:26px 0 10px;color:var(--acento)}

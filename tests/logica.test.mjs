@@ -147,3 +147,13 @@ test('id de clínica', () => {
   assert.ok(!idClinicaValido('<script>'));
   assert.ok(!idClinicaValido('Demo'));
 });
+
+test('Teste do mês: dias, prazo e faixas', async () => {
+  const { diasDesde, testeDevido, faixaTeste } = await import('../js/logica.js');
+  const agora = new Date(2026, 10, 30);
+  assert.equal(diasDesde('2026-11-01', agora), 29);
+  assert.equal(testeDevido([], 30, agora), true);
+  assert.equal(testeDevido([{ data: '2026-11-01', n: 10 }], 30, agora), false);
+  assert.equal(testeDevido([{ data: '2026-10-31', n: 10 }], 30, agora), true);
+  assert.deepEqual([5, 8, 12, 20].map(faixaTeste), ['0-7', '8-11', '12-15', '16+']);
+});

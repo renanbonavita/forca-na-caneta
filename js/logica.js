@@ -219,3 +219,25 @@ export function mostrarElastico(n, dispensadoEm, aPartirDe = 7, aCada = 5) {
   if (dispensadoEm == null) return true;
   return n - dispensadoEm >= aCada;
 }
+
+// ---------- Teste do mês (opcional) ----------
+const DIA_MS = 24 * 60 * 60 * 1000;
+/** Dias inteiros entre a data ISO (AAAA-MM-DD) e hoje. */
+export function diasDesde(iso, agora = new Date()) {
+  const [a, m, d] = String(iso).split('-').map(Number);
+  if (!a) return Infinity;
+  const hoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+  return Math.round((hoje - new Date(a, m - 1, d)) / DIA_MS);
+}
+/** O teste está "na hora" se nunca foi feito ou se o último tem intervaloDias ou mais. */
+export function testeDevido(historico = [], intervaloDias = 30, agora = new Date()) {
+  if (!historico.length) return true;
+  return diasDesde(historico.at(-1).data, agora) >= intervaloDias;
+}
+/** Faixa do resultado, para relatórios agregados (nunca o número exato de uma pessoa). */
+export function faixaTeste(n) {
+  if (n <= 7) return '0-7';
+  if (n <= 11) return '8-11';
+  if (n <= 15) return '12-15';
+  return '16+';
+}

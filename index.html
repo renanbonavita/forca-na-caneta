@@ -107,10 +107,11 @@
     </button>
     <p id="msg-hoje" class="msg-hoje" hidden></p>
     <p class="fraco" id="requisitos-inicio">Cadeira encostada na parede e uma toalha.</p>
+    <a class="botao-link" id="link-teste" href="#teste" hidden></a>
   </div>
 
   <footer class="rodape">
-    <p class="links-rodape"><span class="it"><a href="#sobre"><img class="logo-rodape" src="icons/logo.svg" alt="" width="22" height="22">Sobre</a>&nbsp;·</span> <span class="it"><a href="#sobre/lembretes">Lembretes</a>&nbsp;·</span> <span class="it"><a href="#sobre/codigo">Meu código</a>&nbsp;·</span> <span class="it"><a href="termos.html">Termos</a></span></p>
+    <p class="links-rodape"><span class="it"><a href="#sobre"><img class="logo-rodape" src="icons/logo.svg" alt="" width="22" height="22">Sobre</a>&nbsp;·</span> <span class="it"><a href="#sobre/lembretes">Lembretes</a>&nbsp;·</span> <span class="it"><a href="#sobre/codigo">Meu código</a>&nbsp;·</span> <span class="it"><a href="termos.html">Termos</a></span><span class="it" id="it-compartilhar" hidden>&nbsp;· <a href="#" id="link-compartilhar">Mandar para alguém</a></span></p>
     <p class="rt">Responsável técnico: <span data-rt-nome></span> · CREF <span data-rt-cref></span></p>
   </footer>
 </main>
@@ -170,6 +171,33 @@
   <div class="fixo-rodape">
     <button class="principal" type="button" id="btn-mais-uma">Mais uma rodada?</button>
     <button class="voltar largo" type="button" id="btn-por-hoje">Por hoje tá ótimo</button>
+  </div>
+</section>
+
+<!-- ===== TESTE DO MÊS (opcional: config.produto.teste.ativo) ===== -->
+<section id="teste" class="tela" aria-labelledby="titulo-teste">
+  <div class="barra">
+    <button class="voltar" type="button" data-voltar>← Voltar</button>
+  </div>
+  <div class="instrucao teste">
+    <h1 id="titulo-teste">Teste do mês</h1>
+    <div id="teste-intro">
+      <p id="teste-instrucao"></p>
+      <p class="fraco u-texto-menor" id="teste-seguranca"></p>
+    </div>
+    <div id="teste-relogio" class="relogio-teste" aria-live="polite" hidden></div>
+    <div id="teste-resultado" hidden>
+      <p class="rotulo-campo" id="teste-pergunta">Quantas vezes você ficou em pé?</p>
+      <div class="contador">
+        <button class="secundario" type="button" id="teste-menos" aria-label="Diminuir">−</button>
+        <output id="teste-valor" aria-live="polite">0</output>
+        <button class="secundario" type="button" id="teste-mais" aria-label="Aumentar">+</button>
+      </div>
+    </div>
+    <p id="teste-mensagem" class="msg-nivel" hidden></p>
+  </div>
+  <div class="fixo-rodape">
+    <button class="principal" type="button" id="teste-acao">Começar</button>
   </div>
 </section>
 
@@ -255,6 +283,13 @@
         <button class="botao-link" type="button" id="btn-usar-codigo">Restaurar</button>
       </div>
       <p id="codigo-erro" class="u-mt8 erro" role="alert"></p>
+    </details>
+
+    <details class="secao" id="sobre-progresso" hidden>
+      <summary><h2>Meu progresso</h2></summary>
+      <p id="progresso-resumo"></p>
+      <ul id="progresso-lista"></ul>
+      <div class="botoes-linha"><a class="botao-link" href="#teste">Fazer o teste agora</a></div>
     </details>
 
     <details class="secao" id="sobre-voz">
