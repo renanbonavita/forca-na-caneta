@@ -94,15 +94,15 @@ try {
   // Código de recuperação (seção da página Sobre)
   await page.getByRole('link', { name: 'Meu código' }).click();
   await visivel(page, '#sobre');
-  assert.equal(await page.locator('#codigo-texto').innerText(), 'FNC-1');
+  assert.equal(await page.locator('#codigo-texto').innerText(), 'DOSE-1');
   assert.match(await page.locator('#codigo-link').inputValue(), /#t=1$/);
-  await page.locator('#codigo-entrada').fill('FNC-15');
+  await page.locator('#codigo-entrada').fill('DOSE-15');
   await page.getByRole('button', { name: 'Restaurar', exact: true }).click();
   assert.match(await page.locator('#restaurar-texto').innerText(), /Restaurar para o treino 15\?/);
   await page.getByRole('button', { name: 'Sim, restaurar' }).click();
   await page.getByRole('button', { name: '← Voltar' }).click();
   await page.locator('#num-treino', { hasText: 'Treino nº 16' }).waitFor();
-  ok('código FNC-15 restaura (próximo: nº 16) e "← Voltar" leva ao início');
+  ok('código DOSE-15 restaura (próximo: nº 16) e "← Voltar" leva ao início');
 
   // Link #t=
   await page.goto(BASE + '#t=6');

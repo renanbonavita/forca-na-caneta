@@ -18,7 +18,7 @@ Antes de testar, abra uma vez `SEU-SITE/?c=demo` para ligar o modo clínica.
 - [ ] Legenda e botões ficam sempre visíveis na parte de baixo do treino, sem rolar.
 
 ## iPhone — tela de início
-- [ ] "Usar sem internet" (topo) abre os passos; seguir os passos instala o ícone **FnC**.
+- [ ] "Usar sem internet" (topo) abre os passos; seguir os passos instala o ícone **Dose de Força**.
 - [ ] Dentro do app instalado, "Usar sem internet" **não** aparece.
 - [ ] Abrir pelo ícone: abre sem a barra do Safari.
 - [ ] A contagem começou do zero? Se sim, usar "Meu código" (anotado antes) e restaurar.
@@ -36,7 +36,7 @@ Antes de testar, abra uma vez `SEU-SITE/?c=demo` para ligar o modo clínica.
 - [ ] "Lembretes" → "Usar o Google Agenda" cria o evento recorrente.
 
 ## Código de recuperação
-- [ ] Fazer 2 treinos → rodapé "Meu código" mostra FNC-2 → "Copiar link".
+- [ ] Fazer 2 treinos → rodapé "Meu código" mostra DOSE-2 → "Copiar link".
 - [ ] Abrir o link em outra aba anônima → abre "Meu código" perguntando "Restaurar para o treino 2?" → Sim → Voltar → mostra "Treino nº 3".
 
 ## Acessibilidade

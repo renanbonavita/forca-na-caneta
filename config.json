@@ -2,6 +2,7 @@
   "_leia_me": "Arquivo de configuração. Campos vazios (\"\") ficam ocultos no app. Veja o README.",
 
   "responsavel_tecnico": { "nome": "[NOME DO RESPONSÁVEL TÉCNICO]", "cref": "[NÚMERO]-G/[UF]" },
+  "slogan": "A caneta já fez a parte dela. Agora é hora de fortalecer.",
   "contato_email": "[seu-email-de-contato@exemplo.com]",
 
   "mostrar_marcadores_de_lugar": true,
@@ -47,7 +48,7 @@
     "Devagar é chique. Controle é tudo.",
     "Tá indo lindamente. Sem pressa, com força.",
     "Cada repetição é um tijolinho de força.",
-    "Força na caneta e no braço também!",
+    "Essa é a sua dose de força do dia!",
     "Ninguém tá olhando: pode fazer careta à vontade.",
     "Barriga firme, como quem vai fechar a calça jeans.",
     "Músculo não tem idade, tem treino.",
@@ -78,7 +79,7 @@
     "Sacode as mãos, solta o corpo."
   ],
   "frases_conclusao": [
-    "Cinco minutos de pura força na caneta 💪",
+    "Dose de força tomada! Cinco minutos de pura energia 💪",
     "Treino feito! Pode contar pra todo mundo (ou guardar só pra você).",
     "Mais forte que ontem. Simples assim.",
     "Cinco minutos que valem ouro. Parabéns!",

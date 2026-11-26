@@ -1,4 +1,4 @@
-// Lógica pura do Força na Caneta (sem DOM). Usada pelo app e pelos testes.
+// Lógica pura do Dose de Força (sem DOM). Usada pelo app e pelos testes.
 
 // Duração fixa: 30 s + 4 × (40 s + 20 s) + 30 s = 300 s = 5 min.
 export const DURACAO = Object.freeze({ aquecimento: 30, exercicio: 40, descanso: 20, desaquecimento: 30 });
@@ -7,7 +7,7 @@ export const GRUPOS = Object.freeze(['pernas', 'empurrar', 'costas', 'extra']);
 export const NIVEIS = Object.freeze([
   { nivel: 1, nome: 'Esquentando', de: 1, ate: 6 },
   { nivel: 2, nome: 'Pegando no tranco', de: 7, ate: 15 },
-  { nivel: 3, nome: 'Força na Caneta', de: 16, ate: Infinity },
+  { nivel: 3, nome: 'Força Total', de: 16, ate: Infinity },
 ]);
 
 /** Nível do treino de número `n` (1, 2, 3...). */
@@ -75,9 +75,9 @@ export function sortearTreino(exercicios, nivel, idsAnteriores = [], rnd = Math.
 }
 
 // ---------- Código de recuperação ----------
-export const codigoDe = (treinos) => `FNC-${treinos}`;
+export const codigoDe = (treinos) => `DOSE-${treinos}`;
 export function lerCodigo(texto) {
-  const m = String(texto || '').trim().match(/^FNC[\s-]?(\d{1,4})$/i);
+  const m = String(texto || '').trim().match(/^(?:DOSE|FNC)[\s-]?(\d{1,4})$/i);
   return m ? Number(m[1]) : null;
 }
 export function lerHashTreino(hash) {
@@ -102,7 +102,7 @@ const fmtLocal = (d) => `${d.getFullYear()}${doisDig(d.getMonth() + 1)}${doisDig
 const fmtUTC = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 const escaparICS = (s) => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 
-export const TITULO_LEMBRETE = 'Treino Força na Caneta – 5 min';
+export const TITULO_LEMBRETE = 'Treino Dose de Força – 5 min';
 
 /** Gera um .ics com evento recorrente de segunda a sexta (horário local "flutuante"). */
 export function gerarICS({ hora, minuto, url = '', agora = new Date() }) {
@@ -110,11 +110,11 @@ export function gerarICS({ hora, minuto, url = '', agora = new Date() }) {
   const linhas = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Forca na Caneta//Lembrete//PT-BR',
+    'PRODID:-//Dose de Forca//Lembrete//PT-BR',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',
-    `UID:fnc-${fmtUTC(agora)}-${doisDig(hora)}${doisDig(minuto)}@forcanacaneta`,
+    `UID:fnc-${fmtUTC(agora)}-${doisDig(hora)}${doisDig(minuto)}@dosedeforca`,
     `DTSTAMP:${fmtUTC(agora)}`,
     `DTSTART:${fmtLocal(inicio)}`,
     'DURATION:PT5M',

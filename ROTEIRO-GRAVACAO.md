@@ -1,4 +1,4 @@
-# Roteiro de gravação — Força na Caneta
+# Roteiro de gravação — Dose de Força
 
 > Arquivo gerado por `node tools/gerar-roteiro.mjs`. Se mudar exercícios ou frases, gere de novo.
 
@@ -30,14 +30,14 @@ Depois de gravar: coloque os vídeos em `videos/` e os áudios em `audio/`, mude
 | 14 | `videos/n2-abre-fecha-toalha.mp4` | **Abre e fecha com toalha** (nível 2 · Pegando no tranco) | Costas | Sentada, braços esticados à frente na altura do peito, segurando a toalha. Tente afastar as mãos esticando a toalha, apertando as escápulas, sem soltar. Relaxe e repita. | Não prenda a respiração. Ombros baixos. |
 | 15 | `videos/n2-agachamento-parcial-encosto.mp4` | **Agachamento parcial segurando o encosto** (nível 2 · Pegando no tranco) | Extra | Em pé, de frente para a cadeira, mãos no topo do encosto. Empurre o quadril para trás e dobre um pouco os joelhos, como quem vai sentar numa cadeira imaginária. Volte a ficar em pé. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Joelhos apontando na direção dos pés. Desça só até onde for confortável. |
 | 16 | `videos/n2-abducao-quadril.mp4` | **Abdução de quadril em pé com apoio** (nível 2 · Pegando no tranco) | Extra | Em pé, de lado para a cadeira, com uma mão no encosto. Leve a perna de fora para o lado, sem inclinar o tronco, e volte devagar. Na metade do tempo, troque de lado. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Tronco reto: o movimento é só da perna. Mostre os dois lados. |
-| 17 | `videos/n3-levantar-pausa.mp4` | **Levantar com pausa antes do assento** (nível 3 · Força na Caneta) | Pernas | Sentada na beirada da cadeira. Fique em pé devagar. Ao sentar, pare a dois dedos do assento por 2 segundos, e só então sente. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Levante sempre devagar. Se a pausa ficar difícil, sente. |
-| 18 | `videos/n3-avanco-parado.mp4` | **Avanço parado com apoio no encosto** (nível 3 · Força na Caneta) | Pernas | Em pé, de lado para a cadeira, mão no encosto. Dê um passo à frente com uma perna, a outra fica atrás. Dobre os dois joelhos, descendo o corpo reto, e suba. Na metade do tempo, troque a perna da frente. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Tronco reto e joelho da frente sem passar muito da ponta do pé. Mostre os dois lados. |
-| 19 | `videos/n3-flexao-fechada-encosto.mp4` | **Flexão fechada no encosto** (nível 3 · Força na Caneta) | Empurrar | Mãos próximas uma da outra no topo do encosto, cotovelos rentes ao corpo. Dobre os cotovelos levando o peito ao encosto e empurre de volta. O foco é a parte de trás do braço. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Confira que a cadeira não se mexe antes de começar. |
-| 20 | `videos/n3-flexao-inclinada-lenta.mp4` | **Flexão inclinada com descida lenta** (nível 3 · Força na Caneta) | Empurrar | Mãos no topo do encosto, corpo em linha reta. Desça contando 3 segundos e empurre de volta em 1 segundo. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Confira que a cadeira não se mexe antes de começar. |
-| 21 | `videos/n3-remada-toalha-pes.mp4` | **Remada com toalha nos pés, sentada** (nível 3 · Força na Caneta) | Costas | Sentada, pernas estendidas à frente com os calcanhares no chão e a toalha passada na sola dos pés. Puxe as pontas levando os cotovelos para trás, aperte as escápulas e sustente 3 segundos. Volte devagar. | Costas retas e respiração solta durante a sustentação. |
-| 22 | `videos/n3-w-parede-sustentacao.mp4` | **"W" na parede com sustentação** (nível 3 · Força na Caneta) | Costas | Como o "W" na parede, mas segure as escápulas apertadas por 3 segundos em cada repetição. | Não force os braços na parede se o ombro reclamar. |
-| 23 | `videos/n3-ponta-pes-uma-perna.mp4` | **Ponta dos pés em uma perna, com apoio** (nível 3 · Força na Caneta) | Extra | Em pé, de lado para a cadeira, mão no encosto. Dobre uma perna e suba na ponta do outro pé devagar, desça devagar. Na metade do tempo, troque de perna. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Segure firme no encosto o tempo todo. Mostre os dois lados. |
-| 24 | `videos/n3-prancha-inclinada-encosto.mp4` | **Prancha inclinada no encosto** (nível 3 · Força na Caneta) | Extra | Mãos no topo do encosto, pés para trás, corpo em linha reta. Barriga firme e segure a posição respirando. Se precisar, pause 5 segundos e volte. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Confira que a cadeira não se mexe. Não prenda a respiração. |
+| 17 | `videos/n3-levantar-pausa.mp4` | **Levantar com pausa antes do assento** (nível 3 · Força Total) | Pernas | Sentada na beirada da cadeira. Fique em pé devagar. Ao sentar, pare a dois dedos do assento por 2 segundos, e só então sente. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Levante sempre devagar. Se a pausa ficar difícil, sente. |
+| 18 | `videos/n3-avanco-parado.mp4` | **Avanço parado com apoio no encosto** (nível 3 · Força Total) | Pernas | Em pé, de lado para a cadeira, mão no encosto. Dê um passo à frente com uma perna, a outra fica atrás. Dobre os dois joelhos, descendo o corpo reto, e suba. Na metade do tempo, troque a perna da frente. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Tronco reto e joelho da frente sem passar muito da ponta do pé. Mostre os dois lados. |
+| 19 | `videos/n3-flexao-fechada-encosto.mp4` | **Flexão fechada no encosto** (nível 3 · Força Total) | Empurrar | Mãos próximas uma da outra no topo do encosto, cotovelos rentes ao corpo. Dobre os cotovelos levando o peito ao encosto e empurre de volta. O foco é a parte de trás do braço. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Confira que a cadeira não se mexe antes de começar. |
+| 20 | `videos/n3-flexao-inclinada-lenta.mp4` | **Flexão inclinada com descida lenta** (nível 3 · Força Total) | Empurrar | Mãos no topo do encosto, corpo em linha reta. Desça contando 3 segundos e empurre de volta em 1 segundo. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Confira que a cadeira não se mexe antes de começar. |
+| 21 | `videos/n3-remada-toalha-pes.mp4` | **Remada com toalha nos pés, sentada** (nível 3 · Força Total) | Costas | Sentada, pernas estendidas à frente com os calcanhares no chão e a toalha passada na sola dos pés. Puxe as pontas levando os cotovelos para trás, aperte as escápulas e sustente 3 segundos. Volte devagar. | Costas retas e respiração solta durante a sustentação. |
+| 22 | `videos/n3-w-parede-sustentacao.mp4` | **"W" na parede com sustentação** (nível 3 · Força Total) | Costas | Como o "W" na parede, mas segure as escápulas apertadas por 3 segundos em cada repetição. | Não force os braços na parede se o ombro reclamar. |
+| 23 | `videos/n3-ponta-pes-uma-perna.mp4` | **Ponta dos pés em uma perna, com apoio** (nível 3 · Força Total) | Extra | Em pé, de lado para a cadeira, mão no encosto. Dobre uma perna e suba na ponta do outro pé devagar, desça devagar. Na metade do tempo, troque de perna. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Segure firme no encosto o tempo todo. Mostre os dois lados. |
+| 24 | `videos/n3-prancha-inclinada-encosto.mp4` | **Prancha inclinada no encosto** (nível 3 · Força Total) | Extra | Mãos no topo do encosto, pés para trás, corpo em linha reta. Barriga firme e segure a posição respirando. Se precisar, pause 5 segundos e volte. | Cadeira firme, sem rodinhas, com o encosto encostado na parede. Confira que a cadeira não se mexe. Não prenda a respiração. |
 
 ## 2. Áudios de cada movimento (48)
 
@@ -124,7 +124,7 @@ O número do arquivo segue a ordem da lista no `config.json` (01 = primeira fras
 | `audio/durante-04.mp3` | Devagar é chique. Controle é tudo. |
 | `audio/durante-05.mp3` | Tá indo lindamente. Sem pressa, com força. |
 | `audio/durante-06.mp3` | Cada repetição é um tijolinho de força. |
-| `audio/durante-07.mp3` | Força na caneta e no braço também! |
+| `audio/durante-07.mp3` | Essa é a sua dose de força do dia! |
 | `audio/durante-08.mp3` | Ninguém tá olhando: pode fazer careta à vontade. |
 | `audio/durante-09.mp3` | Barriga firme, como quem vai fechar a calça jeans. |
 | `audio/durante-10.mp3` | Músculo não tem idade, tem treino. |
@@ -170,7 +170,7 @@ O número do arquivo segue a ordem da lista no `config.json` (01 = primeira fras
 
 | Arquivo | Texto |
 |---|---|
-| `audio/conclusao-01.mp3` | Cinco minutos de pura força na caneta |
+| `audio/conclusao-01.mp3` | Dose de força tomada! Cinco minutos de pura energia |
 | `audio/conclusao-02.mp3` | Treino feito! Pode contar pra todo mundo (ou guardar só pra você). |
 | `audio/conclusao-03.mp3` | Mais forte que ontem. Simples assim. |
 | `audio/conclusao-04.mp3` | Cinco minutos que valem ouro. Parabéns! |
