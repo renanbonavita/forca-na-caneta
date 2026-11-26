@@ -3,11 +3,13 @@ import { createRequire } from 'node:module';
 const { chromium } = createRequire(import.meta.url)('playwright');
 import { readFileSync } from 'node:fs';
 const raiz = new URL('..', import.meta.url).pathname;
+// Fundo dos ícones = cor principal do produto (config.json → produto.cores.principal).
+const cor = ((JSON.parse(readFileSync(raiz + 'config.json', 'utf8')).produto || {}).cores || {}).principal || '#FF6B4A';
 const alvos = [
-  ['icons/quadrado.svg', 'icons/icon-192.png', 192, '#FF6B4A'],
-  ['icons/quadrado.svg', 'icons/icon-512.png', 512, '#FF6B4A'],
-  ['icons/maskable.svg', 'icons/icon-maskable-512.png', 512, '#FF6B4A'],
-  ['icons/quadrado.svg', 'icons/apple-touch-icon.png', 180, '#FF6B4A'],
+  ['icons/quadrado.svg', 'icons/icon-192.png', 192, cor],
+  ['icons/quadrado.svg', 'icons/icon-512.png', 512, cor],
+  ['icons/maskable.svg', 'icons/icon-maskable-512.png', 512, cor],
+  ['icons/quadrado.svg', 'icons/apple-touch-icon.png', 180, cor],
 ];
 const browser = await chromium.launch();
 const page = await browser.newPage();

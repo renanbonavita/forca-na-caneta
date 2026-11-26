@@ -102,7 +102,7 @@ Para cada movimento: uma **apresentação** (tocada no início dos 40 s) e um **
 | `audio/aquecimento-2.mp3` | Agora gira os ombros pra trás, bem devagar. | Aquecimento, 10 s |
 | `audio/aquecimento-3.mp3` | Abre e fecha as mãos. Respira fundo. | Aquecimento, 18 s |
 | `audio/cadeira-alerta.mp3` | Cadeira encostada na parede? Então bora. | Antes de movimento com cadeira |
-| `audio/levanta-devagar.mp3` | Levanta devagar. | Ao passar de sentada para em pé / movimentos de levantar |
+| `audio/levanta-devagar.mp3` | Levanta devagar. | Ao levantar da cadeira / movimentos de levantar |
 | `audio/troca-lado.mp3` | Troca de lado! | Metade dos movimentos de um lado só |
 | `audio/ultimo-descanso.mp3` | Último descanso! Já já vem o desaquecimento. | Último descanso |
 | `audio/desaquecimento-1.mp3` | Desaquecimento. Sentada, respira fundo pelo nariz e solta pela boca. | Início do desaquecimento |
