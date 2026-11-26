@@ -1,13 +1,13 @@
 // Service worker do Força na Caneta: funciona offline.
 // Ao publicar mudanças, aumente a VERSAO para os celulares baixarem a versão nova.
-const VERSAO = 'fnc-v5';
+const VERSAO = 'fnc-v7';
 
 const ESSENCIAIS = [
   './', 'index.html', 'styles.css', 'app.js', 'js/logica.js',
   'exercicios.json', 'config.json', 'clinicas.json', 'manifest.json', 'termos.html',
   'icons/logo.svg', 'icons/favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png',
   'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png',
-  'img/aquecimento.svg', 'img/descanso.svg', 'img/desaquecimento.svg',
+  'img/aquecimento.svg', 'img/descanso.svg', 'img/desaquecimento.svg', 'termos.js', 'og-image.png',
 ];
 
 self.addEventListener('install', (event) => {

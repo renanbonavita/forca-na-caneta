@@ -35,12 +35,10 @@ async function carregarJSON(url, padrao) {
 }
 
 // ---------------- Telas ----------------
-const TELAS = ['aviso', 'inicio', 'treino', 'fim'];
+const TELAS = ['aviso', 'inicio', 'treino', 'fim', 'sobre'];
 function mostrar(nome) {
-  TELAS.forEach((t) => { $(`#tela-${t}`).hidden = t !== nome; });
+  TELAS.forEach((t) => document.getElementById(t).classList.toggle('ativa', t === nome));
   window.scrollTo(0, 0);
-  const alvo = $(`#tela-${nome} h1, #tela-${nome} h2`);
-  if (alvo && nome !== 'treino') { alvo.setAttribute('tabindex', '-1'); alvo.focus({ preventScroll: true }); }
 }
 
 function atualizarInicio() {
@@ -59,7 +57,6 @@ const querReduzir = () => store.get('reduzir', null) ?? window.matchMedia('(pref
 function aplicarReduzir() {
   const r = querReduzir();
   document.documentElement.classList.toggle('reduzir-animacoes', !!r);
-  $('#btn-animacoes').setAttribute('aria-pressed', String(!!r));
 }
 
 // ---------------- Analytics (sem cookies, sem dados pessoais) ----------------
@@ -133,6 +130,7 @@ if ('speechSynthesis' in window) {
   escolherVoz();
   speechSynthesis.addEventListener?.('voiceschanged', escolherVoz);
 }
+const vozLigada = () => store.get('voz', true) !== false;
 function legenda(texto) { $('#legenda').textContent = texto || ''; }
 const semEmoji = (t) => t.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
 
@@ -155,6 +153,7 @@ function proximaFala() {
   voz.falando = true;
   legenda(item.texto);
   const terminou = () => { clearTimeout(voz.timeout); if (voz.falando) proximaFala(); };
+  if (!vozLigada()) { voz.timeout = setTimeout(terminou, 1200 + item.texto.length * 60); return; }
   // Rede de segurança: alguns navegadores não disparam "onend".
   voz.timeout = setTimeout(terminou, 1500 + item.texto.length * 95);
   const porTTS = () => {
@@ -246,7 +245,7 @@ function comecarTreino(nivelForcado = null) {
   T.total = duracaoTotal(T.etapas); // sempre 300 s
   T.ativo = true; T.pausadoEm = null; T.posicao = 'sentada';
   rotuloPausa(false);
-  mostrar('treino');
+  ir('#treino', { substituir: location.hash === '#fim' });
   pedirWakeLock();
   track('treino_iniciado', { nivel: T.nivel });
   entrarEtapa(0);
@@ -490,7 +489,8 @@ function mostrarFim(n, novoNivel, { previa = false } = {}) {
     card.hidden = false;
   } else card.hidden = true;
 
-  mostrar('fim');
+  fimPronto = true;
+  if (previa) mostrar('fim'); else ir('#fim', { substituir: true });
   if (!previa) falar(frase, { interromper: true });
   confete();
 }
@@ -524,49 +524,127 @@ function confete() {
 
 // ---------------- Instalação ----------------
 let promptInstalacao = null;
-window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); promptInstalacao = e; });
-window.addEventListener('appinstalled', () => track('instalacao'));
 const estaInstalado = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); promptInstalacao = e;
+  const b = document.getElementById('btn-instalar-agora');
+  if (b) b.hidden = false;
+});
+window.addEventListener('appinstalled', () => {
+  track('instalacao');
+  promptInstalacao = null;
+  $('#botao-instalar').hidden = true;
+});
+async function instalar() {
+  if (!promptInstalacao) { ir('#sobre/instalar'); return; }
+  promptInstalacao.prompt();
+  try { await promptInstalacao.userChoice; } catch { /* */ }
+  promptInstalacao = null;
+  $('#btn-instalar-agora').hidden = true;
+}
 
-function li(html) { const l = document.createElement('li'); l.innerHTML = html; return l; }
-async function abrirInstalar() {
-  const p = detectarPlataforma(navigator.userAgent, navigator.maxTouchPoints || 0, estaInstalado());
-  const box = $('#instalar-conteudo');
-  box.replaceChildren();
-  const par = (t) => { const e = document.createElement('p'); e.textContent = t; return e; };
+// ---------------- Navegação por endereço (#), para o "voltar" do celular funcionar ----------------
+const pilha = [location.hash];
+let fimPronto = false;
+let restaurarPendente = null;
 
-  if (p.inApp) {
-    box.append(par(`Você está no navegador interno do ${p.inApp}. Para instalar, abra no ${p.ios ? 'Safari' : 'Chrome'}:`));
-    const ol = document.createElement('ol');
-    ol.append(li('Toque nos <strong>três pontinhos</strong> (⋯ ou ⋮) no canto da tela.'),
-      li(`Escolha <strong>“Abrir no ${p.ios ? 'Safari' : 'navegador'}”</strong>.`),
-      li('Lá, toque de novo em “Adicionar à tela de início”.'));
-    box.append(ol);
-    const copiar = document.createElement('button');
-    copiar.type = 'button'; copiar.className = 'btn btn-secundario'; copiar.textContent = 'Copiar link do app';
-    copiar.addEventListener('click', () => copiarTexto(location.origin + location.pathname + location.search, copiar));
-    box.append(copiar);
-  } else if (p.ios) {
-    const ol = document.createElement('ol');
-    ol.append(li('Abra este site no <strong>Safari</strong>.'),
-      li('Toque em <strong>⋯ (Mais)</strong> e depois em <strong>Compartilhar</strong>.'),
-      li('Role e toque em <strong>“Adicionar à Tela de Início”</strong>.'),
-      li('Toque em <strong>“Adicionar”</strong>. Pronto! 🎉'));
-    box.append(ol);
-    box.append(par(`Dica: no iPhone, o app instalado pode começar a contagem do zero. Se isso acontecer, use “Meu código”: o seu é ${codigoDe(treinosFeitos())}.`));
-  } else if (promptInstalacao) {
-    $('#dlg-instalar').close();
-    promptInstalacao.prompt();
-    try { await promptInstalacao.userChoice; } catch { /* */ }
-    promptInstalacao = null;
+function ir(hash, { substituir = false } = {}) {
+  const url = hash || location.pathname + location.search;
+  if (substituir) { history.replaceState(null, '', url); pilha[pilha.length - 1] = location.hash; }
+  else { history.pushState(null, '', url); pilha.push(location.hash); }
+  rota();
+}
+window.addEventListener('hashchange', () => {
+  if (pilha.length > 1 && pilha[pilha.length - 2] === location.hash) pilha.pop();
+  else pilha.push(location.hash);
+  rota();
+});
+/* "Voltar" desfaz o último passo dentro do app; se a pessoa abriu direto num link, vai para o início. */
+function voltar() {
+  if (pilha.length > 1) { history.back(); return; }
+  ir('', { substituir: true });
+}
+
+function rota() {
+  if (!store.get('aceite')) { mostrar('aviso'); return; }
+
+  const t = lerHashTreino(location.hash);
+  if (t != null) {
+    if (t !== treinosFeitos()) { restaurarPendente = t; ir('#sobre/codigo', { substituir: true }); }
+    else ir('', { substituir: true });
     return;
-  } else {
-    const ol = document.createElement('ol');
-    ol.append(li('Toque no menu do navegador (<strong>⋮</strong>).'),
-      li('Escolha <strong>“Instalar app”</strong> ou <strong>“Adicionar à tela inicial”</strong>.'));
-    box.append(ol);
   }
-  if (!$('#dlg-instalar').open) $('#dlg-instalar').showModal();
+
+  const [tipo, sub] = location.hash.replace('#', '').split('/');
+
+  // Saiu do treino pelo "voltar" do celular: confirma antes de encerrar.
+  if (T.ativo && tipo !== 'treino') {
+    pausar();
+    if (window.confirm('Encerrar o treino agora? Ele não vai entrar na contagem.')) pararTreino();
+    else { history.pushState(null, '', '#treino'); pilha.push('#treino'); mostrar('treino'); continuar(); return; }
+  }
+
+  if (tipo === 'treino') { if (T.ativo) mostrar('treino'); else ir('', { substituir: true }); return; }
+  if (tipo === 'fim') { if (fimPronto) mostrar('fim'); else ir('', { substituir: true }); return; }
+  if (tipo === 'sobre') {
+    prepararSobre();
+    mostrar('sobre');
+    const alvo = { instalar: 'sobre-instalar', lembretes: 'sobre-lembretes', codigo: 'sobre-codigo', voz: 'sobre-voz', movimentos: 'sobre-movimentos' }[sub];
+    if (alvo) { const d = document.getElementById(alvo); d.open = true; d.scrollIntoView(); }
+    return;
+  }
+  atualizarInicio();
+  mostrar('inicio');
+}
+
+// ---------------- Página Sobre ----------------
+let listaPronta = false;
+function prepararSobre() {
+  // Os movimentos, por nível
+  if (!listaPronta && exercicios.length) {
+    const box = $('#lista-movimentos');
+    const GR = { pernas: 'Pernas', empurrar: 'Empurrar', costas: 'Costas', extra: 'Extra' };
+    [1, 2, 3].forEach((nv) => {
+      const h = document.createElement('h3');
+      h.className = 'nivel-titulo';
+      h.textContent = `Nível ${nv} · ${nomeDoNivel(nv)}`;
+      const ul = document.createElement('ul');
+      exercicios.filter((e) => e.nivel === nv).forEach((e) => {
+        const li = document.createElement('li');
+        const b = document.createElement('strong'); b.textContent = `${GR[e.grupo]}: `;
+        li.append(b, e.nome);
+        ul.append(li);
+      });
+      box.append(h, ul);
+    });
+    listaPronta = true;
+  }
+
+  // Instalar
+  const p = detectarPlataforma(navigator.userAgent, navigator.maxTouchPoints || 0, estaInstalado());
+  const inapp = $('#instalar-inapp');
+  if (p.inApp) {
+    inapp.textContent = `Você está no navegador interno do ${p.inApp}. Para instalar, toque nos três pontinhos (⋯ ou ⋮) e escolha “Abrir no ${p.ios ? 'Safari' : 'navegador'}”.`;
+    inapp.hidden = false;
+  } else inapp.hidden = true;
+  $('#btn-instalar-agora').hidden = !promptInstalacao;
+
+  // Lembretes
+  prepararLembretes();
+
+  // Código
+  $('#codigo-texto').textContent = codigoDe(treinosFeitos());
+  $('#codigo-link').value = linkRecuperacao();
+  const caixa = $('#restaurar-caixa');
+  if (restaurarPendente != null) {
+    const n = restaurarPendente;
+    $('#restaurar-texto').textContent = `Restaurar para o treino ${n}? Sua contagem fica com ${n} treino${n === 1 ? '' : 's'} feito${n === 1 ? '' : 's'}, e o próximo será o nº ${n + 1}.`;
+    caixa.hidden = false;
+  } else caixa.hidden = true;
+
+  // Voz e animações
+  $('#opcao-voz').checked = vozLigada();
+  $('#opcao-reduzir').checked = !!querReduzir();
 }
 
 // ---------------- Lembretes (.ics) ----------------
@@ -587,49 +665,21 @@ function atualizarLinksLembrete() {
   const [hora, minuto] = $('#hora-lembrete').value.split(':').map(Number);
   store.set('horaLembrete', `${hora}:${minuto}`);
   const url = location.origin + location.pathname;
-  const ics = gerarICS({ hora, minuto, url });
-  $('#link-ics').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+  $('#link-ics').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(gerarICS({ hora, minuto, url }));
   $('#link-google').href = linkGoogleAgenda({ hora, minuto, url });
 }
 
 // ---------------- Código de recuperação ----------------
 function linkRecuperacao() {
-  const n = treinosFeitos();
-  return `${location.origin}${location.pathname}${clinica ? `?c=${clinica.id}` : ''}#t=${n}`;
+  return `${location.origin}${location.pathname}${clinica ? `?c=${clinica.id}` : ''}#t=${treinosFeitos()}`;
 }
-function abrirCodigo() {
-  $('#codigo-texto').textContent = codigoDe(treinosFeitos());
-  $('#codigo-link').value = linkRecuperacao();
-  $('#copiado').textContent = ''; $('#codigo-erro').textContent = ''; $('#codigo-entrada').value = '';
-  $('#dlg-codigo').showModal();
-}
-async function copiarTexto(texto, botao) {
+async function copiarTexto(texto) {
   let ok = false;
   try { await navigator.clipboard.writeText(texto); ok = true; } catch {
-    const campo = document.createElement('textarea');
-    campo.value = texto; document.body.append(campo); campo.select();
+    const campo = $('#codigo-link'); campo.select();
     try { ok = document.execCommand('copy'); } catch { /* */ }
-    campo.remove();
   }
-  if (botao === $('#btn-copiar')) $('#copiado').textContent = ok ? 'Link copiado! Guarde no WhatsApp ou nas notas.' : 'Não deu para copiar: selecione o link acima e copie.';
-  else if (botao) botao.textContent = ok ? 'Link copiado ✓' : 'Copie o endereço da barra';
-}
-function pedirRestauracao(n) {
-  $('#restaurar-num').textContent = String(n);
-  $('#restaurar-texto').textContent = `Sua contagem fica com ${n} treino${n === 1 ? '' : 's'} feito${n === 1 ? '' : 's'}, e o próximo será o nº ${n + 1}.`;
-  $('#btn-restaurar-sim').onclick = () => {
-    store.set('treinos', n);
-    $('#dlg-restaurar').close();
-    atualizarInicio();
-  };
-  const dlg = $('#dlg-restaurar');
-  if (!dlg.open) dlg.showModal();
-}
-function verificarHash() {
-  const n = lerHashTreino(location.hash);
-  if (n == null) return;
-  history.replaceState(null, '', location.pathname + location.search);
-  if (n !== treinosFeitos()) pedirRestauracao(n);
+  $('#copiado').textContent = ok ? 'Link copiado! Guarde no WhatsApp ou nas notas.' : 'Selecionado. Toque e segure para copiar.';
 }
 
 // ---------------- Textos do responsável técnico ----------------
@@ -655,12 +705,19 @@ function registrarSW() {
 }
 
 // ---------------- Eventos ----------------
+function rotuloVoz() {
+  const ligada = vozLigada();
+  $('#btn-voz').setAttribute('aria-pressed', String(ligada));
+  $('#btn-voz').setAttribute('aria-label', ligada ? 'Voz ligada. Toque para desligar' : 'Voz desligada. Toque para ligar');
+}
+
 function ligarEventos() {
-  $('#btn-aceitar').addEventListener('click', () => {
-    store.set('aceite', new Date().toISOString());
-    atualizarInicio(); mostrar('inicio'); verificarHash();
-  });
+  $('#btn-aceitar').addEventListener('click', () => { store.set('aceite', new Date().toISOString()); rota(); });
   $('#btn-bora').addEventListener('click', () => comecarTreino());
+  $('#botao-instalar').addEventListener('click', instalar);
+  $('#btn-instalar-agora').addEventListener('click', instalar);
+
+  // Treino
   $('#btn-pausar').addEventListener('click', () => (T.pausadoEm ? continuar() : pausar()));
   $('#btn-pular').addEventListener('click', () => { if (T.pausadoEm) continuar(); entrarEtapa(T.idx + 1); });
   $('#btn-facil').addEventListener('click', () => {
@@ -671,34 +728,48 @@ function ligarEventos() {
     $('#descricao-mov').textContent = T.facil ? `Versão mais fácil: ${e.mov.versao_facil}` : e.mov.descricao;
     if (T.facil) falar({ texto: `Versão mais fácil: ${e.mov.versao_facil}` }, { interromper: true });
   });
+  $('#btn-voz').addEventListener('click', () => {
+    store.set('voz', !vozLigada());
+    rotuloVoz();
+    if (!vozLigada()) { try { voz.player.pause(); speechSynthesis.cancel(); } catch { /* */ } }
+  });
   $('#btn-encerrar').addEventListener('click', () => {
     pausar();
-    if (window.confirm('Encerrar o treino agora? Ele não vai entrar na contagem.')) { pararTreino(); atualizarInicio(); mostrar('inicio'); }
+    if (window.confirm('Encerrar o treino agora? Ele não vai entrar na contagem.')) { pararTreino(); voltar(); }
     else continuar();
   });
+
+  // Conclusão
   $('#btn-mais-uma').addEventListener('click', () => { track('mais_uma_rodada', { nivel: T.nivel }); comecarTreino(T.nivel); });
-  $('#btn-por-hoje').addEventListener('click', () => { calar(); atualizarInicio(); mostrar('inicio'); });
+  $('#btn-por-hoje').addEventListener('click', () => { calar(); fimPronto = false; ir('', { substituir: true }); });
   $('#btn-dispensar-elastico').addEventListener('click', () => { store.set('elasticoDispensadoEm', treinosFeitos()); $('#card-elastico').hidden = true; });
   $('#elastico-link').addEventListener('click', (e) => {
     if ($('#elastico-link').getAttribute('aria-disabled') === 'true') { e.preventDefault(); return; }
     track('clique_elastico');
   });
 
-  $('#btn-instalar').addEventListener('click', abrirInstalar);
-  $('#btn-lembretes').addEventListener('click', () => { prepararLembretes(); $('#dlg-lembretes').showModal(); });
-  $('#btn-codigo').addEventListener('click', abrirCodigo);
-  $('#btn-copiar').addEventListener('click', (e) => copiarTexto($('#codigo-link').value, e.currentTarget));
+  // Sobre
+  document.querySelectorAll('[data-voltar]').forEach((b) => b.addEventListener('click', voltar));
+  $('#btn-copiar').addEventListener('click', () => copiarTexto($('#codigo-link').value));
   $('#btn-usar-codigo').addEventListener('click', () => {
     const n = lerCodigo($('#codigo-entrada').value);
     if (n == null) { $('#codigo-erro').textContent = 'Código inválido. Ele tem o formato FNC-15.'; return; }
-    $('#dlg-codigo').close();
-    pedirRestauracao(n);
+    $('#codigo-erro').textContent = '';
+    restaurarPendente = n;
+    prepararSobre();
+    $('#restaurar-caixa').scrollIntoView({ block: 'center' });
+    $('#btn-restaurar-sim').focus();
   });
-  $('#btn-animacoes').addEventListener('click', () => { store.set('reduzir', !querReduzir()); aplicarReduzir(); });
-  document.querySelectorAll('[data-fechar]').forEach((b) => b.addEventListener('click', () => b.closest('dialog').close()));
-  document.querySelectorAll('dialog').forEach((d) => d.addEventListener('click', (e) => { if (e.target === d) d.close(); }));
+  $('#btn-restaurar-sim').addEventListener('click', () => {
+    store.set('treinos', restaurarPendente);
+    restaurarPendente = null;
+    prepararSobre();
+    $('#copiado').textContent = 'Contagem restaurada.';
+  });
+  $('#btn-restaurar-nao').addEventListener('click', () => { restaurarPendente = null; prepararSobre(); });
+  $('#opcao-voz').addEventListener('change', (e) => { store.set('voz', e.target.checked); rotuloVoz(); });
+  $('#opcao-reduzir').addEventListener('change', (e) => { store.set('reduzir', e.target.checked); aplicarReduzir(); });
 
-  window.addEventListener('hashchange', verificarHash);
   document.addEventListener('visibilitychange', () => {
     if (!T.ativo) return;
     if (document.visibilityState === 'hidden') pausar('Pausado porque você saiu do app. Toque em Continuar.');
@@ -714,19 +785,18 @@ async function iniciar() {
   ]);
   preencherRT();
   aplicarReduzir();
+  rotuloVoz();
   ligarEventos();
   await configurarClinica();
   configurarAnalytics();
   registrarSW();
-  if (estaInstalado()) $('#btn-instalar').hidden = true;
+  if (!estaInstalado()) $('#botao-instalar').hidden = false;
 
-  const previa = new URLSearchParams(location.search).get('previa');
-  if (previa === 'fim') { mostrarFim(treinosFeitos() || 7, null, { previa: true }); return; }
-
-  if (!store.get('aceite')) { mostrar('aviso'); return; }
-  atualizarInicio();
-  mostrar('inicio');
-  verificarHash();
+  if (new URLSearchParams(location.search).get('previa') === 'fim') {
+    mostrarFim(treinosFeitos() || 7, null, { previa: true });
+    return;
+  }
+  rota();
 }
 iniciar();
 

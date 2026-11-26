@@ -170,7 +170,7 @@ O número do arquivo segue a ordem da lista no `config.json` (01 = primeira fras
 
 | Arquivo | Texto |
 |---|---|
-| `audio/conclusao-01.mp3` | Acabou! Cinco minutos de pura força na caneta |
+| `audio/conclusao-01.mp3` | Cinco minutos de pura força na caneta |
 | `audio/conclusao-02.mp3` | Treino feito! Pode contar pra todo mundo (ou guardar só pra você). |
 | `audio/conclusao-03.mp3` | Mais forte que ontem. Simples assim. |
 | `audio/conclusao-04.mp3` | Cinco minutos que valem ouro. Parabéns! |

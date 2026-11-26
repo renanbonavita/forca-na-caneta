@@ -26,7 +26,8 @@ Um web app (PWA) gratuito de treinos de força de **5 minutos**, feitos em casa 
 | `clinicas.json` | Clínicas parceiras (nome, logo, cor) | **Sim** |
 | `exercicios.json` | Os 24 movimentos (8 por nível) | Às vezes |
 | `termos.html` | Termos de uso e privacidade | **Sim** (marcadores `[ ]`) |
-| `index.html`, `styles.css`, `app.js`, `js/logica.js` | O app em si | Não precisa |
+| `index.html`, `styles.css`, `app.js`, `js/logica.js`, `termos.js` | O app em si (estrutura inspirada no AuHug: telas por endereço, página Sobre com seções, ação principal presa ao rodapé) | Não precisa |
+| `og-image.png`, `robots.txt` | Prévia do link no WhatsApp/Instagram e busca | Não |
 | `sw.js` | Faz o app funcionar offline | Só a linha `VERSAO` |
 | `manifest.json`, `icons/` | Ícone e nome na tela de início | Não |
 | `img/` | Ilustrações provisórias, uma por movimento | Não |
@@ -137,11 +138,24 @@ Enquanto `"mostrar_marcadores_de_lugar": true`, o app mostra **caixas tracejadas
 
 Para ver a tela final com os dois marcadores sem precisar treinar, abra: `SEU-SITE/?previa=fim`
 
+### Endereços úteis
+| Endereço | Abre |
+|---|---|
+| `SEU-SITE/#sobre` | Página Sobre |
+| `SEU-SITE/#sobre/instalar` | Instruções de instalação |
+| `SEU-SITE/#sobre/lembretes` | Lembretes na agenda |
+| `SEU-SITE/#sobre/codigo` | Meu código |
+| `SEU-SITE/#sobre/voz` | Voz e animações |
+| `SEU-SITE/#t=15` | Pergunta se quer restaurar para o treino 15 |
+
+### Segurança (CSP)
+O `index.html` tem uma política de segurança (Content-Security-Policy) que só permite scripts do próprio site, do GoatCounter e do Plausible. Se um dia adicionar outro serviço externo, inclua o endereço dele nessa linha, senão ele será bloqueado.
+
 ### Patrocinador de proteína
 ```json
 "patrocinio": { "marca": "Marca X", "link": "https://marca-x.com.br/?utm_source=forcanacaneta", "texto": "Hidrate-se e garanta sua proteína — apoio" }
 ```
-Resultado na tela final: *"Hidrate-se e garanta sua proteína — apoio **Marca X**"* (com link). Se `marca` ficar vazia, a linha some.
+Resultado na tela final (linha discreta abaixo do card): *"Hidrate-se e garanta sua proteína — apoio **Marca X**"* (com link). Se `marca` ficar vazia, a linha some.
 
 ### Link de afiliado do elástico (Missão Elástico)
 ```json

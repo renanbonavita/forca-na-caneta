@@ -22,7 +22,11 @@ const pares = [
   ['texto sobre alerta amarelo', '#2A1A14', '#FFF1C9', 4.5],
   ['texto sobre verde claro', '#2A1A14', '#DDF3E8', 4.5],
   ['erro sobre branco', '#A3241B', '#FFFFFF', 4.5],
-  ['barra de progresso (gráfico) sobre trilho', '#B23A1C', '#FFF0EA', 3],
+  ['contorno de botões e campos sobre o fundo (WCAG 1.4.11)', '#9A8478', '#FFFBF8', 3],
+  ['contorno de botões sobre branco', '#9A8478', '#FFFFFF', 3],
+  ['borda do BORA/principal sobre coral', '#B23A1C', '#FF6B4A', 1],
+  ['texto escuro sobre botão coral (BORA)', '#2A1A14', '#FF6B4A', 4.5],
+  ['barra de progresso (gráfico) sobre trilho', '#B23A1C', '#EADBD2', 3],
 ];
 let falhou = false;
 for (const [nome, a, b, min] of pares) {

@@ -1,209 +1,304 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Força na Caneta</title>
-  <meta name="description" content="Treino de força de 5 minutos em casa, com cadeira e toalha. Grátis, sem cadastro.">
-  <meta name="theme-color" content="#FFFBF8">
-  <meta name="color-scheme" content="light">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="FnC">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Força na Caneta: treino de força de 5 minutos em casa</title>
+<meta name="description" content="Treino de força gratuito de 5 minutos, em casa, com uma cadeira e uma toalha. Sem cadastro, com voz e legendas, e funciona sem internet.">
+<link rel="canonical" href="https://renanbonavita.github.io/forca-na-caneta/">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at https://plausible.io; style-src 'self'; img-src 'self' data: https://*.goatcounter.com; media-src 'self' blob:; font-src 'self'; connect-src 'self' https://*.goatcounter.com https://plausible.io; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Força na Caneta",
+  "url": "https://renanbonavita.github.io/forca-na-caneta/",
+  "description": "Treino de força gratuito de 5 minutos em casa, com cadeira e toalha, com voz, legendas e funcionamento sem internet.",
+  "inLanguage": "pt-BR",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Android, iOS, navegador",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+  "accessibilityFeature": ["legendas", "leitura em voz alta", "alto contraste", "funciona sem internet"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "O Força na Caneta é gratuito?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. É gratuito e sem cadastro." } },
+    { "@type": "Question", "name": "Preciso de equipamento?", "acceptedAnswer": { "@type": "Answer", "text": "Não. Só uma cadeira firme encostada na parede e uma toalha." } },
+    { "@type": "Question", "name": "Funciona sem internet?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. Depois de aberto uma vez com internet, o app guarda tudo no celular e abre mesmo sem sinal." } },
+    { "@type": "Question", "name": "Substitui o acompanhamento profissional?", "acceptedAnswer": { "@type": "Answer", "text": "Não. Os exercícios são genéricos e não substituem avaliação médica, nutricional ou de profissional de educação física." } }
+  ]
+}
+</script>
+<meta name="theme-color" content="#FFFBF8">
+<meta property="og:url" content="https://renanbonavita.github.io/forca-na-caneta/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Força na Caneta: treino de força de 5 minutos em casa">
+<meta property="og:description" content="Cadeira, toalha e 5 minutos. Grátis, sem cadastro, funciona sem internet.">
+<meta property="og:image" content="https://renanbonavita.github.io/forca-na-caneta/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FnC">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Ícones (traço único, 24 px) -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <symbol id="i-instalar" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m-3-3 3 3 3-3"/></symbol>
-      <symbol id="i-lembrete" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M5 4 3 6m16-2 2 2"/></symbol>
-      <symbol id="i-chave" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="m11.5 11.5 8-8M17 6l2.5 2.5M15 8l2 2"/></symbol>
-      <symbol id="i-movimento" viewBox="0 0 24 24"><path d="M4 12c2-4 4-4 6 0s4 4 6 0 4-4 4-4"/><path d="M4 18c2-4 4-4 6 0s4 4 6 0 4-4 4-4" opacity=".45"/></symbol>
-      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
-      <symbol id="i-pausa" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
-      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
-      <symbol id="i-pular" viewBox="0 0 24 24"><path d="M5 5l9 7-9 7zM18 5v14"/></symbol>
-      <symbol id="i-folha" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19l7-7"/></symbol>
-      <symbol id="i-cadeira" viewBox="0 0 24 24"><path d="M7 3v18M7 12h10v9M17 12V9"/></symbol>
-      <symbol id="i-voz" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16.5 9a4 4 0 0 1 0 6"/></symbol>
-      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
-      <symbol id="i-fechar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-      <symbol id="i-elastico" viewBox="0 0 24 24"><path d="M4 8c4 3 12 3 16 0M4 16c4-3 12-3 16 0"/><circle cx="4" cy="12" r="1.5"/><circle cx="20" cy="12" r="1.5"/></symbol>
-      <symbol id="i-seta" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
-    </defs>
-  </svg>
 
-  <main id="app">
+<!-- Ícones (traço único) -->
+<svg width="0" height="0" class="u-oculto" aria-hidden="true"><defs>
+  <symbol id="i-baixar" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+  <symbol id="i-voz" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+  <symbol id="i-pausa" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
+  <symbol id="i-pular" viewBox="0 0 24 24"><path d="M5 5l9 7-9 7zM18 5v14"/></symbol>
+  <symbol id="i-folha" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19l7-7"/></symbol>
+  <symbol id="i-cadeira" viewBox="0 0 24 24"><path d="M7 3v18M7 12h10v9M17 12V9"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-fechar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+</defs></svg>
 
-    <!-- 1. AVISO -->
-    <section id="tela-aviso" class="tela" hidden aria-labelledby="titulo-aviso">
-      <img src="icons/logo.svg" alt="Força na Caneta" class="logo" width="64" height="64">
-      <header class="cabecalho">
-        <h1 id="titulo-aviso">Antes de começar</h1>
-        <p class="lead">O Força na Caneta traz exercícios genéricos de força, sem orientação individual. Ele não substitui avaliação médica, nutricional ou de profissional de educação física. Responsável técnico: <span data-rt-nome></span>, CREF <span data-rt-cref></span>.</p>
-      </header>
-      <ul class="cartao lista-check">
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Converse com seu médico antes de começar, principalmente se você usa medicação para emagrecer ou tem alguma condição de saúde.</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Levante-se sempre devagar: tontura ao ficar em pé pode acontecer, sobretudo com pouca comida ou pouca água.</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Beba água antes e depois do treino.</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Use uma cadeira firme, sem rodinhas, encostada na parede, em piso que não escorrega.</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Pare na hora se sentir tontura, dor no peito, falta de ar, enjoo ou mal-estar.</span></li>
+<!-- ===== AVISO (primeiro acesso) ===== -->
+<section id="aviso" class="tela" aria-labelledby="titulo-aviso">
+  <div class="texto">
+    <img class="logo-sobre" src="icons/logo.svg" alt="" width="64" height="64">
+    <h1 id="titulo-aviso">Antes de começar</h1>
+    <p>O Força na Caneta traz exercícios genéricos de força, sem orientação individual. Ele não substitui avaliação médica, nutricional ou de profissional de educação física. Responsável técnico: <span data-rt-nome></span>, CREF <span data-rt-cref></span>.</p>
+    <ul class="lista-cuidados">
+      <li>Converse com seu médico antes de começar, principalmente se você usa medicação para emagrecer ou tem alguma condição de saúde.</li>
+      <li>Levante-se sempre devagar: tontura ao ficar em pé pode acontecer, sobretudo com pouca comida ou pouca água.</li>
+      <li>Beba água antes e depois do treino.</li>
+      <li>Use uma cadeira firme, sem rodinhas, encostada na parede, em piso que não escorrega.</li>
+      <li>Pare na hora se sentir tontura, dor no peito, falta de ar, enjoo ou mal-estar.</li>
+    </ul>
+    <p class="fraco"><a href="termos.html">Termos de uso</a></p>
+  </div>
+  <div class="fixo-rodape">
+    <button class="principal" type="button" id="btn-aceitar">Entendi, bora!</button>
+  </div>
+</section>
+
+<!-- ===== INÍCIO ===== -->
+<main id="inicio" class="tela" aria-label="Início">
+  <div class="marca">
+    <img class="logo-marca" src="icons/logo.svg" alt="" width="28" height="28"><span>Força na Caneta</span>
+    <button class="botao-instalar" id="botao-instalar" type="button" hidden><svg class="ic ic-18"><use href="#i-baixar"/></svg>Usar sem internet</button>
+  </div>
+  <p id="selo-clinica" class="selo-clinica" hidden><img id="logo-clinica" alt="" width="24" height="24"><span>Indicado por <strong id="nome-clinica"></strong></span></p>
+
+  <div class="centro-inicio">
+    <p class="info-treino"><strong id="num-treino">Treino nº 1</strong> · <span id="nome-nivel">Esquentando</span></p>
+    <button class="bora" type="button" id="btn-bora">
+      <span class="bora-texto">BORA <span aria-hidden="true">💪</span></span>
+      <span class="bora-sub">treino de 5 min</span>
+    </button>
+    <p id="msg-hoje" class="msg-hoje" hidden></p>
+    <p class="fraco">Cadeira encostada na parede e uma toalha.</p>
+  </div>
+
+  <footer class="rodape">
+    <p class="links-rodape"><span class="it"><a href="#sobre"><img class="logo-rodape" src="icons/logo.svg" alt="" width="22" height="22">Sobre</a>&nbsp;·</span> <span class="it"><a href="#sobre/lembretes">Lembretes</a>&nbsp;·</span> <span class="it"><a href="#sobre/codigo">Meu código</a>&nbsp;·</span> <span class="it"><a href="termos.html">Termos</a></span></p>
+    <p class="rt">Responsável técnico: <span data-rt-nome></span> · CREF <span data-rt-cref></span></p>
+  </footer>
+</main>
+
+<!-- ===== TREINO ===== -->
+<section id="treino" class="tela tela-treino" aria-label="Treino">
+  <div class="barra">
+    <button class="voltar" type="button" id="btn-encerrar">← Encerrar</button>
+    <button class="ouvir" type="button" id="btn-voz" aria-pressed="true"><svg class="ic"><use href="#i-voz"/></svg><span>Voz</span></button>
+  </div>
+  <div class="progresso">
+    <p class="progresso-texto"><strong id="etapa-rotulo">Aquecimento</strong><span id="tempo-total">5:00 restantes</span></p>
+    <div class="trilho" role="progressbar" aria-label="Progresso do treino" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0" id="barra"><div class="trilho-cheio" id="barra-preenchida"></div></div>
+  </div>
+
+  <div class="midia">
+    <video id="video" muted playsinline loop autoplay preload="auto" hidden aria-hidden="true"></video>
+    <img id="placeholder" src="img/aquecimento.svg" alt="">
+    <div id="cronometro" class="cronometro" aria-hidden="true">30</div>
+  </div>
+
+  <div class="mov">
+    <h1 id="nome-mov">Aquecimento</h1>
+    <p id="descricao-mov" class="fraco"></p>
+  </div>
+  <p id="aviso-tela" class="fraco u-texto-menor" hidden>Mantenha a tela ligada durante o treino.</p>
+
+  <div class="fixo-rodape controles">
+    <p id="alerta" class="alerta" role="status" hidden><svg class="ic"><use href="#i-cadeira"/></svg><span id="alerta-texto"></span></p>
+    <p class="legenda"><svg class="ic"><use href="#i-voz"/></svg><span id="legenda" aria-live="polite"></span></p>
+    <button class="secundario" type="button" id="btn-pausar"><svg class="ic"><use href="#i-pausa"/></svg><span>Pausar</span></button>
+    <button class="secundario" type="button" id="btn-pular"><svg class="ic"><use href="#i-pular"/></svg><span>Pular</span></button>
+    <button class="alternar" type="button" id="btn-facil" aria-pressed="false"><svg class="ic"><use href="#i-folha"/></svg><span>Versão mais fácil</span></button>
+  </div>
+</section>
+
+<!-- ===== CONCLUSÃO ===== -->
+<section id="fim" class="tela" aria-labelledby="titulo-fim">
+  <canvas id="confete" class="confete" aria-hidden="true"></canvas>
+  <div class="instrucao">
+    <span class="selo-fim" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span>
+    <h1 id="titulo-fim">Acabou! Treino nº 1 🎉</h1>
+    <p id="frase-fim"></p>
+    <p id="msg-nivel" class="msg-nivel" hidden></p>
+  </div>
+
+  <div id="card-elastico" class="caixa card-elastico" hidden>
+    <div class="caixa-topo">
+      <h2 id="elastico-titulo">Missão Elástico</h2>
+      <button class="fechar" type="button" id="btn-dispensar-elastico" aria-label="Dispensar Missão Elástico"><svg class="ic"><use href="#i-fechar"/></svg></button>
+    </div>
+    <p id="elastico-texto"></p>
+    <a id="elastico-link" class="botao-link" target="_blank" rel="sponsored noopener"></a>
+  </div>
+  <p id="patrocinio" class="patrocinio" hidden></p>
+
+  <div class="fixo-rodape">
+    <button class="principal" type="button" id="btn-mais-uma">Mais uma rodada?</button>
+    <button class="voltar largo" type="button" id="btn-por-hoje">Por hoje tá ótimo</button>
+  </div>
+</section>
+
+<!-- ===== SOBRE ===== -->
+<section id="sobre" class="tela">
+  <button class="voltar" type="button" data-voltar>← Voltar</button>
+  <div class="texto">
+    <img class="logo-sobre" src="icons/logo.svg" alt="" loading="lazy" width="64" height="64">
+    <h1>Sobre o Força na Caneta</h1>
+    <p>Um treino de força de <strong>5 minutos</strong>, em casa, com uma cadeira e uma toalha. Você toca em BORA e a voz guia cada movimento.</p>
+    <p class="fraco">Os exercícios são genéricos e não substituem avaliação médica, nutricional ou de profissional de educação física. Responsável técnico: <span data-rt-nome></span>, CREF <span data-rt-cref></span>.</p>
+
+    <p class="dica-secoes fraco">Toque num assunto para abrir.</p>
+
+    <details class="secao" id="sobre-como">
+      <summary><h2>Como funciona</h2></summary>
+      <ul>
+        <li><strong>30 s</strong> de aquecimento, sentada.</li>
+        <li><strong>4 movimentos</strong> de 40 s, cada um com 20 s de descanso: pernas, empurrar, costas e um extra.</li>
+        <li><strong>30 s</strong> de desaquecimento. No final, levante devagar e fique um instante parada.</li>
       </ul>
-      <div class="acoes">
-        <button type="button" class="btn btn-primario" id="btn-aceitar">Entendi, bora!</button>
-        <a class="btn btn-texto" href="termos.html">Termos de uso</a>
+      <p>A cada treino os movimentos mudam. O nível sobe com a prática: <strong>Esquentando</strong> (treinos 1 a 6), <strong>Pegando no tranco</strong> (7 a 15) e <strong>Força na Caneta</strong> (16 em diante).</p>
+      <p class="fraco">Achou difícil? Toque em <strong>Versão mais fácil</strong> durante o movimento.</p>
+    </details>
+
+    <details class="secao" id="sobre-movimentos">
+      <summary><h2>Os movimentos</h2></summary>
+      <div id="lista-movimentos"></div>
+    </details>
+
+    <details class="secao" id="sobre-instalar">
+      <summary><h2>Deixe na tela inicial</h2></summary>
+      <p id="instalar-inapp" class="aviso-inapp" hidden></p>
+      <p>Assim o treino abre com um toque e funciona também sem internet.</p>
+      <button class="botao-link" type="button" id="btn-instalar-agora" hidden>Instalar agora</button>
+      <p><strong>iPhone (Safari):</strong></p>
+      <ol>
+        <li>Toque em <strong>⋯ (Mais)</strong> e depois em <strong>Compartilhar</strong>.</li>
+        <li>Role e toque em <strong>Adicionar à Tela de Início</strong>.</li>
+        <li>Toque em <strong>Adicionar</strong>.</li>
+      </ol>
+      <p class="u-mt14"><strong>Android (Chrome):</strong></p>
+      <ol>
+        <li>Toque no menu <strong>⋮</strong> no canto superior.</li>
+        <li>Toque em <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>.</li>
+        <li>Confirme. O ícone FnC aparece junto com seus apps.</li>
+      </ol>
+      <p class="u-mt14 fraco">No iPhone, o app instalado pode começar a contagem do zero. Se acontecer, use <a href="#sobre/codigo">Meu código</a>.</p>
+    </details>
+
+    <details class="secao" id="sobre-lembretes">
+      <summary><h2>Lembretes</h2></summary>
+      <p>Um lembrete de segunda a sexta na agenda do celular: <strong>“Treino Força na Caneta – 5 min”</strong>.</p>
+      <label class="rotulo-campo" for="hora-lembrete">Que horas?</label>
+      <select class="campo" id="hora-lembrete"></select>
+      <div class="botoes-linha">
+        <a class="botao-link" id="link-ics" download="lembrete-forca-na-caneta.ics" href="#">Adicionar à agenda</a>
+        <a class="botao-link" id="link-google" target="_blank" rel="noopener" href="#">Usar o Google Agenda</a>
       </div>
-    </section>
+      <p class="u-mt8 fraco u-texto-menor">No iPhone, o arquivo abre no app Calendário: toque em “Adicionar”.</p>
+    </details>
 
-    <!-- 2. INÍCIO -->
-    <section id="tela-inicio" class="tela tela-inicio" hidden aria-labelledby="titulo-app">
-      <header class="topo">
-        <img src="icons/logo.svg" alt="" class="logo" width="40" height="40">
-        <h1 id="titulo-app" class="marca">Força na Caneta</h1>
-      </header>
-      <p id="selo-clinica" class="selo-clinica" hidden>
-        <img id="logo-clinica" alt="" width="24" height="24">
-        <span>Indicado por <strong id="nome-clinica"></strong></span>
-      </p>
-
-      <div class="centro-inicio">
-        <p class="info-treino"><span id="num-treino">Treino nº 1</span> · <span id="nome-nivel">Esquentando</span></p>
-        <button type="button" id="btn-bora" class="btn-bora">
-          <span class="bora-texto">BORA</span>
-          <span class="bora-sub"><span aria-hidden="true">💪</span> treino de 5 min</span>
-        </button>
-        <p id="msg-hoje" class="msg-hoje" hidden></p>
-        <p class="nota">Cadeira encostada na parede e uma toalha.</p>
-      </div>
-
-      <nav class="atalhos" aria-label="Opções">
-        <button type="button" class="atalho" id="btn-instalar"><svg class="ic"><use href="#i-instalar"/></svg><span>Instalar</span></button>
-        <button type="button" class="atalho" id="btn-lembretes"><svg class="ic"><use href="#i-lembrete"/></svg><span>Lembretes</span></button>
-        <button type="button" class="atalho" id="btn-codigo"><svg class="ic"><use href="#i-chave"/></svg><span>Meu código</span></button>
-      </nav>
-
-      <footer class="rodape">
-        <button type="button" class="link-mini" id="btn-animacoes" aria-pressed="false">Reduzir animações</button>
-        <span aria-hidden="true">·</span>
-        <a class="link-mini" href="termos.html">Termos de uso</a>
-        <p>Responsável técnico: <span data-rt-nome></span> · CREF <span data-rt-cref></span></p>
-      </footer>
-    </section>
-
-    <!-- 3. TREINO -->
-    <section id="tela-treino" class="tela tela-treino" hidden aria-label="Treino">
-      <div class="treino-topo">
-        <span id="etapa-rotulo" class="etapa-rotulo">Aquecimento</span>
-        <span id="tempo-total" class="nota">5:00 restantes</span>
-      </div>
-      <div class="barra" role="progressbar" aria-label="Progresso do treino" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0" id="barra">
-        <div class="barra-preenchida" id="barra-preenchida"></div>
-      </div>
-
-      <div class="midia">
-        <video id="video" muted playsinline loop autoplay preload="auto" hidden aria-hidden="true"></video>
-        <img id="placeholder" src="img/aquecimento.svg" alt="">
-        <div id="cronometro" class="cronometro" aria-hidden="true">30</div>
-      </div>
-
-      <div class="bloco-mov">
-        <h2 id="nome-mov" class="nome-mov">Aquecimento</h2>
-        <p id="descricao-mov" class="descricao-mov"></p>
-      </div>
-
-      <div id="alerta" class="alerta" role="status" hidden><svg class="ic"><use href="#i-cadeira"/></svg><span id="alerta-texto"></span></div>
-      <div class="legenda-caixa"><svg class="ic"><use href="#i-voz"/></svg><p id="legenda" class="legenda" aria-live="polite"></p></div>
-
-      <div class="controles">
-        <button type="button" class="btn btn-fantasma" id="btn-pausar"><svg class="ic"><use href="#i-pausa"/></svg><span>Pausar</span></button>
-        <button type="button" class="btn btn-fantasma" id="btn-pular"><svg class="ic"><use href="#i-pular"/></svg><span>Pular</span></button>
-        <button type="button" class="btn btn-alternar" id="btn-facil" aria-pressed="false"><svg class="ic"><use href="#i-folha"/></svg><span>Versão mais fácil</span></button>
-      </div>
-      <p id="aviso-tela" class="nota centro" hidden>Mantenha a tela ligada durante o treino.</p>
-      <button type="button" class="btn btn-texto" id="btn-encerrar">Encerrar treino</button>
-    </section>
-
-    <!-- 4. CONCLUSÃO -->
-    <section id="tela-fim" class="tela tela-fim" hidden aria-labelledby="titulo-fim">
-      <canvas id="confete" class="confete" aria-hidden="true"></canvas>
-      <div class="selo-fim" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></div>
-      <header class="cabecalho centro">
-        <h1 id="titulo-fim">Acabou! Treino nº 1 🎉</h1>
-        <p id="frase-fim" class="lead"></p>
-      </header>
-      <p id="msg-nivel" class="msg-nivel" hidden></p>
-
-      <div class="acoes">
-        <button type="button" class="btn btn-primario" id="btn-mais-uma">Mais uma rodada?</button>
-        <button type="button" class="btn btn-texto" id="btn-por-hoje">Por hoje tá ótimo</button>
-      </div>
-
-      <div id="card-elastico" class="cartao card-elastico" hidden>
-        <div class="card-elastico-topo">
-          <span class="icone-redondo"><svg class="ic"><use href="#i-elastico"/></svg></span>
-          <h2 id="elastico-titulo">Missão Elástico</h2>
-          <button type="button" class="btn-icone" id="btn-dispensar-elastico" aria-label="Dispensar Missão Elástico"><svg class="ic"><use href="#i-fechar"/></svg></button>
+    <details class="secao" id="sobre-codigo">
+      <summary><h2>Meu código</h2></summary>
+      <div id="restaurar-caixa" class="caixa" role="alert" hidden>
+        <p id="restaurar-texto"></p>
+        <div class="botoes-linha">
+          <button class="botao-link destaque" type="button" id="btn-restaurar-sim">Sim, restaurar</button>
+          <button class="botao-link" type="button" id="btn-restaurar-nao">Agora não</button>
         </div>
-        <p id="elastico-texto"></p>
-        <a id="elastico-link" class="btn btn-secundario" target="_blank" rel="sponsored noopener"></a>
       </div>
+      <p>Se o celular apagar sua contagem, este código recupera:</p>
+      <p class="codigo" id="codigo-texto">FNC-0</p>
+      <label class="rotulo-campo" for="codigo-link">Link de recuperação</label>
+      <input class="campo" id="codigo-link" readonly>
+      <div class="botoes-linha">
+        <button class="botao-link" type="button" id="btn-copiar">Copiar link</button>
+      </div>
+      <p id="copiado" class="u-mt8 fraco" role="status"></p>
+      <label class="rotulo-campo u-mt14" for="codigo-entrada">Tem um código? Digite aqui:</label>
+      <input class="campo" id="codigo-entrada" placeholder="FNC-15" autocomplete="off" autocapitalize="characters">
+      <div class="botoes-linha">
+        <button class="botao-link" type="button" id="btn-usar-codigo">Restaurar</button>
+      </div>
+      <p id="codigo-erro" class="u-mt8 erro" role="alert"></p>
+    </details>
 
-      <p id="patrocinio" class="patrocinio" hidden></p>
-    </section>
-  </main>
+    <details class="secao" id="sobre-voz">
+      <summary><h2>Voz e animações</h2></summary>
+      <label class="opcao"><input type="checkbox" id="opcao-voz" checked><span>Falar as instruções em voz alta durante o treino</span></label>
+      <label class="opcao"><input type="checkbox" id="opcao-reduzir"><span>Reduzir animações (sem confete)</span></label>
+      <p class="u-mt8 fraco u-texto-menor">As legendas aparecem sempre.</p>
+    </details>
 
-  <!-- Diálogos -->
-  <dialog id="dlg-instalar" aria-labelledby="dlg-instalar-titulo">
-    <h2 id="dlg-instalar-titulo">Adicionar à tela de início</h2>
-    <div id="instalar-conteudo" class="conteudo-dialogo"></div>
-    <button type="button" class="btn btn-texto" data-fechar>Fechar</button>
-  </dialog>
+    <details class="secao" id="sobre-seguranca">
+      <summary><h2>Cuidados</h2></summary>
+      <ul>
+        <li>Converse com seu médico antes de começar.</li>
+        <li>Levante-se sempre devagar.</li>
+        <li>Beba água antes e depois do treino.</li>
+        <li>Cadeira firme, sem rodinhas, com o encosto encostado na parede.</li>
+        <li>Pare se sentir tontura, dor no peito, falta de ar, enjoo ou mal-estar.</li>
+      </ul>
+    </details>
 
-  <dialog id="dlg-lembretes" aria-labelledby="dlg-lembretes-titulo">
-    <h2 id="dlg-lembretes-titulo">Lembrete na agenda</h2>
-    <p>De segunda a sexta: <strong>“Treino Força na Caneta – 5 min”</strong>.</p>
-    <div class="campo-grupo">
-      <label for="hora-lembrete" class="rotulo">Que horas?</label>
-      <select id="hora-lembrete" class="campo"></select>
-    </div>
-    <a id="link-ics" class="btn btn-primario" download="lembrete-forca-na-caneta.ics" href="#">Adicionar à agenda do celular</a>
-    <a id="link-google" class="btn btn-secundario" target="_blank" rel="noopener" href="#">Usar o Google Agenda</a>
-    <p class="nota">No iPhone, o arquivo abre direto no app Calendário: toque em “Adicionar”.</p>
-    <button type="button" class="btn btn-texto" data-fechar>Fechar</button>
-  </dialog>
+    <details class="secao" id="sobre-perguntas">
+      <summary><h2>Perguntas frequentes</h2></summary>
+      <div class="faq">
+        <h3>É gratuito?</h3>
+        <p>Sim. Gratuito e sem cadastro.</p>
+        <h3>Preciso de equipamento?</h3>
+        <p>Não. Só uma cadeira firme encostada na parede e uma toalha.</p>
+        <h3>Funciona sem internet?</h3>
+        <p>Sim. Depois de aberto uma vez com internet, o app guarda tudo no celular.</p>
+        <h3>Funciona no iPhone e no Android?</h3>
+        <p>Sim. No iPhone, use o Safari; no Android, o Chrome.</p>
+        <h3>O app guarda meus dados?</h3>
+        <p>Não pedimos nome, e-mail, peso ou dado de saúde. A contagem de treinos fica só no seu celular.</p>
+      </div>
+    </details>
 
-  <dialog id="dlg-codigo" aria-labelledby="dlg-codigo-titulo">
-    <h2 id="dlg-codigo-titulo">Meu código</h2>
-    <p>Se o celular apagar sua contagem, use este código para recuperar:</p>
-    <p class="codigo" id="codigo-texto">FNC-0</p>
-    <input id="codigo-link" class="campo" readonly aria-label="Link de recuperação">
-    <button type="button" class="btn btn-primario" id="btn-copiar">Copiar link</button>
-    <p id="copiado" class="nota" role="status"></p>
-    <hr>
-    <div class="campo-grupo">
-      <label for="codigo-entrada" class="rotulo">Tem um código? Digite aqui:</label>
-      <input id="codigo-entrada" class="campo" placeholder="FNC-15" autocomplete="off" autocapitalize="characters">
-    </div>
-    <button type="button" class="btn btn-secundario" id="btn-usar-codigo">Restaurar</button>
-    <p id="codigo-erro" class="nota erro" role="alert"></p>
-    <button type="button" class="btn btn-texto" data-fechar>Fechar</button>
-  </dialog>
+    <details class="secao">
+      <summary><h2>Privacidade</h2></summary>
+      <p>Sem cadastro e sem cookies de rastreamento. A contagem de treinos e suas preferências ficam <strong>só neste celular</strong>.</p>
+      <p>Usamos um contador de acessos sem cookies e sem dados pessoais, que registra apenas números agregados, como quantos treinos foram concluídos.</p>
+      <p><a href="termos.html">Termos de uso e privacidade completos</a></p>
+    </details>
+  </div>
+</section>
 
-  <dialog id="dlg-restaurar" aria-labelledby="dlg-restaurar-titulo">
-    <h2 id="dlg-restaurar-titulo">Restaurar para o treino <span id="restaurar-num"></span>?</h2>
-    <p id="restaurar-texto"></p>
-    <button type="button" class="btn btn-primario" id="btn-restaurar-sim">Sim, restaurar</button>
-    <button type="button" class="btn btn-texto" data-fechar>Agora não</button>
-  </dialog>
-
-  <script type="module" src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
